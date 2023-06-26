@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manely.ap.project.client.controller.signupController">
+   <left>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" BorderPane.alignment="CENTER">
+         <children>
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity">
+               <children>
+                  <Label fx:id="firstnameErrorLabel" focusTraversable="false" text=" " textFill="#e42626">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="firstnameTextField" promptText="firstname">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </TextField>
+               </children>
+               <padding>
+                  <Insets right="2.0" />
+               </padding>
+            </HBox>
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity">
+               <children>
+                  <Label fx:id="lastnameErrorLabel" focusTraversable="false" text=" " textFill="#e42626">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="lastnameTextField" promptText="lastname">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+               <padding>
+                  <Insets right="2.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets top="14.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity">
+               <children>
+                  <Label fx:id="usernameErrorLabel" focusTraversable="false" text=" " textFill="#e42626">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="usernameTextField" promptText="username">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+               <padding>
+                  <Insets right="2.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets top="14.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity">
+               <children>
+                  <Label fx:id="passwordErrorLabel1" focusTraversable="false" text=" " textFill="#e42626">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Label>
+                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="162.5">
+                     <children>
+                        <PasswordField fx:id="passwordTextField" promptText="password">
+                           <font>
+                              <Font name="Apple Braille" size="13.0" />
+                           </font>
+                        </PasswordField>
+                        <Label fx:id="passwordErrorLabel2" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" textFill="#e42626">
+                           <font>
+                              <Font name="Apple Braille" size="11.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets right="2.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets top="14.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox fx:id="repeatPassHBox" maxHeight="-Infinity" maxWidth="-Infinity">
+               <children>
+                  <Label fx:id="repeatPasswordErrorLabel1" focusTraversable="false" text=" " textFill="#e32727">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Label>
+                  <VBox>
+                     <children>
+                        <PasswordField fx:id="repeatPasswordTextField" promptText="repeat password">
+                           <font>
+                              <Font name="Apple Braille" size="13.0" />
+                           </font>
+                        </PasswordField>
+                        <Label fx:id="repeatPasswordErrorLabel2" textFill="#e42626">
+                           <font>
+                              <Font name="Apple Braille" size="11.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets right="2.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </left>
+   <padding>
+      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+   </padding>
+   <bottom>
+      <VBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
+         <children>
+            <Button fx:id="signupButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#signupButtonPressed" text="SignUp">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+            </Button>
+            <Label fx:id="signupErrorLabel" alignment="CENTER" focusTraversable="false" textAlignment="CENTER" textFill="#e42626">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </bottom>
+   <right>
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="189.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox fx:id="emailHBox" maxHeight="-Infinity" maxWidth="-Infinity">
+               <padding>
+                  <Insets right="2.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <children>
+                  <Label fx:id="emailErrorLabel1" focusTraversable="false" text=" " textFill="#e42626">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Label>
+                  <VBox>
+                     <children>
+                        <TextField fx:id="emailTextField" promptText="email">
+                           <font>
+                              <Font name="Apple Braille" size="13.0" />
+                           </font>
+                        </TextField>
+                        <Label fx:id="emailErrorLabel2" textFill="#e42626">
+                           <font>
+                              <Font name="Apple Braille" size="11.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox fx:id="phoneNumberHBox" maxHeight="-Infinity" maxWidth="-Infinity">
+               <padding>
+                  <Insets right="2.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <children>
+                  <Label fx:id="phoneNumberErrorLabel1" focusTraversable="false" text=" " textFill="#e42626">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Label>
+                  <VBox>
+                     <children>
+                        <TextField fx:id="phoneNumberTextField" maxWidth="-Infinity" promptText="phone number">
+                           <font>
+                              <Font name="Apple Braille" size="13.0" />
+                           </font>
+                        </TextField>
+                        <Label fx:id="phoneNumberErrorLabel2" textFill="#e42626">
+                           <font>
+                              <Font name="Apple Braille" size="11.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox fx:id="countryHBox" maxHeight="-Infinity" maxWidth="-Infinity">
+               <children>
+                  <Label focusTraversable="false" text=" ">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="countryComboBox" prefWidth="162.5" promptText="country" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity">
+               <children>
+                  <Label focusTraversable="false" text=" ">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Label>
+                  <DatePicker fx:id="birthdatePicker" prefWidth="162.5" promptText="birthdate" />
+               </children>
+               <VBox.margin>
+                  <Insets top="14.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </right>
+</BorderPane>
