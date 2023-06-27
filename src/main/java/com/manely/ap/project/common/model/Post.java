@@ -1,8 +1,9 @@
 package com.manely.ap.project.common.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public abstract class Post {
+public abstract class Post implements Serializable {
     private int id;
     private String sender;
     private Date date;

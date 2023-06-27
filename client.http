@@ -1,0 +1,182 @@
+GET http://localhost:8000/login?username=MelMel&password=melodyHam
+Accept: application/json
+
+###
+
+GET http://localhost:8000/login?username=ManMan&password=ManiHamed
+Accept: application/json
+
+###
+
+GET http://localhost:8000/login?username=PoopPoop&password=PoopShir
+Accept: application/json
+
+###
+
+POST http://localhost:8000/signup
+Content-Type: application/json
+
+{
+  "username": "MelMel",
+  "firstName": "Melody",
+  "lastName": "Ham",
+  "password": "melodyHam",
+  "email": "manely.g.hamedani@gmail.com",
+  "phoneNumber": "09123111510",
+  "country": "Iran",
+  "birthDate": "2004-01-21"
+}
+
+###
+
+POST http://localhost:8000/signup
+Content-Type: application/json
+
+{
+  "username": "ManMan",
+  "firstName": "Mani",
+  "lastName": "Ham",
+  "password": "ManiHamed",
+  "email": "mani.hamedani@gmail.com",
+  "phoneNumber": "09121074092",
+  "country": "Iran",
+  "birthDate": "1973-09-01"
+}
+
+###
+
+POST http://localhost:8000/signup
+Content-Type: application/json
+
+{
+  "username": "PoopPoop",
+  "firstName": "Poop",
+  "lastName": "Shir",
+  "password": "PoopShir",
+  "email": "poop.shir@gmail.com",
+  "phoneNumber": "09126238112",
+  "country": "Iran",
+  "birthDate": "1977-09-01"
+}
+
+###
+
+POST http://localhost:8000/set-user-image
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTcxOTA1OTk3OCwiZXhwIjoxNjg2NTgzMDU5OTc4fQ.478864ysmidjLsz79xC-CUp81MbAzqif-6N2aHB82Y0
+
+< ./avatar.json
+
+###
+
+POST http://localhost:8000/set-user-image
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTcxOTA1OTk3OCwiZXhwIjoxNjg2NTgzMDU5OTc4fQ.478864ysmidjLsz79xC-CUp81MbAzqif-6N2aHB82Y0
+
+< ./header3.json
+
+###
+
+POST http://localhost:8000/set-user-info
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTcxOTA1OTk3OCwiZXhwIjoxNjg2NTgzMDU5OTc4fQ.478864ysmidjLsz79xC-CUp81MbAzqif-6N2aHB82Y0
+
+{
+  "bio": "Hey! It is my test bio.",
+  "location": "SomeWhere",
+  "website": "https://apple.com"
+}
+
+###
+
+POST http://localhost:8000/follow?username=ManMan
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTcxOTA1OTk3OCwiZXhwIjoxNjg2NTgzMDU5OTc4fQ.478864ysmidjLsz79xC-CUp81MbAzqif-6N2aHB82Y0
+
+###
+
+POST http://localhost:8000/follow?username=PoopPoop
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTcxOTA1OTk3OCwiZXhwIjoxNjg2NTgzMDU5OTc4fQ.478864ysmidjLsz79xC-CUp81MbAzqif-6N2aHB82Y0
+
+###
+
+GET http://localhost:8000/list-followers?username=ManMan
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTcxOTA1OTk3OCwiZXhwIjoxNjg2NTgzMDU5OTc4fQ.478864ysmidjLsz79xC-CUp81MbAzqif-6N2aHB82Y0
+
+###
+
+GET http://localhost:8000/list-following?username=MelMel
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTcxOTA1OTk3OCwiZXhwIjoxNjg2NTgzMDU5OTc4fQ.478864ysmidjLsz79xC-CUp81MbAzqif-6N2aHB82Y0
+
+###
+
+GET http://localhost:8000/search?quest=hAm
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTcxOTA1OTk3OCwiZXhwIjoxNjg2NTgzMDU5OTc4fQ.478864ysmidjLsz79xC-CUp81MbAzqif-6N2aHB82Y0
+
+###
+
+POST http://localhost:8000/tweet
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTcxOTA1OTk3OCwiZXhwIjoxNjg2NTgzMDU5OTc4fQ.478864ysmidjLsz79xC-CUp81MbAzqif-6N2aHB82Y0
+
+< ./tweet.json
+
+###
+
+POST http://localhost:8000/retweet
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTcxOTA1OTk3OCwiZXhwIjoxNjg2NTgzMDU5OTc4fQ.478864ysmidjLsz79xC-CUp81MbAzqif-6N2aHB82Y0
+
+< ./retweet.json
+
+###
+
+POST http://localhost:8000/quote
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJQb29wUG9vcCIsImlkIjozLCJhdWQiOiJ1c2VyIiwiaWF0IjoxNjg1ODI2Njc4NjU5LCJleHAiOjE2ODY2OTA2Nzg2NTl9.Cpb0MNT_uV2NoaxdvyJ8rmDLsqjLsThePCU_Yt5yDpk
+
+< ./quote.json
+
+###
+
+POST http://localhost:8000/like?id=1
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNYW5NYW4iLCJpZCI6MiwiYXVkIjoidXNlciIsImlhdCI6MTY4NTg4OTM3MDE2NywiZXhwIjoxNjg2NzUzMzcwMTY3fQ.Ci6PuumPktyxoJ-_xdp1zp4TnOHV4TxRzLPy_dEgcVQ
+
+###
+
+POST http://localhost:8000/like?id=2
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNYW5NYW4iLCJpZCI6MiwiYXVkIjoidXNlciIsImlhdCI6MTY4NTg4OTM3MDE2NywiZXhwIjoxNjg2NzUzMzcwMTY3fQ.Ci6PuumPktyxoJ-_xdp1zp4TnOHV4TxRzLPy_dEgcVQ
+
+###
+
+POST http://localhost:8000/unlike?id=1
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNYW5NYW4iLCJpZCI6MiwiYXVkIjoidXNlciIsImlhdCI6MTY4NTg4OTM3MDE2NywiZXhwIjoxNjg2NzUzMzcwMTY3fQ.Ci6PuumPktyxoJ-_xdp1zp4TnOHV4TxRzLPy_dEgcVQ
+
+###
+
+POST http://localhost:8000/reply
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNYW5NYW4iLCJpZCI6MiwiYXVkIjoidXNlciIsImlhdCI6MTY4NTg4OTM3MDE2NywiZXhwIjoxNjg2NzUzMzcwMTY3fQ.Ci6PuumPktyxoJ-_xdp1zp4TnOHV4TxRzLPy_dEgcVQ
+
+< ./reply.json
+
+###
+
+POST http://localhost:8000/block?username=PoopPoop
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTcxOTA1OTk3OCwiZXhwIjoxNjg2NTgzMDU5OTc4fQ.478864ysmidjLsz79xC-CUp81MbAzqif-6N2aHB82Y0
+
+###
+
+POST http://localhost:8000/timeline?date=1685980418590
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTk4MDY2MTg2NCwiZXhwIjoxNjg2ODQ0NjYxODY0fQ.imL8PKlss8JqBmcSoSjSf1KzVL3ewc1iVlztEqlGHv8
+
+###
+
+POST http://localhost:8000/unblock?username=PoopPoop
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MSwiYXVkIjoidXNlciIsImlhdCI6MTY4NTcxOTA1OTk3OCwiZXhwIjoxNjg2NTgzMDU5OTc4fQ.478864ysmidjLsz79xC-CUp81MbAzqif-6N2aHB82Y0
+
+###
+
+POST http://localhost:8000/filter?quest=t
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJQb29wUG9vcCIsImlkIjozLCJhdWQiOiJ1c2VyIiwiaWF0IjoxNjg1OTg2MTk0NzE4LCJleHAiOjE2ODY4NTAxOTQ3MTh9.yI_yxJySg6JJ5OBN7qAPEiOrnvlBBsp2U0EZe6UQA0Q
+
+###

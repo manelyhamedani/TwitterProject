@@ -1,6 +1,8 @@
 package com.manely.ap.project.common.model;
 
-public class Tweet extends Post {
+import java.io.Serializable;
+
+public class Tweet extends Post implements Serializable {
     private String text;
     private Image[] images;
     private int likesCount;

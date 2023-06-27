@@ -1,6 +1,8 @@
 package com.manely.ap.project.common.model;
 
-public class Quote extends Tweet {
+import java.io.Serializable;
+
+public class Quote extends Tweet implements Serializable {
     private Tweet tweet;
 
     public Tweet getTweet() {

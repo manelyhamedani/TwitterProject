@@ -3,7 +3,7 @@ package com.manely.ap.project.common;
 public class API {
     public static final int PORT = 8000;
     public static final String IP_ADDRESS = "localhost";
-    public static final String BASE_URL = "https://" + IP_ADDRESS + ":" + PORT;
+    public static final String BASE_URL = "http://" + IP_ADDRESS + ":" + PORT;
 
     public static final String LOGIN = "/login";
     public static final String SIGNUP = "/signup";

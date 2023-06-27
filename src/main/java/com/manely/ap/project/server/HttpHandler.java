@@ -616,9 +616,9 @@ public class HttpHandler {
     private static <T> void response(HttpExchange exchange, int status, String msg, boolean success, T content) {
         try {
             String response = (new Gson()).toJson(new HttpResponse<>(status, msg, success, content));
-            exchange.sendResponseHeaders(status, response.getBytes(StandardCharsets.UTF_8).length);
+            exchange.sendResponseHeaders(200, response.getBytes().length);
             OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes(StandardCharsets.UTF_8));
+            os.write(response.getBytes());
             os.close();
         }
         catch (IOException e) {

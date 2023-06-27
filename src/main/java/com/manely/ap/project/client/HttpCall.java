@@ -16,26 +16,24 @@ import java.util.concurrent.Executors;
 
 public class HttpCall {
 
-    private static final Executor executor = Executors.newCachedThreadPool();
+    private static final Executor executor = Executors.newSingleThreadExecutor();
 
     public static <T> void get(
             String path,
             Map<String, String> query,
             Class<T> contentType,
-            ErrorCallback onError,
             ResponseCallback<T> onResponse
     ) {
-        execute("GET", path, null, query, onError, onResponse, contentType);
+        execute("GET", path, null, query, onResponse, contentType);
     }
 
     public static <T> void post(
             String path,
             Object data,
             Class<T> contentType,
-            ErrorCallback onError,
             ResponseCallback<T> onResponse
     ) {
-        execute("POST", path, data, null, onError, onResponse, contentType);
+        execute("POST", path, data, null, onResponse, contentType);
     }
 
     static <T> void execute(
@@ -43,7 +41,6 @@ public class HttpCall {
             String path,
             Object data,
             Map<String, String> query,
-            ErrorCallback onError,
             ResponseCallback<T> onResponse,
             Class<T> contentType
     ) {
@@ -59,27 +56,36 @@ public class HttpCall {
                     conn.setRequestProperty("Content-Length", String.valueOf(bytes.length));
                     conn.getOutputStream().write(bytes);
                 }
+                conn.connect();
+                InputStreamReader isr = new InputStreamReader(conn.getInputStream());
 
-                HttpResponse<T> response = new Gson().fromJson(
-                        new InputStreamReader(conn.getInputStream()),
-                        TypeToken.getParameterized(HttpResponse.class, contentType).getType()
+                HttpResponse response = new Gson().fromJson(
+                        isr,
+                        HttpResponse.class
                 );
 
-                Main.mainThreadQueue.put(() -> {
-                    onResponse.onResponse(response);
-                });
+                isr.close();
+                conn.disconnect();
+
+                onResponse.setResponse(response);
+
+                Main.tasks.execute(onResponse);
+//                Main.mainThreadQueue.put(() -> onResponse.onResponse(response));
             }
             catch (Exception e) {
-                onError.onError(e);
+                e.printStackTrace();
+                System.exit(1);
             }
+
         });
+
     }
 
     private static String mapToQuery(Map<String, String> query) {
-        String queryStr = "";
+        StringBuilder queryStr = new StringBuilder();
 
         if (query != null) {
-            queryStr = "?";
+            queryStr = new StringBuilder("?");
             for (Map.Entry<String, String> entry : query.entrySet()) {
                 String entity = entry.getValue();
                 try {
@@ -89,11 +95,11 @@ public class HttpCall {
                     e.printStackTrace();
                 }
 
-                queryStr += entry.getKey() + "=" + entity + "&";
+                queryStr.append(entry.getKey()).append("=").append(entity).append("&");
             }
-            queryStr = queryStr.substring(0, queryStr.length() - 1);
+            queryStr = new StringBuilder(queryStr.substring(0, queryStr.length() - 1));
         }
 
-        return queryStr;
+        return queryStr.toString();
     }
 }

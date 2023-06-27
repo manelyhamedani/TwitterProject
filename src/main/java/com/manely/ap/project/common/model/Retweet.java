@@ -1,7 +1,9 @@
 package com.manely.ap.project.common.model;
 
 
-public class Retweet extends Post {
+import java.io.Serializable;
+
+public class Retweet extends Post implements Serializable {
     private Tweet tweet;
 
     public Tweet getTweet() {

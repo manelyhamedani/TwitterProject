@@ -11,9 +11,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Iterator;
 
-public class Image {
+public class Image implements Serializable {
     private final String format;
     private byte[] imageBytes;
     private final KIND kind;

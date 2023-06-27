@@ -1,21 +1,23 @@
 package com.manely.ap.project.client;
 
 import com.manely.ap.project.client.controller.SceneController;
+import com.sun.net.httpserver.HttpExchange;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main extends Application {
-    public static final BlockingQueue<Runnable> mainThreadQueue = new LinkedBlockingQueue<>();
+    public static final ExecutorService tasks = Executors.newCachedThreadPool();
 
     @Override
     public void start(Stage stage) throws IOException {
-        SceneController.setStage(stage);
+        SceneController.setPrimaryStage(stage);
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("entry.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Twitter");
@@ -23,15 +25,8 @@ public class Main extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        mainThreadQueue.put(Main::start);
-
-        while (true) {
-            mainThreadQueue.take().run();
-        }
+    public static void main(String[] args) {
+        launch(args);
     }
 
-    public static void start() {
-        launch();
-    }
 }

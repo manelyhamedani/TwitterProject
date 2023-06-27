@@ -2,12 +2,14 @@ package com.manely.ap.project.common.model;
 
 import org.apache.commons.validator.routines.UrlValidator;
 
+import java.io.Serializable;
 
-public class UserInfo {
+
+public class UserInfo implements Serializable {
     private String bio;
     private String location;
     private String website;
-    private static final int MAX_BIO_LENGTH = 160;
+    private static final transient int MAX_BIO_LENGTH = 160;
 
     public String getBio() {
         return bio;
