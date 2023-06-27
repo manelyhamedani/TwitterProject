@@ -5,6 +5,7 @@ public class API {
     public static final String IP_ADDRESS = "localhost";
     public static final String BASE_URL = "http://" + IP_ADDRESS + ":" + PORT;
 
+    public static final String CONNECT = "/connect";
     public static final String LOGIN = "/login";
     public static final String SIGNUP = "/signup";
     public static final String SET_USER_IMAGE = "/set-user-image";

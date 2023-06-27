@@ -16,6 +16,7 @@ public class Driver {
         HttpServer server = HttpServer.create(new InetSocketAddress(API.PORT), 0);
         server.setExecutor(Executors.newCachedThreadPool());
 
+        server.createContext(API.CONNECT, HttpHandler::handleConnect);
         server.createContext(API.LOGIN, HttpHandler::handleLogin);
         server.createContext(API.SIGNUP, HttpHandler::handleSignUp);
         server.createContext(API.SET_USER_IMAGE, HttpHandler::handleSetUserImage);

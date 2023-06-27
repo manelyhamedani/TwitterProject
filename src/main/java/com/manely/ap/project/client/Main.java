@@ -3,11 +3,12 @@ package com.manely.ap.project.client;
 import com.manely.ap.project.client.controller.SceneController;
 import com.sun.net.httpserver.HttpExchange;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,8 +19,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         SceneController.setPrimaryStage(stage);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("entry.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = SceneController.getMainScene();
         stage.setTitle("Twitter");
         stage.setScene(scene);
         stage.show();

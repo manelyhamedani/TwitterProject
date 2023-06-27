@@ -56,21 +56,19 @@ public class HttpCall {
                     conn.setRequestProperty("Content-Length", String.valueOf(bytes.length));
                     conn.getOutputStream().write(bytes);
                 }
-                conn.connect();
-                InputStreamReader isr = new InputStreamReader(conn.getInputStream());
 
-                HttpResponse response = new Gson().fromJson(
-                        isr,
-                        HttpResponse.class
+                conn.connect();
+
+                HttpResponse<T> response = new Gson().fromJson(
+                        new InputStreamReader(conn.getInputStream()),
+                        TypeToken.getParameterized(HttpResponse.class, contentType).getType()
                 );
 
-                isr.close();
                 conn.disconnect();
 
                 onResponse.setResponse(response);
 
                 Main.tasks.execute(onResponse);
-//                Main.mainThreadQueue.put(() -> onResponse.onResponse(response));
             }
             catch (Exception e) {
                 e.printStackTrace();

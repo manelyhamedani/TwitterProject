@@ -1,5 +1,6 @@
 package com.manely.ap.project.client.controller;
 
+import com.google.gson.Gson;
 import com.manely.ap.project.client.DataResource;
 import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.ResponseCallback;

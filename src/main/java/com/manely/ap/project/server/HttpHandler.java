@@ -22,6 +22,28 @@ import java.util.Set;
 
 public class HttpHandler {
 
+    static void handleConnect(HttpExchange exchange) {
+        if (validateMethod("GET", exchange)) {
+            try {
+                HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
+                String[] validQuery = {"jwt"};
+                if (!validateRequestQuery(validQuery, query.keySet())) {
+                    throw new IllegalArgumentException();
+                }
+                if (JWebToken.isValid(query.get("jwt"))) {
+                    //TODO: online
+                    response(exchange, 200, "OK", true, null);
+                }
+                else {
+                    response(exchange, 401, Error.UNAUTHORIZED.toString(), false, null);
+                }
+            }
+            catch (Exception e) {
+                response(exchange, 400, e.getMessage(), false, null);
+            }
+        }
+    }
+
     static void handleLogin(HttpExchange exchange) {
         if (validateMethod("GET", exchange)) {
             try {
@@ -32,10 +54,10 @@ public class HttpHandler {
                 }
                 User user = SQL.getUsers().select(query.get("username"));
                 if (user == null) {
-                    response(exchange, 401, "Unauthorized", false, Error.UNAUTHORIZED);
+                    response(exchange, 401, Error.UNAUTHORIZED.toString(), false, null);
                 }
                 else if (!user.getPassword().equals(query.get("password"))) {
-                    response(exchange, 403, "Forbidden", false, Error.WRONG_PASS);
+                    response(exchange, 403, Error.WRONG_PASS.toString(), false, null);
                 }
                 else {
                     user.setAvatar(MediaManager.getUserAvatar(user.getUsername()));
@@ -46,14 +68,14 @@ public class HttpHandler {
                 }
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
 
     static void handleSignUp(HttpExchange exchange) {
         if (validateMethod("POST", exchange)) {
-            Error err = null;
+            Error err = Error.UNUSUAL;
             try {
                 User user = getRequestBody(exchange, User.class);
                 if (user == null) {
@@ -79,17 +101,17 @@ public class HttpHandler {
                 user.setLastDateModified(now);
                 SQL.getUsers().insert(user);
                 if (!MediaManager.addUser(user.getUsername())) {
-                    response(exchange, 500, "Internal Server Error", false, Error.CANNOT_SAVE_IMAGE);
+                    response(exchange, 500, Error.CANNOT_SAVE_IMAGE.toString(), false, null);
                 }
                 else {
                     response(exchange, 200, "OK", true, null);
                 }
             }
             catch (IllegalArgumentException e) {
-                response(exchange, 400, "Bad Request", false, err);
+                response(exchange, 400, err.toString(), false, null);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -104,7 +126,7 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, null);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -112,7 +134,7 @@ public class HttpHandler {
     static void handleSetUserInfo(HttpExchange exchange) {
         String jwt;
         if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
-            Error err = null;
+            Error err = Error.UNUSUAL;
             try {
                 String username = JWebToken.getPayload(jwt).getSub();
                 UserInfo userInfo = getRequestBody(exchange, UserInfo.class);
@@ -128,10 +150,10 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, null);
             }
             catch (IllegalArgumentException e) {
-                response(exchange, 400, "Bad Request", false, err);
+                response(exchange, 400, err.toString(), false, null);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -153,7 +175,7 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, null);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -175,7 +197,7 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, null);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -194,7 +216,7 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, followers);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -213,7 +235,7 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, following);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -231,7 +253,7 @@ public class HttpHandler {
                response(exchange, 200, "OK", true, result);
            }
            catch (Exception e) {
-               response(exchange, 400, "Bad Request", false, e.getMessage());
+               response(exchange, 400, e.getMessage(), false, null);
            }
         }
     }
@@ -239,13 +261,14 @@ public class HttpHandler {
     static void handleTweet(HttpExchange exchange) {
         String jwt;
         if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
-            Error err = null;
+            Error err = Error.UNUSUAL;
             try {
                 String sender = JWebToken.getPayload(jwt).getSub();
                 Tweet tweet = getRequestBody(exchange, Tweet.class);
                 if ((err = tweet.validateTweet()) != null) {
                     throw new IllegalArgumentException();
                 }
+                err = Error.UNUSUAL;
                 tweet.setSender(sender);
                 long currentTime = System.currentTimeMillis();
                 tweet.setDate(new Date(currentTime));
@@ -254,10 +277,10 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, tweet);
             }
             catch (IllegalArgumentException e) {
-                response(exchange, 400 , "Bad Request", false, err);
+                response(exchange, 400 , err.toString(), false, null);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -265,7 +288,7 @@ public class HttpHandler {
     static void handleQuote(HttpExchange exchange) {
         String jwt;
         if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
-            Error err = null;
+            Error err = Error.UNUSUAL;
             try {
                 String sender = JWebToken.getPayload(jwt).getSub();
                 Quote quote = getRequestBody(exchange, Quote.class);
@@ -282,10 +305,10 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, quote);
             }
             catch (IllegalArgumentException e) {
-                response(exchange, 400 , "Bad Request", false, err);
+                response(exchange, 400 , err.toString(), false, null);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -304,7 +327,7 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, retweet);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -327,7 +350,7 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, null);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -350,7 +373,7 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, null);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -358,7 +381,7 @@ public class HttpHandler {
     static void handleReply(HttpExchange exchange) {
         String jwt;
         if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
-            Error err = null;
+            Error err = Error.UNUSUAL;
             try {
                 String sender = JWebToken.getPayload(jwt).getSub();
                 Reply reply = getRequestBody(exchange, Reply.class);
@@ -375,10 +398,10 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, reply);
             }
             catch (IllegalArgumentException e) {
-                response(exchange, 400 , "Bad Request", false, err);
+                response(exchange, 400 , err.toString(), false, null);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -401,7 +424,7 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, null);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -423,7 +446,7 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, null);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -447,7 +470,7 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, posts);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -471,7 +494,7 @@ public class HttpHandler {
                 response(exchange, 200, "OK", true, tweets);
             }
             catch (Exception e) {
-                response(exchange, 400, "Bad Request", false, e.getMessage());
+                response(exchange, 400, e.getMessage(), false, null);
             }
         }
     }
@@ -561,7 +584,7 @@ public class HttpHandler {
     private static String getJWT(HttpExchange exchange) {
         String jwt = exchange.getRequestHeaders().getFirst("Authorization");
         if (!JWebToken.isValid(jwt)) {
-            response(exchange, 401, "Unauthorized", false, Error.INVALID_JWT);
+            response(exchange, 401, Error.INVALID_JWT.toString(), false, null);
             return null;
         }
         return jwt;

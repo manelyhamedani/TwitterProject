@@ -2,7 +2,7 @@ package com.manely.ap.project.client;
 
 import com.manely.ap.project.common.model.HttpResponse;
 
-public abstract class ResponseCallback<T> implements Runnable {
+public abstract class ResponseCallback<T> extends Thread {
     private HttpResponse<T> response;
 
     public abstract void run();

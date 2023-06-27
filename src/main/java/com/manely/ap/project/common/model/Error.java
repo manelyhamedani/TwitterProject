@@ -1,6 +1,7 @@
 package com.manely.ap.project.common.model;
 
 public enum Error {
+    UNUSUAL,
     INVALID_EMAIL,
     UNAUTHORIZED,
     WRONG_PASS,
