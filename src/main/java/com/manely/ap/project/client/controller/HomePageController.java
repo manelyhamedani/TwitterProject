@@ -1,6 +1,5 @@
 package com.manely.ap.project.client.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.*;
@@ -11,6 +10,14 @@ import java.net.URL;
 
 
 public class HomePageController {
+    private Image homeImage;
+    private Image profileImage;
+    private Image searchImage;
+    private Image settingsImage;
+    private Image coloredHomeImage;
+    private Image coloredProfileImage;
+    private Image coloredSearchImage;
+    private Image coloredSettingsImage;
 
     @FXML
     private Button homeButton;
@@ -26,6 +33,11 @@ public class HomePageController {
 
     public void initialize() throws MalformedURLException {
         setButtonImages();
+
+        coloredHomeImage = setColorButtonImage(homeButton);
+        coloredProfileImage = setColorButtonImage(profileButton);
+        coloredSearchImage = setColorButtonImage(searchButton);
+        coloredSettingsImage = setColorButtonImage(settingsButton);
     }
 
     private void setButtonImages() throws MalformedURLException {
@@ -50,20 +62,24 @@ public class HomePageController {
         settingsImageView.setFitWidth(29);
         settingsImageView.setFitHeight(29);
 
-        homeImageView.setImage(new Image(home.toString()));
+        homeImage = new Image(home.toString());
+        homeImageView.setImage(homeImage);
         homeButton.setGraphic(homeImageView);
 
-        searchImageView.setImage(new Image(search.toString()));
+        searchImage = new Image(search.toString());
+        searchImageView.setImage(searchImage);
         searchButton.setGraphic(searchImageView);
 
-        profileImageView.setImage(new Image(profile.toString()));
+        profileImage = new Image(profile.toString());
+        profileImageView.setImage(profileImage);
         profileButton.setGraphic(profileImageView);
 
-        settingsImageView.setImage(new Image(settings.toString()));
+        settingsImage = new Image(settings.toString());
+        settingsImageView.setImage(settingsImage);
         settingsButton.setGraphic(settingsImageView);
     }
 
-    private void reColorButtonImage(Button button) {
+    private Image setColorButtonImage(Button button) {
         ImageView imageView = (ImageView) button.getGraphic();
         Image image = imageView.getImage();
         int width = (int) image.getWidth();
@@ -83,32 +99,43 @@ public class HomePageController {
             }
         }
 
-        imageView.setImage(finalImage);
+        return finalImage;
+    }
+
+    private void resetButtonImages() {
+        ((ImageView) homeButton.getGraphic()).setImage(homeImage);
+        ((ImageView) profileButton.getGraphic()).setImage(profileImage);
+        ((ImageView) searchButton.getGraphic()).setImage(searchImage);
+        ((ImageView) settingsButton.getGraphic()).setImage(settingsImage);
+    }
+
+
+    @FXML
+    void homeButtonPressed() {
+        resetButtonImages();
+        ((ImageView) homeButton.getGraphic()).setImage(coloredHomeImage);
+
     }
 
     @FXML
-    void homeButtonPressed(ActionEvent event) throws MalformedURLException {
-        setButtonImages();
-        reColorButtonImage(homeButton);
+    void profileButtonPressed() {
+        resetButtonImages();
+        ((ImageView) profileButton.getGraphic()).setImage(coloredProfileImage);
 
     }
 
     @FXML
-    void profileButtonPressed(ActionEvent event) throws MalformedURLException {
-        setButtonImages();
-        reColorButtonImage(profileButton);
+    void searchButtonPressed() {
+        resetButtonImages();
+        ((ImageView) searchButton.getGraphic()).setImage(coloredSearchImage);
+
     }
 
     @FXML
-    void searchButtonPressed(ActionEvent event) throws MalformedURLException {
-        setButtonImages();
-        reColorButtonImage(searchButton);
-    }
+    void settingsButtonPressed() {
+        resetButtonImages();
+        ((ImageView) settingsButton.getGraphic()).setImage(coloredSettingsImage);
 
-    @FXML
-    void settingsButtonPressed(ActionEvent event) throws MalformedURLException {
-        setButtonImages();
-        reColorButtonImage(settingsButton);
     }
 
 }
