@@ -24,7 +24,7 @@ public class Main extends Application {
             System.exit(0);
         });
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("entry.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("home-page.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Twitter");
         stage.setScene(scene);

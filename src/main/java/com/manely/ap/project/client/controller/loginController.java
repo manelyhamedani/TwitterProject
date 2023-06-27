@@ -54,7 +54,8 @@ public class loginController {
                             if (getResponse().isSuccess()) {
                                 Data.setUser(getResponse().getContent());
                                 SceneController.changeScene("home-page.fxml");
-                            } else {
+                            }
+                            else {
                                 Platform.runLater(() -> {
                                     switch (getResponse().getStatus()) {
                                         case 401 -> errorLabel.setText("User does not exist!");

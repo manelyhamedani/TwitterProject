@@ -10,7 +10,6 @@ module com.manely.ap.project.twitterproject {
     requires jdk.httpserver;
 
     opens com.manely.ap.project.client to javafx.fxml, javafx.controls, com.google.gson, jdk.httpserver;
-    opens com.manely.ap.project.client.controller to jdk.httpserver, javafx.fxml, commons.validator;
     opens com.manely.ap.project.common.model to com.google.gson, commons.validator;
     opens com.manely.ap.project.database to sqlite.jdbc, java.sql;
     opens com.manely.ap.project.server.jwt to jdk.httpserver, jjwt.api, com.google.gson;
@@ -24,4 +23,5 @@ module com.manely.ap.project.twitterproject {
     exports com.manely.ap.project.filemanager;
     exports com.manely.ap.project.server;
     exports com.manely.ap.project.server.jwt;
+    opens com.manely.ap.project.client.controller to com.google.gson, commons.validator, javafx.controls, javafx.fxml, jdk.httpserver;
 }
