@@ -19,7 +19,13 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         SceneController.setPrimaryStage(stage);
 
-        Scene scene = SceneController.getMainScene();
+        stage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
+
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("entry.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Twitter");
         stage.setScene(scene);
         stage.show();

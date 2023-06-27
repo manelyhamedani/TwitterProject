@@ -76,6 +76,7 @@ public class HttpHandler {
     static void handleSignUp(HttpExchange exchange) {
         if (validateMethod("POST", exchange)) {
             Error err = Error.UNUSUAL;
+            int errCode = 400;
             try {
                 User user = getRequestBody(exchange, User.class);
                 if (user == null) {
@@ -83,17 +84,20 @@ public class HttpHandler {
                 }
                 if (user.getEmail() == null && user.getPhoneNumber() == null) {
                     err = Error.NULL_EMAIL_PHONE;
+                    errCode = 401;
                     throw new IllegalArgumentException();
                 }
 
                 if (user.getPassword() != null) {
                     if (user.getPassword().length() < 8 || !user.getPassword().matches("[a-zA-Z]+")) {
                         err = Error.INVALID_PASS;
+                        errCode = 402;
                         throw new IllegalArgumentException();
                     }
                 }
                 if (!EmailValidator.getInstance().isValid(user.getEmail())) {
                     err = Error.INVALID_EMAIL;
+                    errCode = 403;
                     throw new IllegalArgumentException();
                 }
                 Date now = new Date();
@@ -108,7 +112,7 @@ public class HttpHandler {
                 }
             }
             catch (IllegalArgumentException e) {
-                response(exchange, 400, err.toString(), false, null);
+                response(exchange, errCode, err.toString(), false, null);
             }
             catch (Exception e) {
                 response(exchange, 400, e.getMessage(), false, null);

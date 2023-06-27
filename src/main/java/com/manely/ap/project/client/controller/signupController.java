@@ -1,5 +1,9 @@
 package com.manely.ap.project.client.controller;
 
+import com.manely.ap.project.client.HttpCall;
+import com.manely.ap.project.client.ResponseCallback;
+import com.manely.ap.project.common.API;
+import com.manely.ap.project.common.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,15 +19,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class signupController {
-    private String firstname;
-    private String lastname;
-    private String username;
-    private String password;
+    private User user = new User();
     private String repeatedPassword;
-    private String email;
-    private String phoneNumber;
-    private String country;
-    private Date birthdate;
 
     @FXML
     private DatePicker birthdatePicker;
@@ -80,16 +77,19 @@ public class signupController {
     private PasswordField repeatPasswordTextField;
 
     @FXML
-    private Button signupButton;
-
-    @FXML
     private Label signupErrorLabel;
 
     @FXML
-    private Label usernameErrorLabel;
+    private Label usernameErrorLabel1;
+
+    @FXML
+    private Label usernameErrorLabel2;
 
     @FXML
     private TextField usernameTextField;
+
+    @FXML
+    private HBox passwordHBox;
 
     @FXML
     private HBox repeatPassHBox;
@@ -99,6 +99,9 @@ public class signupController {
 
     @FXML
     private HBox countryHBox;
+
+    @FXML
+    private Label signupLabel;
 
     public void initialize() {
         passwordErrorLabel2.setWrapText(true);
@@ -120,19 +123,19 @@ public class signupController {
         boolean invalid = false;
         StringBuffer errMsg = new StringBuffer();
 
-        if (firstname.isBlank()) {
+        if (user.getFirstName().isBlank()) {
             firstnameErrorLabel.setText("*");
             invalid = true;
         }
-        if (lastname.isBlank()) {
+        if (user.getLastName().isBlank()) {
             lastnameErrorLabel.setText("*");
             invalid = true;
         }
-        if (username.isBlank()) {
-            usernameErrorLabel.setText("*");
+        if (user.getUsername().isBlank()) {
+            usernameErrorLabel1.setText("*");
             invalid = true;
         }
-        if (password.isBlank()) {
+        if (user.getPassword().isBlank()) {
             passwordErrorLabel1.setText("*");
             invalid = true;
         }
@@ -145,31 +148,31 @@ public class signupController {
             errMsg.append("Fill required fields!\n");
         }
 
-        if (email.isBlank() && phoneNumber.isBlank()) {
+        if (user.getEmail().isBlank() && user.getPhoneNumber().isBlank()) {
             emailErrorLabel1.setText("*");
             phoneNumberErrorLabel1.setText("*");
             errMsg.append("Enter email or phone number!");
             invalid = true;
         }
 
-        if (!password.isBlank() && (password.length() < 8 || !password.matches("[a-zA-Z]+"))) {
+        if (!user.getPassword().isBlank() && (user.getPassword().length() < 8 || !user.getPassword().matches("[a-zA-Z]+"))) {
             VBox.setMargin(repeatPassHBox, new Insets(8, 0, 0, 0));
             passwordErrorLabel2.setText("Your password must be at least 8 characters!");
             invalid = true;
         }
 
-        if (!repeatedPassword.isBlank() && !repeatedPassword.equals(password)) {
+        if (!repeatedPassword.isBlank() && !repeatedPassword.equals(user.getPassword())) {
             repeatPasswordErrorLabel2.setText("Repeated password isn't correct!");
             invalid = true;
         }
 
-        if (!email.isBlank() && !EmailValidator.getInstance().isValid(email)) {
+        if (!user.getEmail().isBlank() && !EmailValidator.getInstance().isValid(user.getEmail())) {
             VBox.setMargin(phoneNumberHBox, new Insets(8, 0, 0, 0));
             emailErrorLabel2.setText("Email is invalid!");
             invalid = true;
         }
 
-        if (!phoneNumber.isBlank() && !phoneNumber.matches("[0-9]+")) {
+        if (!user.getPhoneNumber().isBlank() && !user.getPhoneNumber().matches("[0-9]+")) {
             VBox.setMargin(countryHBox, new Insets(8, 0, 0, 0));
             phoneNumberErrorLabel2.setText("Phone number is invalid!");
             invalid = true;
@@ -187,7 +190,7 @@ public class signupController {
         signupErrorLabel.setText("");
         firstnameErrorLabel.setText(" ");
         lastnameErrorLabel.setText(" ");
-        usernameErrorLabel.setText(" ");
+        usernameErrorLabel1.setText(" ");
         passwordErrorLabel1.setText(" ");
         passwordErrorLabel2.setText("");
         repeatPasswordErrorLabel1.setText(" ");
@@ -203,24 +206,56 @@ public class signupController {
     void signupButtonPressed() {
         resetErrorLabels();
 
-        firstname = firstnameTextField.getText();
-        lastname = lastnameTextField.getText();
-        username = usernameTextField.getText();
-        password = passwordTextField.getText();
+        user.setFirstName(firstnameTextField.getText());
+        user.setLastName(lastnameTextField.getText());
+        user.setUsername(usernameTextField.getText());
+        user.setPassword(passwordTextField.getText());
         repeatedPassword = repeatPasswordTextField.getText();
-        email = emailTextField.getText();
-        phoneNumber = phoneNumberTextField.getText();
-        country = countryComboBox.getSelectionModel().getSelectedItem();
+        user.setEmail(emailTextField.getText());
+        user.setPhoneNumber(phoneNumberTextField.getText());
+        user.setCountry(countryComboBox.getSelectionModel().getSelectedItem());
         LocalDate bd = birthdatePicker.getValue();
-        if (bd == null) {
-            birthdate = null;
-        }
-        else {
-            birthdate = Date.from(birthdatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        if (bd != null) {
+            user.setBirthDate(Date.from(birthdatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         }
 
         if (validateFields()) {
+            HttpCall.post(API.SIGNUP, user, Object.class,
+                    new ResponseCallback<>() {
+                        @Override
+                        public void run() {
+                            if (getResponse().isSuccess()) {
+                                signupLabel.setText("Your account has been successfully created");
+                                try{
+                                    sleep(2000);
+                                }
+                                catch (InterruptedException ignore) {
 
+                                }
+                                SceneController.changeScene("entry.fxml");
+                            }
+                            else {
+                                String errMsg = getResponse().getMessage();
+                                if (errMsg.contains("SQLITE_CONSTRAINT_UNIQUE")) {
+                                    if (errMsg.contains("Username")) {
+                                        VBox.setMargin(passwordHBox, new Insets(8, 0, 0, 0));
+                                        usernameErrorLabel2.setText("Username is already in use!");
+                                    }
+                                    else if (errMsg.contains("Email")) {
+                                        VBox.setMargin(phoneNumberHBox, new Insets(8, 0, 0, 0));
+                                        emailErrorLabel2.setText("Email is already in use!");
+                                    }
+                                    else if (errMsg.contains("PhoneNumber")) {
+                                        VBox.setMargin(countryHBox, new Insets(8, 0, 0, 0));
+                                        phoneNumberErrorLabel2.setText("Phone number is already in use!");
+                                    }
+                                }
+                                else {
+                                    signupErrorLabel.setText("Internal Error!");
+                                }
+                            }
+                        }
+                    });
         }
     }
 

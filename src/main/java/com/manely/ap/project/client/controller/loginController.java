@@ -1,9 +1,8 @@
 package com.manely.ap.project.client.controller;
 
-import com.google.gson.Gson;
-import com.manely.ap.project.client.DataResource;
 import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.ResponseCallback;
+import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.User;
 import javafx.application.Platform;
@@ -56,14 +55,8 @@ public class loginController {
                         @Override
                         public void run() {
                             if (getResponse().isSuccess()) {
-                                try {
-                                    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(DataResource.user));
-                                    oos.writeObject(getResponse().getContent());
-                                    SceneController.changeScene("home-page.fxml");
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
-                                }
+                                Data.setUser(getResponse().getContent());
+                                SceneController.changeScene("home-page.fxml");
                             } else {
                                 Platform.runLater(() -> {
                                     usernameTextField.clear();
