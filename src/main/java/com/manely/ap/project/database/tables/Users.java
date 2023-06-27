@@ -3,10 +3,7 @@ package com.manely.ap.project.database.tables;
 import com.manely.ap.project.database.SQL;
 import com.manely.ap.project.common.model.*;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -82,7 +79,13 @@ public class Users extends Table {
         statement.setString(5, user.getEmail());
         statement.setString(6, user.getPhoneNumber());
         statement.setString(7, user.getCountry());
-        statement.setLong(8, user.getBirthDate().getTime());
+        Date birthdate = user.getBirthDate();
+        if (birthdate == null) {
+            statement.setNull(8, Types.BIGINT);
+        }
+        else {
+            statement.setLong(8, user.getBirthDate().getTime());
+        }
         statement.setLong(9, user.getDateAdded().getTime());
         statement.setLong(10, user.getLastDateModified().getTime());
         statement.executeUpdate();

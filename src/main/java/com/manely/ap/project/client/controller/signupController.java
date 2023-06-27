@@ -4,6 +4,7 @@ import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.ResponseCallback;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.User;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -191,6 +192,7 @@ public class signupController {
         firstnameErrorLabel.setText(" ");
         lastnameErrorLabel.setText(" ");
         usernameErrorLabel1.setText(" ");
+        usernameErrorLabel2.setText("");
         passwordErrorLabel1.setText(" ");
         passwordErrorLabel2.setText("");
         repeatPasswordErrorLabel1.setText(" ");
@@ -200,6 +202,9 @@ public class signupController {
         phoneNumberErrorLabel1.setText(" ");
         phoneNumberErrorLabel2.setText("");
         VBox.setMargin(repeatPassHBox, new Insets(0, 0, 0, 0));
+        VBox.setMargin(phoneNumberHBox, new Insets(0, 0, 0, 0));
+        VBox.setMargin(countryHBox, new Insets(0, 0, 0, 0));
+        VBox.setMargin(passwordHBox, new Insets(0, 0, 0, 0));
     }
 
     @FXML
@@ -225,7 +230,7 @@ public class signupController {
                         @Override
                         public void run() {
                             if (getResponse().isSuccess()) {
-                                signupLabel.setText("Your account has been successfully created");
+                                Platform.runLater(() -> signupLabel.setText("Your account has been successfully created"));
                                 try{
                                     sleep(2000);
                                 }
@@ -236,23 +241,23 @@ public class signupController {
                             }
                             else {
                                 String errMsg = getResponse().getMessage();
-                                if (errMsg.contains("SQLITE_CONSTRAINT_UNIQUE")) {
-                                    if (errMsg.contains("Username")) {
-                                        VBox.setMargin(passwordHBox, new Insets(8, 0, 0, 0));
-                                        usernameErrorLabel2.setText("Username is already in use!");
+                                Platform.runLater(() ->
+                                {
+                                    if (errMsg.contains("SQLITE_CONSTRAINT_UNIQUE")) {
+                                        if (errMsg.contains("Username")) {
+                                            VBox.setMargin(passwordHBox, new Insets(8, 0, 0, 0));
+                                            usernameErrorLabel2.setText("Username is already in use!");
+                                        } else if (errMsg.contains("Email")) {
+                                            VBox.setMargin(phoneNumberHBox, new Insets(8, 0, 0, 0));
+                                            emailErrorLabel2.setText("Email is already in use!");
+                                        } else if (errMsg.contains("PhoneNumber")) {
+                                            VBox.setMargin(countryHBox, new Insets(8, 0, 0, 0));
+                                            phoneNumberErrorLabel2.setText("Phone number is already in use!");
+                                        }
+                                    } else {
+                                        signupErrorLabel.setText("Internal Error!");
                                     }
-                                    else if (errMsg.contains("Email")) {
-                                        VBox.setMargin(phoneNumberHBox, new Insets(8, 0, 0, 0));
-                                        emailErrorLabel2.setText("Email is already in use!");
-                                    }
-                                    else if (errMsg.contains("PhoneNumber")) {
-                                        VBox.setMargin(countryHBox, new Insets(8, 0, 0, 0));
-                                        phoneNumberErrorLabel2.setText("Phone number is already in use!");
-                                    }
-                                }
-                                else {
-                                    signupErrorLabel.setText("Internal Error!");
-                                }
+                                });
                             }
                         }
                     });

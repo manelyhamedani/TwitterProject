@@ -12,9 +12,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,8 +56,6 @@ public class loginController {
                                 SceneController.changeScene("home-page.fxml");
                             } else {
                                 Platform.runLater(() -> {
-                                    usernameTextField.clear();
-                                    passwordTextField.clear();
                                     switch (getResponse().getStatus()) {
                                         case 401 -> errorLabel.setText("User does not exist!");
                                         case 403 -> errorLabel.setText("Wrong password!");

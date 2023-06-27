@@ -71,31 +71,31 @@ public class User implements Serializable {
     }
 
     public void setUsername(String username) {
-        this.username = username.trim();
+        this.username = username;
     }
 
     public void setPassword(String password) {
-        this.password = password.trim();
+        this.password = password;
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName.trim();
+        this.firstName = firstName;
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName.trim();
+        this.lastName = lastName;
     }
 
     public void setEmail(String email) {
-        this.email = email.trim();
+        this.email = email;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber.trim();
+        this.phoneNumber = phoneNumber;
     }
 
     public void setCountry(String country) {
-        this.country = country.trim();
+        this.country = country;
     }
 
     public void setBirthDate(Date birthDate) {
