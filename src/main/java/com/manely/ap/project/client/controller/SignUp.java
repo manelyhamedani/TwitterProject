@@ -19,7 +19,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 
-public class signupController {
+public class SignUp {
     private User user = new User();
     private String repeatedPassword;
 
@@ -237,7 +237,7 @@ public class signupController {
                                 catch (InterruptedException ignore) {
 
                                 }
-                                SceneController.changeScene("entry.fxml");
+                                Scene.changeScene("entry.fxml");
                             }
                             else {
                                 String errMsg = getResponse().getMessage();

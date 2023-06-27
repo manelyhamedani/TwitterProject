@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 import java.util.HashMap;
 import java.util.Map;
 
-public class loginController {
+public class Login {
 
     @FXML
     private PasswordField passwordTextField;
@@ -53,7 +53,7 @@ public class loginController {
                         public void run() {
                             if (getResponse().isSuccess()) {
                                 Data.setUser(getResponse().getContent());
-                                SceneController.changeScene("home-page.fxml");
+                                Scene.changeScene("home-page.fxml");
                             }
                             else {
                                 Platform.runLater(() -> {

@@ -1,15 +1,19 @@
 package com.manely.ap.project.client.controller;
 
+import com.manely.ap.project.client.Main;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.image.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 
-public class HomePageController {
+public class HomePage {
     private Image homeImage;
     private Image profileImage;
     private Image searchImage;
@@ -18,6 +22,9 @@ public class HomePageController {
     private Image coloredProfileImage;
     private Image coloredSearchImage;
     private Image coloredSettingsImage;
+
+    @FXML
+    private BorderPane root;
 
     @FXML
     private Button homeButton;
@@ -31,13 +38,15 @@ public class HomePageController {
     @FXML
     private Button settingsButton;
 
-    public void initialize() throws MalformedURLException {
+    public void initialize() throws IOException {
         setButtonImages();
 
         coloredHomeImage = setColorButtonImage(homeButton);
         coloredProfileImage = setColorButtonImage(profileButton);
         coloredSearchImage = setColorButtonImage(searchButton);
         coloredSettingsImage = setColorButtonImage(settingsButton);
+
+        homeButtonPressed();
     }
 
     private void setButtonImages() throws MalformedURLException {
@@ -111,10 +120,15 @@ public class HomePageController {
 
 
     @FXML
-    void homeButtonPressed() {
+    void homeButtonPressed() throws IOException {
         resetButtonImages();
         ((ImageView) homeButton.getGraphic()).setImage(coloredHomeImage);
 
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("timeline.fxml"));
+        Timeline timeline = new Timeline();
+        fxmlLoader.setRoot(timeline);
+        fxmlLoader.load();
+        root.setCenter(timeline);
     }
 
     @FXML

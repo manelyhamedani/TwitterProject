@@ -2,16 +2,16 @@ package com.manely.ap.project.client.controller;
 
 import javafx.fxml.FXML;
 
-public class EntryController {
+public class Entry {
 
     @FXML
     void loginButtonPressed() {
-        SceneController.changeScene("login.fxml");
+        Scene.changeScene("login.fxml");
     }
 
     @FXML
     void signUpButtonPressed() {
-        SceneController.changeScene("signup.fxml");
+        Scene.changeScene("signup.fxml");
     }
 
 }

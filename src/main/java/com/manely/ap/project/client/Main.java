@@ -1,11 +1,9 @@
 package com.manely.ap.project.client;
 
-import com.manely.ap.project.client.controller.SceneController;
-import com.sun.net.httpserver.HttpExchange;
+import com.manely.ap.project.client.controller.Scene;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -17,15 +15,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        SceneController.setPrimaryStage(stage);
+        Scene.setPrimaryStage(stage);
 
         stage.setOnCloseRequest(event -> {
             Platform.exit();
             System.exit(0);
         });
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("entry.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("home-page.fxml"));
+        javafx.scene.Scene scene = new javafx.scene.Scene(fxmlLoader.load());
         stage.setTitle("Twitter");
         stage.setScene(scene);
         stage.show();
