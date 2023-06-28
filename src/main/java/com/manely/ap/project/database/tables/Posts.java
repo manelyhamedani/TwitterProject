@@ -3,8 +3,11 @@ package com.manely.ap.project.database.tables;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Retweet;
 import com.manely.ap.project.common.model.Tweet;
+import com.manely.ap.project.common.model.User;
 import com.manely.ap.project.database.SQL;
+import com.manely.ap.project.filemanager.MediaManager;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -56,7 +59,7 @@ public class Posts extends Table {
         statement.close();
     }
 
-    public synchronized ArrayList<Post> fetchUserPosts(String username, long date) throws SQLException {
+    public synchronized ArrayList<Post> fetchUserPosts(String username, long date) throws SQLException, IOException {
         String query = "SELECT * FROM " + TABLE_NAME +
                         " WHERE " + COLUMN_DATE + "<=? AND " +
                         COLUMN_SENDER + "=? " +
@@ -69,7 +72,7 @@ public class Posts extends Table {
         return readPosts(set);
     }
 
-    public synchronized ArrayList<Post> fetchTimelinePosts(String username, long date) throws SQLException {
+    public synchronized ArrayList<Post> fetchTimelinePosts(String username, long date) throws SQLException, IOException {
         String query = "SELECT DISTINCT " + TABLE_NAME + ".*" + " FROM " + TABLE_NAME +
                         " INNER JOIN " +
                         Follow.TABLE_NAME + ", " + Tweets.TABLE_NAME +
@@ -89,15 +92,14 @@ public class Posts extends Table {
         return readPosts(set);
     }
 
-    private ArrayList<Post> readPosts(ResultSet set) throws SQLException {
+    private ArrayList<Post> readPosts(ResultSet set) throws SQLException, IOException {
         ArrayList<Post> result = new ArrayList<>();
-        Post post;
+        Post post = null;
 
         while (set.next()) {
             int tweetId;
             if ((tweetId = set.getInt(COLUMN_TWEET_ID)) != 0) {
                 post = SQL.getTweets().select(tweetId);
-                result.add(post);
             }
             else if ((tweetId = set.getInt(COLUMN_RETWEET_ID)) != 0) {
                 post = new Retweet();
@@ -105,8 +107,15 @@ public class Posts extends Table {
                 post.setSenderUsername(set.getString(COLUMN_SENDER));
                 post.setDate(new Date(set.getLong(COLUMN_DATE)));
                 ((Retweet) post).setTweet((Tweet) SQL.getTweets().select(tweetId));
+            }
+            if (post != null) {
+                User sender = SQL.getUsers().fetchTweetSender(post.getSenderUsername());
+                post.setSenderName(sender.getFirstName() + " " + sender.getLastName());
+                post.setSenderAvatar(MediaManager.getUserAvatar(sender.getUsername()));
                 result.add(post);
-            }}
+            }
+
+        }
 
         set.close();
         return result;

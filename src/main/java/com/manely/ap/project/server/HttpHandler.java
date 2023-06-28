@@ -274,10 +274,7 @@ public class HttpHandler {
                     throw new IllegalArgumentException();
                 }
                 err = Error.UNUSUAL;
-                User sender = SQL.getUsers().fetchTweetSender(senderUsername);
                 tweet.setSenderUsername(senderUsername);
-                tweet.setSenderName(sender.getFirstName() + " " + sender.getLastName());
-                tweet.setSenderAvatar(MediaManager.getUserAvatar(senderUsername));
                 long currentTime = System.currentTimeMillis();
                 tweet.setDate(new Date(currentTime));
                 SQL.getTweets().insert(tweet);

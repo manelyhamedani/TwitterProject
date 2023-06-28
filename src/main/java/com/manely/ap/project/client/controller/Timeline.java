@@ -46,16 +46,9 @@ public class Timeline extends Group {
                             ArrayList<Post> posts = (ArrayList<Post>) getResponse().getContent();
                             for (Post post : posts) {
                                 if (post instanceof com.manely.ap.project.common.model.Tweet) {
-                                    Tweet tweet = new Tweet((com.manely.ap.project.common.model.Tweet) post);
-                                    try {
-                                        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("tweet.fxml"));
-                                        fxmlLoader.setRoot(tweet);
-                                        fxmlLoader.load();
-                                        tweets.add(tweet);
-                                    }
-                                    catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                    Tweet tweet = new Tweet();
+                                    tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
+                                    tweets.add(tweet);
                                 }
                             }
                             Data.setTimeLinePosts(posts);

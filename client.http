@@ -166,7 +166,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZC
 
 ###
 
-POST http://localhost:8000/timeline?date=1687917241184
+GET http://localhost:8000/timeline?date=1687957418013
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MCwiYXVkIjoidXNlciIsImlhdCI6MTY4NzkxNjU4NDQ1NSwiZXhwIjoxNjg4NzgwNTg0NDU1fQ.Am3pAv9hAwlqMbXmS3uTDEplxLwLrcXagThBzCuDt3c
 
 ###
