@@ -6,9 +6,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="530.0" spacing="14.0" type="HBox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manely.ap.project.client.controller.Tweet">
    <children>
@@ -42,8 +46,25 @@
                   </Label>
                </children>
             </HBox>
-            <VBox fx:id="tweetVBox" />
-            <HBox spacing="50.0">
+            <VBox fx:id="tweetVBox" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="430.0" spacing="14.0">
+               <children>
+                  <Text fx:id="tweetText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="430.0">
+                     <font>
+                        <Font name="Apple Braille" size="14.0" />
+                     </font>
+                  </Text>
+                  <GridPane fx:id="tweetGridPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+               </children></VBox>
+            <HBox spacing="85.0">
                <children>
                   <HBox>
                      <children>

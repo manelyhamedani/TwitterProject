@@ -1,11 +1,16 @@
 package com.manely.ap.project.client;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.manely.ap.project.client.model.Data;
+import com.manely.ap.project.common.model.PostAdapter;
 import com.manely.ap.project.common.model.HttpResponse;
 import com.manely.ap.project.common.API;
+import com.manely.ap.project.common.model.Post;
 
-import java.io.InputStreamReader;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -21,7 +26,7 @@ public class HttpCall {
     public static <T> void get(
             String path,
             Map<String, String> query,
-            Class<T> contentType,
+            Type contentType,
             ResponseCallback<T> onResponse
     ) {
         execute("GET", path, null, query, onResponse, contentType);
@@ -30,7 +35,7 @@ public class HttpCall {
     public static <T> void post(
             String path,
             Object data,
-            Class<T> contentType,
+            Type contentType,
             ResponseCallback<T> onResponse
     ) {
         execute("POST", path, data, null, onResponse, contentType);
@@ -42,7 +47,7 @@ public class HttpCall {
             Object data,
             Map<String, String> query,
             ResponseCallback<T> onResponse,
-            Class<T> contentType
+            Type contentType
     ) {
         executor.execute(() -> {
             try {
@@ -56,10 +61,17 @@ public class HttpCall {
                     conn.setRequestProperty("Content-Length", String.valueOf(bytes.length));
                     conn.getOutputStream().write(bytes);
                 }
+                if (!path.equals(API.SIGNUP) && !path.equals(API.LOGIN)) {
+                    conn.setRequestProperty("Authorization", Data.getUser().getJwt());
+                }
 
                 conn.connect();
 
-                HttpResponse<T> response = new Gson().fromJson(
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.registerTypeAdapter(Post.class, new PostAdapter());
+                Gson gson = gsonBuilder.create();
+
+                HttpResponse<T> response = gson.fromJson(
                         new InputStreamReader(conn.getInputStream()),
                         TypeToken.getParameterized(HttpResponse.class, contentType).getType()
                 );

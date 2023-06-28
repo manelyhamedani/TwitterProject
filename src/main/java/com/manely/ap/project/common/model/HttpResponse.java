@@ -1,7 +1,9 @@
 package com.manely.ap.project.common.model;
 
 
-public record HttpResponse<T>(int STATUS_CODE, String MESSAGE, boolean SUCCESS, T CONTENT) {
+import java.io.Serializable;
+
+public record HttpResponse<T>(int STATUS_CODE, String MESSAGE, boolean SUCCESS, T CONTENT) implements Serializable {
 
     public boolean isSuccess() {
         return SUCCESS;

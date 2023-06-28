@@ -2,8 +2,12 @@ package com.manely.ap.project.client.model;
 
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
+
 
 public class Data {
     private static User user;
@@ -20,6 +24,10 @@ public class Data {
 
     public static ArrayList<Post> getTimeLinePosts() {
         return timeLinePosts;
+    }
+
+    public static void setTimeLinePosts(ArrayList<Post> posts) {
+        timeLinePosts = posts;
     }
 
 }

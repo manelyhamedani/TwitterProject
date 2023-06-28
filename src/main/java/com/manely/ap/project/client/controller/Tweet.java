@@ -1,24 +1,35 @@
 package com.manely.ap.project.client.controller;
 
+import com.manely.ap.project.client.Main;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.NumberFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import static com.manely.ap.project.client.util.ButtonUtility.setColorButtonImage;
 
 public class Tweet extends HBox {
+    private final NumberFormat formatter = NumberFormat.getInstance();
+    private final com.manely.ap.project.common.model.Tweet tweet;
+
     private Image retweetImage;
     private Image coloredRetweetImage;
     private Image likeImage;
@@ -65,11 +76,91 @@ public class Tweet extends HBox {
     @FXML
     private Hyperlink usernameLink;
 
+    @FXML
+    private Text tweetText;
+
+    @FXML
+    private GridPane tweetGridPane;
+
     public void initialize() throws IOException {
        setButtonImages();
 
        coloredRetweetImage = setColorButtonImage(retweetButton);
        coloredLikeImage = setColorButtonImage(likeButton);
+
+       nameLink.setText(tweet.getSenderName());
+       usernameLink.setText(tweet.getSenderUsername());
+       commentCountLabel.setText(formatter.format(tweet.getCommentsCount()));
+       retweetCountLabel.setText(formatter.format(tweet.getRetweetsCount()));
+       quoteCountLabel.setText(formatter.format(tweet.getQuotesCount()));
+       likeCountLabel.setText(formatter.format(tweet.getLikesCount()));
+       tweetText.setText(tweet.getText());
+       Date date = tweet.getDate();
+       Date currentTime = new Date();
+       Calendar calendar = Calendar.getInstance();
+       calendar.setTime(date);
+       int day = calendar.get(Calendar.DAY_OF_MONTH);
+       int month = calendar.get(Calendar.MONTH);
+       int year = calendar.get(Calendar.YEAR);
+
+       long diff = currentTime.getTime() - date.getTime();
+       long hourMillis = 60 * 60 * 1000;
+       long dayMillis = 24 * hourMillis;
+       long yearMillis = 365 * dayMillis;
+       if (diff < hourMillis) {
+           long minuteMillis = 60 * 1000;
+           int min = (int) (diff / minuteMillis);
+           timeLabel.setText(formatter.format(min) + "m");
+       }
+       else if (diff < dayMillis) {
+           int hour = (int) (diff / hourMillis);
+           timeLabel.setText(formatter.format(hour) + "h");
+       }
+       else if (diff < yearMillis) {
+           timeLabel.setText(formatter.format(month) + " " + formatter.format(day));
+       }
+       else {
+           timeLabel.setText(formatter.format(year) + " " + formatter.format(month) + " " + formatter.format(day));
+       }
+
+       if (tweet.getSenderAvatar() != null) {
+           Image avatar = new Image(new ByteArrayInputStream(tweet.getSenderAvatar().getBytes()));
+           ((ImageView) avatarButton.getGraphic()).setImage(avatar);
+       }
+
+       int count = 1;
+       int columnIndex = 0;
+       int rowIndex = 0;
+       if (tweet.getImageCount() > 0) {
+           for (com.manely.ap.project.common.model.Image img : tweet.getImages()) {
+               if (count % 2 == 0) {
+                   columnIndex = 1;
+               }
+               if (count / 2 == 1) {
+                   rowIndex = 1;
+               }
+
+               Button imageButton = new Button();
+               imageButton.setMaxHeight(Double.MAX_VALUE);
+               imageButton.setMaxWidth(Double.MAX_VALUE);
+               imageButton.setText("");
+               imageButton.setStyle("-fx-background-color: transparent");
+               imageButton.setOnAction(new EventHandler<ActionEvent>() {
+                   @Override
+                   public void handle(ActionEvent event) {
+                       //TODO:handle show image
+                   }
+               });
+
+               ImageView imageView = new ImageView();
+               Image image = new Image(new ByteArrayInputStream(img.getBytes()));
+               imageView.setImage(image);
+               imageButton.setGraphic(imageView);
+
+               tweetGridPane.add(imageButton, columnIndex, rowIndex);
+               ++count;
+            }
+        }
 
     }
 
@@ -90,15 +181,11 @@ public class Tweet extends HBox {
         ((ImageView) likeButton.getGraphic()).setImage(likeImage);
     }
 
-    public Tweet(com.manely.ap.project.common.model.Tweet tweet) throws IOException {
-        if (tweet.getSenderAvatar() != null) {
-            Image avatar = new Image(new ByteArrayInputStream(tweet.getSenderAvatar().getBytes()));
-            ((ImageView) avatarButton.getGraphic()).setImage(avatar);
-        }
-
-        nameLink.setText(tweet.getSenderName());
-        usernameLink.setText(tweet.getSenderUsername());
+    public Tweet(com.manely.ap.project.common.model.Tweet tweet) {
+        this.tweet = tweet;
     }
+
+
 
     @FXML
     void avatarButtonPressed(ActionEvent event) {

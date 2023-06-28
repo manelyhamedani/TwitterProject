@@ -2,6 +2,8 @@ package com.manely.ap.project.server;
 
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.manely.ap.project.common.model.*;
 import com.manely.ap.project.common.model.Error;
 import com.manely.ap.project.database.SQL;
@@ -10,9 +12,8 @@ import com.manely.ap.project.server.jwt.JWebToken;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.validator.routines.EmailValidator;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -460,7 +461,7 @@ public class HttpHandler {
 
     static void handleTimeline(HttpExchange exchange) {
         String jwt;
-        if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
+        if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
             try {
                 String username = JWebToken.getPayload(jwt).getSub();
                 HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
@@ -645,14 +646,24 @@ public class HttpHandler {
 
     private static <T> void response(HttpExchange exchange, int status, String msg, boolean success, T content) {
         try {
-            String response = (new Gson()).toJson(new HttpResponse<>(status, msg, success, content));
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeHierarchyAdapter(Post.class, new PostAdapter());
+            Type type;
+            if (content == null) {
+                type = new TypeToken<HttpResponse<Object>>(){}.getType();
+            }
+            else {
+                type = TypeToken.getParameterized(HttpResponse.class, content.getClass()).getType();
+
+            }
+            String response = gsonBuilder.create().toJson(new HttpResponse<>(status, msg, success, content), type);
             exchange.sendResponseHeaders(200, response.getBytes().length);
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();
         }
         catch (IOException e) {
-            //TODO: handle
+            e.printStackTrace();
         }
     }
 }

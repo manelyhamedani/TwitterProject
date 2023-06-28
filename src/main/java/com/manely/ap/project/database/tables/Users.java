@@ -172,6 +172,7 @@ public class Users extends Table {
             profile.setFollowersCount(getFollowersCount(profile.getUsername()));
             profile.setFollowingCount(getFollowingCount(profile.getUsername()));
             if (kind.equals(Kind.USER)) {
+                profile.setPassword(set.getString(COLUMN_PASSWORD));
                 profile.setEmail(set.getString(COLUMN_EMAIL));
                 profile.setPhoneNumber(set.getString(COLUMN_PHONE_NUMBER));
                 profile.setCountry(set.getString(COLUMN_COUNTRY));

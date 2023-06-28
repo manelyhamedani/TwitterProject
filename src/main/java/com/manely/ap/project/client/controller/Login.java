@@ -52,7 +52,7 @@ public class Login {
                         @Override
                         public void run() {
                             if (getResponse().isSuccess()) {
-                                Data.setUser(getResponse().getContent());
+                                Data.setUser((User) getResponse().getContent());
                                 Scene.changeScene("home-page.fxml");
                             }
                             else {
