@@ -1,20 +1,26 @@
 package com.manely.ap.project.client.controller;
 
 import com.manely.ap.project.client.Main;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.io.ByteArrayInputStream;
@@ -181,7 +187,21 @@ public class Tweet extends HBox {
 
         if (tweet.getSenderAvatar() != null) {
             Image avatar = new Image(new ByteArrayInputStream(tweet.getSenderAvatar().getBytes()));
-            ((ImageView) avatarButton.getGraphic()).setImage(avatar);
+            ImageView imageView = (ImageView) avatarButton.getGraphic();
+            double radius = imageView.getFitHeight() / 2;
+            Circle clip = new Circle(radius);
+            clip.setCenterX(radius);
+            clip.setCenterY(radius);
+
+            imageView.setImage(avatar);
+            imageView.setClip(clip);
+            SnapshotParameters parameters = new SnapshotParameters();
+            parameters.setFill(Color.TRANSPARENT);
+            Platform.runLater(() -> {
+                WritableImage roundedImage = imageView.snapshot(parameters, null);
+                imageView.setClip(null);
+                imageView.setImage(roundedImage);
+            });
         }
 
         int count = 1;

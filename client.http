@@ -77,6 +77,14 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZC
 
 ###
 
+POST http://localhost:8000/set-user-image
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNYW5NYW4iLCJpZCI6MCwiYXVkIjoidXNlciIsImlhdCI6MTY4Nzk3NjUzNTA0NywiZXhwIjoxNjg4ODQwNTM1MDQ3fQ.lMlFjzxd6eypitt7HMLnxDTlACbSG4DUj3s6Lim5kJw
+
+< ./avatar.json
+
+###
+
 POST http://localhost:8000/set-user-info
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MCwiYXVkIjoidXNlciIsImlhdCI6MTY4NzkxNjU4NDQ1NSwiZXhwIjoxNjg4NzgwNTg0NDU1fQ.Am3pAv9hAwlqMbXmS3uTDEplxLwLrcXagThBzCuDt3c
