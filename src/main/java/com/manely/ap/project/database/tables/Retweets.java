@@ -35,7 +35,7 @@ public class Retweets extends Table {
                         COLUMN_DATE +
                         ") VALUES (?, ?, ?)";
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
-        statement.setString(1, retweet.getSender());
+        statement.setString(1, retweet.getSenderUsername());
         statement.setInt(2, retweet.getTweet().getId());
         statement.setLong(3, retweet.getDate().getTime());
         statement.executeUpdate();

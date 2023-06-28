@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static com.manely.ap.project.client.util.ButtonUtility.setColorButtonImage;
+
 
 public class HomePage {
     private Image homeImage;
@@ -72,44 +74,19 @@ public class HomePage {
         settingsImageView.setFitHeight(29);
 
         homeImage = new Image(home.toString());
-        homeImageView.setImage(homeImage);
-        homeButton.setGraphic(homeImageView);
+        ((ImageView) homeButton.getGraphic()).setImage(homeImage);
 
         searchImage = new Image(search.toString());
-        searchImageView.setImage(searchImage);
-        searchButton.setGraphic(searchImageView);
+        ((ImageView) searchButton.getGraphic()).setImage(searchImage);
 
         profileImage = new Image(profile.toString());
-        profileImageView.setImage(profileImage);
-        profileButton.setGraphic(profileImageView);
+        ((ImageView) profileButton.getGraphic()).setImage(profileImage);
 
         settingsImage = new Image(settings.toString());
-        settingsImageView.setImage(settingsImage);
-        settingsButton.setGraphic(settingsImageView);
+        ((ImageView) settingsButton.getGraphic()).setImage(settingsImage);
     }
 
-    private Image setColorButtonImage(Button button) {
-        ImageView imageView = (ImageView) button.getGraphic();
-        Image image = imageView.getImage();
-        int width = (int) image.getWidth();
-        int height = (int) image.getHeight();
-        WritableImage finalImage = new WritableImage(width, height);
 
-        PixelReader reader = image.getPixelReader();
-        PixelWriter writer = finalImage.getPixelWriter();
-        for (int x = 0; x < width; ++x) {
-            for (int y = 0; y < height; ++y) {
-                if (reader.getColor(x, y).equals(Color.BLACK)) {
-                    writer.setArgb(x, y, 0xff36b9ff);
-                }
-                else {
-                    writer.setArgb(x, y, reader.getArgb(x, y));
-                }
-            }
-        }
-
-        return finalImage;
-    }
 
     private void resetButtonImages() {
         ((ImageView) homeButton.getGraphic()).setImage(homeImage);

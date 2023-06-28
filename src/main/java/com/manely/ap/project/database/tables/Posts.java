@@ -50,7 +50,7 @@ public class Posts extends Table {
                         ") VALUES (?, ?, ?)";
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
         statement.setInt(1, post.getId());
-        statement.setString(2, post.getSender());
+        statement.setString(2, post.getSenderUsername());
         statement.setLong(3, post.getDate().getTime());
         statement.executeUpdate();
         statement.close();
@@ -102,7 +102,7 @@ public class Posts extends Table {
             else if ((tweetId = set.getInt(COLUMN_RETWEET_ID)) != 0) {
                 post = new Retweet();
                 post.setId(tweetId);
-                post.setSender(set.getString(COLUMN_SENDER));
+                post.setSenderUsername(set.getString(COLUMN_SENDER));
                 post.setDate(new Date(set.getLong(COLUMN_DATE)));
                 ((Retweet) post).setTweet((Tweet) SQL.getTweets().select(tweetId));
                 result.add(post);

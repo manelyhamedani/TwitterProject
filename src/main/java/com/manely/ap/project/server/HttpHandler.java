@@ -267,13 +267,16 @@ public class HttpHandler {
         if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
             Error err = Error.UNUSUAL;
             try {
-                String sender = JWebToken.getPayload(jwt).getSub();
+                String senderUsername = JWebToken.getPayload(jwt).getSub();
                 Tweet tweet = getRequestBody(exchange, Tweet.class);
                 if ((err = tweet.validateTweet()) != null) {
                     throw new IllegalArgumentException();
                 }
                 err = Error.UNUSUAL;
-                tweet.setSender(sender);
+                User sender = SQL.getUsers().fetchTweetSender(senderUsername);
+                tweet.setSenderUsername(senderUsername);
+                tweet.setSenderName(sender.getFirstName() + " " + sender.getLastName());
+                tweet.setSenderAvatar(MediaManager.getUserAvatar(senderUsername));
                 long currentTime = System.currentTimeMillis();
                 tweet.setDate(new Date(currentTime));
                 SQL.getTweets().insert(tweet);
@@ -300,7 +303,7 @@ public class HttpHandler {
                     err = Error.NULL_QUOTE;
                     throw new IllegalArgumentException();
                 }
-                quote.setSender(sender);
+                quote.setSenderUsername(sender);
                 long currentTime = System.currentTimeMillis();
                 quote.setDate(new Date(currentTime));
                 SQL.getTweets().insert(quote);
@@ -323,7 +326,7 @@ public class HttpHandler {
             try {
                 String sender = JWebToken.getPayload(jwt).getSub();
                 Retweet retweet = getRequestBody(exchange, Retweet.class);
-                retweet.setSender(sender);
+                retweet.setSenderUsername(sender);
                 long currentTime = System.currentTimeMillis();
                 retweet.setDate(new Date(currentTime));
                 SQL.getRetweets().insert(retweet);
@@ -393,7 +396,7 @@ public class HttpHandler {
                     err = Error.NULL_REPLY;
                     throw new IllegalArgumentException();
                 }
-                reply.setSender(sender);
+                reply.setSenderUsername(sender);
                 long currentTime = System.currentTimeMillis();
                 reply.setDate(new Date(currentTime));
                 SQL.getTweets().insert(reply);
@@ -559,7 +562,7 @@ public class HttpHandler {
             refPost = ((Quote) post).getTweet();
         }
 
-        if (!blockers.contains(post.getSender())) {
+        if (!blockers.contains(post.getSenderUsername())) {
             return filterPost(refPost, blockers);
         }
 

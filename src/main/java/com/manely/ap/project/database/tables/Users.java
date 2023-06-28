@@ -26,6 +26,11 @@ public class Users extends Table {
     private static final String COLUMN_LOCATION = "Location";
     private static final String COLUMN_WEBSITE = "Website";
 
+    private enum Kind {
+        USER,
+        PROFILE,
+        TWEET_SENDER
+    }
 
     @Override
     public synchronized void create() throws SQLException {
@@ -95,7 +100,7 @@ public class Users extends Table {
     }
 
     public synchronized User select(String username) throws SQLException {
-        return selectAs(true, username);
+        return selectAs(Kind.USER, username);
     }
 
     public synchronized ArrayList<User> query(String quest) throws SQLException {
@@ -105,11 +110,15 @@ public class Users extends Table {
                     COLUMN_LASTNAME + " LIKE " + "'%" + quest.trim() + "%'";
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
         ResultSet set = statement.executeQuery();
-        return readAs(false, set);
+        return readAs(Kind.PROFILE, set);
     }
 
     public synchronized User fetchProfile(String username) throws SQLException {
-        return selectAs(false, username);
+        return selectAs(Kind.PROFILE, username);
+    }
+
+    public synchronized User fetchTweetSender(String username) throws SQLException {
+        return selectAs(Kind.TWEET_SENDER, username);
     }
 
     public synchronized ArrayList<User> fetchProfiles(ArrayList<String> usernames) throws SQLException {
@@ -118,12 +127,12 @@ public class Users extends Table {
             return profiles;
         }
         for (String username : usernames) {
-            profiles.add(selectAs(false, username));
+            profiles.add(selectAs(Kind.PROFILE, username));
         }
         return profiles;
     }
 
-    private User selectAs(boolean user, String username) throws SQLException {
+    private User selectAs(Kind kind, String username) throws SQLException {
         String query = "SELECT * FROM " + TABLE_NAME +
                 " WHERE " + COLUMN_USERNAME + "=?";
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
@@ -131,7 +140,7 @@ public class Users extends Table {
 
         ResultSet set = statement.executeQuery();
 
-        ArrayList<User> result = readAs(user, set);
+        ArrayList<User> result = readAs(kind, set);
 
         if (result.size() != 1) {
             return null;
@@ -141,7 +150,7 @@ public class Users extends Table {
         return result.get(0);
     }
 
-    private ArrayList<User> readAs(boolean user, ResultSet set) throws SQLException {
+    private ArrayList<User> readAs(Kind kind, ResultSet set) throws SQLException {
         ArrayList<User> profiles = new ArrayList<>();
         User profile;
         while (set.next()) {
@@ -149,6 +158,10 @@ public class Users extends Table {
             profile.setUsername(set.getString(COLUMN_USERNAME));
             profile.setFirstName(set.getString(COLUMN_FIRSTNAME));
             profile.setLastName(set.getString(COLUMN_LASTNAME));
+            if (kind.equals(Kind.TWEET_SENDER)) {
+                profiles.add(profile);
+                continue;
+            }
             profile.setBirthDate(new Date(set.getLong(COLUMN_BIRTHDATE)));
             profile.setDateAdded(new Date(set.getLong(COLUMN_DATE_ADDED)));
             UserInfo info = new UserInfo();
@@ -158,9 +171,7 @@ public class Users extends Table {
             profile.setInfo(info);
             profile.setFollowersCount(getFollowersCount(profile.getUsername()));
             profile.setFollowingCount(getFollowingCount(profile.getUsername()));
-            if (user) {
-                profile.setId(set.getInt(COLUMN_ID));
-                profile.setPassword(set.getString(COLUMN_PASSWORD));
+            if (kind.equals(Kind.USER)) {
                 profile.setEmail(set.getString(COLUMN_EMAIL));
                 profile.setPhoneNumber(set.getString(COLUMN_PHONE_NUMBER));
                 profile.setCountry(set.getString(COLUMN_COUNTRY));

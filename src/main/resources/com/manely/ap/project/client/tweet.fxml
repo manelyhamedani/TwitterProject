@@ -8,12 +8,19 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="530.0" spacing="8.0" type="HBox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manely.ap.project.client.controller.Tweet">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="530.0" spacing="14.0" type="HBox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manely.ap.project.client.controller.Tweet">
    <children>
-      <Circle fx:id="avatarCircle" fill="WHITE" radius="30.0" stroke="WHITE" strokeType="INSIDE" />
+      <Button fx:id="avatarButton" mnemonicParsing="false" onAction="#avatarButtonPressed" style="-fx-background-radius: 10em; -fx-min-width: 60px; -fx-min-height: 60px; -fx-max-height: 60px; -fx-max-width: 60px; -fx-background-color: white;">
+         <graphic>
+            <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../../../Downloads/avatar.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
       <VBox prefWidth="500.0" spacing="4.0">
          <children>
             <HBox maxWidth="-Infinity">

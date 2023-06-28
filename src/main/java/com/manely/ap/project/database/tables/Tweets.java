@@ -69,7 +69,7 @@ public class Tweets extends Table {
                         COLUMN_REPLIED_TWEET +
                         ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
-        statement.setString(1, tweet.getSender());
+        statement.setString(1, tweet.getSenderUsername());
         statement.setString(2, tweet.getText());
         statement.setInt(3, tweet.getLikesCount());
         statement.setInt(4, tweet.getRetweetsCount());
@@ -141,7 +141,7 @@ public class Tweets extends Table {
                 tweet = new Tweet();
             }
             tweet.setId(set.getInt(COLUMN_ID));
-            tweet.setSender(set.getString(COLUMN_SENDER));
+            tweet.setSenderUsername(set.getString(COLUMN_SENDER));
             tweet.setText(set.getString(COLUMN_TEXT));
             tweet.setDate(new Date(set.getLong(COLUMN_DATE)));
             tweet.setLikesCount(set.getInt(COLUMN_LIKES));
