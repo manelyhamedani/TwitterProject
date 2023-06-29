@@ -5,6 +5,8 @@ import com.manely.ap.project.database.SQL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 public class Likes extends Table {
     public static final String TABLE_NAME = "Likes";
@@ -59,5 +61,20 @@ public class Likes extends Table {
         result.close();
         statement.close();
         return exists;
+    }
+
+    public synchronized ArrayList<String> select(int tweetId) throws SQLException {
+        String query = "SELECT " + COLUMN_USERNAME + " FROM " + TABLE_NAME +
+                        " WHERE " + COLUMN_TWEET_ID + "=" + tweetId;
+        Statement statement = SQL.getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+
+        ArrayList<String> result = new ArrayList<>();
+
+        while (resultSet.next()) {
+            result.add(resultSet.getString(COLUMN_USERNAME));
+        }
+
+        return result;
     }
 }

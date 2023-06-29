@@ -5,6 +5,7 @@ import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.Main;
 import com.manely.ap.project.client.ResponseCallback;
 import com.manely.ap.project.client.model.Data;
+import com.manely.ap.project.client.util.Binding;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Retweet;
@@ -69,20 +70,18 @@ public class HomePage {
     public void initialize() throws IOException {
         setButtonImages();
 
-        coloredHomeImage = setColorButtonImage(homeButton);
-        coloredProfileImage = setColorButtonImage(profileButton);
-        coloredSearchImage = setColorButtonImage(searchButton);
-        coloredSettingsImage = setColorButtonImage(settingsButton);
+        coloredHomeImage = setColorButtonImage(homeButton, 0xff36b9ff);
+        coloredProfileImage = setColorButtonImage(profileButton, 0xff36b9ff);
+        coloredSearchImage = setColorButtonImage(searchButton, 0xff36b9ff);
+        coloredSettingsImage = setColorButtonImage(settingsButton, 0xff36b9ff);
+
+        tweetListView.setFocusTraversable(false);
 
         tweetListView.setCellFactory((listView) -> {
-            TweetCell tweetCell = new TweetCell();
-//            tweetCell.prefWidth(830);
-//            tweetCell.maxWidth(Region.USE_PREF_SIZE);
-//            tweetCell.minWidth(Region.USE_PREF_SIZE);
-//            tweetListView.prefWidthProperty().bind(tweetCell.widthProperty().add(8));
-            return tweetCell;
+            TweetCell cell = new TweetCell();
+            cell.setFocusTraversable(false);
+            return cell;
         });
-
 
         homeButtonPressed();
     }
@@ -167,6 +166,7 @@ public class HomePage {
                                 long id2 = o2.getTweet().getDate().getTime();
                                 return Long.compare(id1, id2) * -1;
                             });
+                            Binding.setBindings(tweets);
                             Platform.runLater(() -> tweetListView.setItems(tweets));
                         }
                         else {

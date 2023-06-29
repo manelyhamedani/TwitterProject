@@ -1,6 +1,7 @@
 package com.manely.ap.project.common.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Tweet extends Post implements Serializable {
     private String text;
@@ -9,6 +10,15 @@ public class Tweet extends Post implements Serializable {
     private int retweetsCount;
     private int commentsCount;
     private int quotesCount;
+    private ArrayList<String> likes;
+
+    public ArrayList<String> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(ArrayList<String> likes) {
+        this.likes = likes;
+    }
 
     public int getQuotesCount() {
         return quotesCount;

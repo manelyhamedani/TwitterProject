@@ -1,10 +1,14 @@
 package com.manely.ap.project.client.controller;
 
+import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.Main;
+import com.manely.ap.project.client.ResponseCallback;
 import com.manely.ap.project.client.model.Data;
+import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Retweet;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -32,6 +36,7 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 import static com.manely.ap.project.client.util.ButtonUtility.setColorButtonImage;
 
@@ -43,8 +48,30 @@ public class Tweet extends VBox {
     private Image coloredRetweetImage;
     private Image likeImage;
     private Image coloredLikeImage;
-    private boolean liked = false;
+    private SimpleBooleanProperty likedProperty = new SimpleBooleanProperty(false);
+    private boolean isLiked = false;
     private boolean retweeted = false;
+
+    public SimpleBooleanProperty likeProperty() {
+        return likedProperty;
+    }
+
+    public void like() {
+        isLiked = true;
+        Platform.runLater(() -> {
+            int count = Integer.parseInt(likeCountLabel.getText());
+            likeCountLabel.setText(String.valueOf(++count));
+            ((ImageView) likeButton.getGraphic()).setImage(coloredLikeImage);
+        });
+    }
+
+    public void unlike() {
+        isLiked = false;
+        Platform.runLater(() -> {
+            int count = Integer.parseInt(likeCountLabel.getText());
+            likeCountLabel.setText(String.valueOf(--count));
+            ((ImageView) likeButton.getGraphic()).setImage(likeImage);
+        });    }
 
     @FXML
     private Button avatarButton;
@@ -109,8 +136,13 @@ public class Tweet extends VBox {
     public void initialize() throws IOException {
        setButtonImages();
 
-       coloredRetweetImage = setColorButtonImage(retweetButton);
-       coloredLikeImage = setColorButtonImage(likeButton);
+       coloredRetweetImage = setColorButtonImage(retweetButton, 0xff39e139);
+       coloredLikeImage = setColorButtonImage(likeButton, 0xffe03a3a);
+
+       likeCountLabel.setText("0");
+       retweetCountLabel.setText("0");
+       quoteCountLabel.setText("0");
+       commentCountLabel.setText("0");
 
     }
 
@@ -152,9 +184,10 @@ public class Tweet extends VBox {
     }
 
     public void setRetweet(Retweet retweet) {
-        this.tweet = retweet;
 
         setTweet(retweet.getTweet());
+        this.tweet = retweet;
+
         tweetHBox.setPadding(new Insets(0, 14, 8, 14));
         retweetSenderHBox.setPadding(new Insets(0, 0, 0, 60));
 
@@ -189,6 +222,12 @@ public class Tweet extends VBox {
         retweetCountLabel.setText(formatter.format(tweet.getRetweetsCount()));
         quoteCountLabel.setText(formatter.format(tweet.getQuotesCount()));
         likeCountLabel.setText(formatter.format(tweet.getLikesCount()));
+
+        if (tweet.getLikes().contains(Data.getUser().getUsername())) {
+            Platform.runLater(() -> ((ImageView) likeButton.getGraphic()).setImage(coloredLikeImage));
+            isLiked = true;
+            likedProperty.set(true);
+        }
 
         double rightPadding = commentHBox.getPadding().getRight();
         double maxWidth = Math.max(Math.max(commentCountLabel.getWidth(), retweetCountLabel.getWidth()), Math.max(quoteCountLabel.getWidth(), likeCountLabel.getWidth()));
@@ -294,13 +333,36 @@ public class Tweet extends VBox {
     }
 
     @FXML
-    void likeButtonPressed(ActionEvent event) {
-        if (liked) {
-
+    void likeButtonPressed() {
+        String path;
+        if (isLiked) {
+            path = API.UNLIKE;
         }
         else {
-
+            path = API.LIKE;
         }
+        HashMap<String, String> query = new HashMap<>();
+        query.put("id", String.valueOf(tweet.getId()));
+        HttpCall.get(path, query, Object.class,
+                new ResponseCallback<>() {
+                    @Override
+                    public void run() {
+                        if (getResponse().isSuccess()) {
+                            if (isLiked) {
+                                likedProperty.set(false);
+                                unlike();
+                            }
+                            else {
+                               likedProperty.set(true);
+                               like();
+                            }
+                        }
+                        else {
+                            System.out.println(getResponse().getMessage());
+                            System.exit(1);
+                        }
+                    }
+                });
     }
 
     @FXML

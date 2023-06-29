@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 
 public class ButtonUtility {
 
-    public static Image setColorButtonImage(Button button) {
+    public static Image setColorButtonImage(Button button, int colorARGB) {
         ImageView imageView = (ImageView) button.getGraphic();
         Image image = imageView.getImage();
         int width = (int) image.getWidth();
@@ -18,7 +18,7 @@ public class ButtonUtility {
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 if (reader.getColor(x, y).equals(Color.BLACK)) {
-                    writer.setArgb(x, y, 0xff36b9ff);
+                    writer.setArgb(x, y, colorARGB);
                 }
                 else {
                     writer.setArgb(x, y, reader.getArgb(x, y));

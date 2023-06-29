@@ -339,7 +339,7 @@ public class HttpHandler {
 
     static void handleLike(HttpExchange exchange) {
         String jwt;
-        if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
+        if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
             try {
                 HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
                 if (!query.containsKey("id")) {
@@ -362,7 +362,7 @@ public class HttpHandler {
 
     static void handleUnlike(HttpExchange exchange) {
         String jwt;
-        if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
+        if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
             try {
                 HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
                 if (!query.containsKey("id")) {

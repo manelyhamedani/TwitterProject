@@ -148,7 +148,7 @@ public class Tweets extends Table {
             tweet.setCommentsCount(set.getInt(COLUMN_COMMENTS));
             tweet.setQuotesCount(set.getInt(COLUMN_QUOTES));
             tweet.setRetweetsCount(set.getInt(COLUMN_RETWEETS));
-
+            tweet.setLikes(SQL.getLikes().select(tweet.getId()));
             tweets.add(tweet);
         }
 

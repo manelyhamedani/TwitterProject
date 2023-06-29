@@ -54,15 +54,15 @@ public class HttpCall {
                 URL url = new URL(API.BASE_URL + path + mapToQuery(query));
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod(method);
-                conn.setDoOutput(true);
                 conn.setRequestProperty("Content-Type", "application/json");
+                if (!path.equals(API.SIGNUP) && !path.equals(API.LOGIN)) {
+                    conn.setRequestProperty("Authorization", Data.getUser().getJwt());
+                }
+                conn.setDoOutput(true);
                 if (data != null && method.equals("POST")) {
                     byte[] bytes = new Gson().toJson(data).getBytes();
                     conn.setRequestProperty("Content-Length", String.valueOf(bytes.length));
                     conn.getOutputStream().write(bytes);
-                }
-                if (!path.equals(API.SIGNUP) && !path.equals(API.LOGIN)) {
-                    conn.setRequestProperty("Authorization", Data.getUser().getJwt());
                 }
 
                 conn.connect();

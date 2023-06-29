@@ -146,17 +146,17 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZC
 
 ###
 
-POST http://localhost:7070/like?id=1
+GET http://localhost:7070/like?id=1
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJQb29wUG9vcCIsImlkIjowLCJhdWQiOiJ1c2VyIiwiaWF0IjoxNjg3OTE2NzUwNjAxLCJleHAiOjE2ODg3ODA3NTA2MDF9.hW5g8bbThwjWqUjEf7om2-ZbW0c1pFo4Aomv7DaDZcc
 
 ###
 
-POST http://localhost:7070/like?id=2
+GET http://localhost:7070/like?id=2
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNYW5NYW4iLCJpZCI6MCwiYXVkIjoidXNlciIsImlhdCI6MTY4NzkxNjcxOTEwNiwiZXhwIjoxNjg4NzgwNzE5MTA2fQ.RmIHhjaDZG8NRHCgllnJLMKutJtyvf3FpIoDj6XNi30
 
 ###
 
-POST http://localhost:7070/unlike?id=1
+GET http://localhost:7070/unlike?id=1
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJQb29wUG9vcCIsImlkIjowLCJhdWQiOiJ1c2VyIiwiaWF0IjoxNjg3OTE2NzUwNjAxLCJleHAiOjE2ODg3ODA3NTA2MDF9.hW5g8bbThwjWqUjEf7om2-ZbW0c1pFo4Aomv7DaDZcc
 
 ###
