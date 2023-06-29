@@ -130,11 +130,9 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNYW5NYW4iLCJpZC
 
 ###
 
-POST http://localhost:7070/retweet
+GET http://localhost:7070/retweet?id=1
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJQb29wUG9vcCIsImlkIjowLCJhdWQiOiJ1c2VyIiwiaWF0IjoxNjg3OTE2NzUwNjAxLCJleHAiOjE2ODg3ODA3NTA2MDF9.hW5g8bbThwjWqUjEf7om2-ZbW0c1pFo4Aomv7DaDZcc
-
-< ./retweet.json
 
 ###
 

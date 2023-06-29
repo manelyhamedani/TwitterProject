@@ -10,6 +10,8 @@ import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Retweet;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -158,6 +160,15 @@ public class HomePage {
                                     Tweet tweet = new Tweet();
                                     tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
                                     tweets.add(tweet);
+
+                                    tweet.retweetedProperty().addListener(new ChangeListener<Boolean>() {
+                                        @Override
+                                        public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
+                                            if (newValue) {
+                                                Platform.runLater(() -> homeButtonPressed());
+                                            }
+                                        }
+                                    });
                                 }
                                 Data.addTimelinePost(post.getPostID());
                             }

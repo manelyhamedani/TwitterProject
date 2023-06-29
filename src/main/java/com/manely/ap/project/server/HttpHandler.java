@@ -320,15 +320,27 @@ public class HttpHandler {
 
     static void handleRetweet(HttpExchange exchange) {
         String jwt;
-        if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
+        if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
             try {
+
+                //TODO: handle double retweet
                 String sender = JWebToken.getPayload(jwt).getSub();
-                Retweet retweet = getRequestBody(exchange, Retweet.class);
+
+                HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
+                if (!query.containsKey("id")) {
+                    throw new IllegalArgumentException();
+                }
+                Retweet retweet = new Retweet();
+
                 retweet.setSenderUsername(sender);
+
+                retweet.setId(Integer.parseInt(query.get("id")));
+
                 long currentTime = System.currentTimeMillis();
                 retweet.setDate(new Date(currentTime));
+
                 SQL.getRetweets().insert(retweet);
-                SQL.getTweets().retweet(retweet.getTweet().getId());
+                SQL.getTweets().retweet(retweet.getId());
                 response(exchange, 200, "OK", true, retweet);
             }
             catch (Exception e) {

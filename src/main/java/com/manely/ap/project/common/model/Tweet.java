@@ -11,6 +11,15 @@ public class Tweet extends Post implements Serializable {
     private int commentsCount;
     private int quotesCount;
     private ArrayList<String> likes;
+    private ArrayList<String> retweets;
+
+    public ArrayList<String> getRetweets() {
+        return retweets;
+    }
+
+    public void setRetweets(ArrayList<String> retweets) {
+        this.retweets = retweets;
+    }
 
     public ArrayList<String> getLikes() {
         return likes;

@@ -49,11 +49,25 @@ public class Tweet extends VBox {
     private Image likeImage;
     private Image coloredLikeImage;
     private SimpleBooleanProperty likedProperty = new SimpleBooleanProperty(false);
+    private SimpleBooleanProperty retweetedProperty = new SimpleBooleanProperty(false);
     private boolean isLiked = false;
     private boolean retweeted = false;
 
     public SimpleBooleanProperty likeProperty() {
         return likedProperty;
+    }
+
+    public SimpleBooleanProperty retweetedProperty() {
+        return retweetedProperty;
+    }
+
+    public void retweet() {
+        retweeted = true;
+        Platform.runLater(() -> {
+            int count = Integer.parseInt(retweetCountLabel.getText());
+            retweetCountLabel.setText(String.valueOf(++count));
+            ((ImageView) retweetButton.getGraphic()).setImage(coloredRetweetImage);
+        });
     }
 
     public void like() {
@@ -229,6 +243,12 @@ public class Tweet extends VBox {
             likedProperty.set(true);
         }
 
+        if (tweet.getRetweets().contains(Data.getUser().getUsername())) {
+            Platform.runLater(() -> ((ImageView) retweetButton.getGraphic()).setImage(coloredRetweetImage));
+            retweeted = true;
+            retweetedProperty.set(true);
+        }
+
         double rightPadding = commentHBox.getPadding().getRight();
         double maxWidth = Math.max(Math.max(commentCountLabel.getWidth(), retweetCountLabel.getWidth()), Math.max(quoteCountLabel.getWidth(), likeCountLabel.getWidth()));
         Insets newInsets = new Insets(0, rightPadding - maxWidth, 0, 0);
@@ -376,13 +396,27 @@ public class Tweet extends VBox {
     }
 
     @FXML
-    void retweetButtonPressed(ActionEvent event) {
-        if (retweeted) {
+    void retweetButtonPressed() {
+        if (!retweeted) {
+            HashMap<String, String> query = new HashMap<>();
+            query.put("id", String.valueOf(tweet.getId()));
+            HttpCall.get(API.RETWEET, query, Object.class,
+                    new ResponseCallback<>() {
+                        @Override
+                        public void run() {
+                            if (getResponse().isSuccess()) {
+                                retweet();
+                                retweetedProperty.set(true);
 
+                            }
+                            else {
+                                System.out.println(getResponse().getMessage());
+                                System.exit(1);
+                            }
+                        }
+                    });
         }
-        else {
 
-        }
     }
 
     @FXML
