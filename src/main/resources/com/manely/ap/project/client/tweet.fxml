@@ -14,41 +14,47 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0" spacing="14.0" type="HBox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="480.0" type="VBox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="avatarButton" mnemonicParsing="false" onAction="#avatarButtonPressed" style="-fx-background-radius: 10em; -fx-min-width: 60px; -fx-min-height: 60px; -fx-max-height: 60px; -fx-max-width: 60px; -fx-background-color: white;">
-         <graphic>
-            <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../../../../../Downloads/avatar.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="400.0" spacing="4.0">
+      <HBox fx:id="retweetSenderHBox" alignment="CENTER_LEFT" maxWidth="-Infinity" prefWidth="480.0">
+         <padding>
+            <Insets left="60.0" />
+         </padding>
+      </HBox>
+      <HBox fx:id="tweetHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="480.0" spacing="14.0">
          <children>
-            <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+            <Button fx:id="avatarButton" mnemonicParsing="false" onAction="#avatarButtonPressed" style="-fx-background-radius: 10em; -fx-min-width: 60px; -fx-min-height: 60px; -fx-max-height: 60px; -fx-max-width: 60px; -fx-background-color: white;">
+               <graphic>
+                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../../../Downloads/avatar.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="380.0" spacing="4.0">
                <children>
-                  <Hyperlink fx:id="nameLink" onMouseMoved="#nameLinkOnMouseMoved" style="-fx-text-fill: black; -fx-border-color: transparent; -fx-underline: false;" translateX="-6.0">
-                     <font>
-                        <Font name="Apple Braille" size="16.0" />
-                     </font>
-                  </Hyperlink>
-                  <Hyperlink fx:id="usernameLink" maxHeight="-Infinity" minHeight="-Infinity" onMouseMoved="#usernameLinkOnMouseMoved" prefHeight="27.0" style="-fx-text-fill: grey; -fx-border-color: transparent; -fx-underline: false;" translateY="1.0">
-                     <font>
-                        <Font name="Apple Braille" size="11.0" />
-                     </font>
-                  </Hyperlink>
-                  <Label fx:id="timeLabel" prefHeight="27.0" style="-fx-text-fill: grey;" translateY="1.0">
-                     <font>
-                        <Font name="Apple Braille" size="11.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <VBox fx:id="tweetVBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" spacing="14.0">
-               <children>
-                  <Text fx:id="tweetText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="400.0">
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                     <children>
+                        <Hyperlink fx:id="nameLink" onMouseMoved="#nameLinkOnMouseMoved" style="-fx-text-fill: black; -fx-border-color: transparent; -fx-underline: false;" translateX="-6.0">
+                           <font>
+                              <Font name="Apple Braille" size="16.0" />
+                           </font>
+                        </Hyperlink>
+                        <Hyperlink fx:id="usernameLink" maxHeight="-Infinity" minHeight="-Infinity" onMouseMoved="#usernameLinkOnMouseMoved" prefHeight="27.0" style="-fx-text-fill: grey; -fx-border-color: transparent; -fx-underline: false;" translateY="1.0">
+                           <font>
+                              <Font name="Apple Braille" size="11.0" />
+                           </font>
+                        </Hyperlink>
+                        <Label fx:id="timeLabel" prefHeight="27.0" style="-fx-text-fill: grey;" translateY="1.0">
+                           <font>
+                              <Font name="Apple Braille" size="11.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Text fx:id="tweetText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="380.0">
                      <font>
                         <Font name="Apple Braille" size="14.0" />
                      </font>
@@ -63,107 +69,109 @@
                       <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
                     </rowConstraints>
                   </GridPane>
-               </children></VBox>
-            <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0">
-               <children>
-                  <HBox fx:id="commentHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                  <HBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
                      <children>
-                        <Button fx:id="commentButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#commentButtonPressed" style="-fx-background-color: transparent;">
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../../../../../../../../Downloads/comment.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Label fx:id="commentCountLabel" minWidth="-Infinity" translateY="-2.0">
-                           <font>
-                              <Font name="Apple Braille" size="11.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets top="10.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                     <padding>
-                        <Insets right="70.0" />
-                     </padding>
-                  </HBox>
-                  <HBox fx:id="retweetHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
-                     <children>
-                        <Button fx:id="retweetButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#retweetButtonPressed" style="-fx-background-color: transparent;" translateY="1.0">
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../../../../../../../../Downloads/retweet.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Label fx:id="retweetCountLabel" translateY="-2.0">
-                           <HBox.margin>
-                              <Insets top="10.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="Apple Braille" size="11.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <padding>
-                        <Insets right="70.0" />
-                     </padding>
-                  </HBox>
-                  <HBox fx:id="quoteHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
-                     <children>
-                        <Button fx:id="quoteButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#quoteButtonPressed" style="-fx-background-color: transparent;" translateY="1.0">
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../../../../../../../../Downloads/quote.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Label fx:id="quoteCountLabel" translateY="-2.0">
-                           <font>
-                              <Font name="Apple Braille" size="11.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets top="10.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                     <padding>
-                        <Insets right="70.0" />
-                     </padding>
-                  </HBox>
-                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
-                     <children>
-                        <Button fx:id="likeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#likeButtonPressed" style="-fx-background-color: transparent;" translateY="2.0">
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../../../../../../../../Downloads/like.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Label fx:id="likeCountLabel" translateY="-2.0">
-                           <font>
-                              <Font name="Apple Braille" size="11.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets top="10.0" />
-                           </HBox.margin>
-                        </Label>
+                        <HBox fx:id="commentHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                           <children>
+                              <Button fx:id="commentButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#commentButtonPressed" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../../../../../../Downloads/comment.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Label fx:id="commentCountLabel" minWidth="-Infinity" translateY="-2.0">
+                                 <font>
+                                    <Font name="Apple Braille" size="11.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="70.0" />
+                           </padding>
+                        </HBox>
+                        <HBox fx:id="retweetHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                           <children>
+                              <Button fx:id="retweetButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#retweetButtonPressed" style="-fx-background-color: transparent;" translateY="1.0">
+                                 <graphic>
+                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../../../../../../Downloads/retweet.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Label fx:id="retweetCountLabel" translateY="-2.0">
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="Apple Braille" size="11.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="70.0" />
+                           </padding>
+                        </HBox>
+                        <HBox fx:id="quoteHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                           <children>
+                              <Button fx:id="quoteButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#quoteButtonPressed" style="-fx-background-color: transparent;" translateY="1.0">
+                                 <graphic>
+                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../../../../../../Downloads/quote.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Label fx:id="quoteCountLabel" translateY="-2.0">
+                                 <font>
+                                    <Font name="Apple Braille" size="11.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="70.0" />
+                           </padding>
+                        </HBox>
+                        <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                           <children>
+                              <Button fx:id="likeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#likeButtonPressed" style="-fx-background-color: transparent;" translateY="2.0">
+                                 <graphic>
+                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../../../../../../Downloads/like.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Label fx:id="likeCountLabel" translateY="-2.0">
+                                 <font>
+                                    <Font name="Apple Braille" size="11.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
                      </children>
                   </HBox>
                </children>
-            </HBox>
-         </children></VBox>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="8.0" left="14.0" right="14.0" top="14.0" />
+         </padding>
+      </HBox>
    </children>
-   <padding>
-      <Insets bottom="8.0" left="14.0" right="14.0" top="14.0" />
-   </padding>
 </fx:root>

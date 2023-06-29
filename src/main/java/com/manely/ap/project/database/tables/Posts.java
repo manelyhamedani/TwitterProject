@@ -17,6 +17,7 @@ import java.util.Date;
 public class Posts extends Table {
 
     private static final String TABLE_NAME = "Posts";
+    private static final String COLUMN_ID = "ID";
     private static final String COLUMN_TWEET_ID = "TweetID";
     private static final String COLUMN_RETWEET_ID = "RetweetID";
     private static final String COLUMN_SENDER = "Sender";
@@ -26,6 +27,7 @@ public class Posts extends Table {
     public synchronized void create() throws SQLException {
         executeUpdate("CREATE TABLE IF NOT EXISTS " + TABLE_NAME +
                 "(" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TWEET_ID + " INTEGER, " +
                 COLUMN_RETWEET_ID + " INTEGER, " +
                 COLUMN_SENDER + " TEXT, " +
@@ -72,20 +74,25 @@ public class Posts extends Table {
         return readPosts(set);
     }
 
-    public synchronized ArrayList<Post> fetchTimelinePosts(String username, long date) throws SQLException, IOException {
+    public synchronized ArrayList<Post> fetchTimelinePosts(String username, int id) throws SQLException, IOException {
+        String limit = "(";
+        if (id != -1) {
+            limit = TABLE_NAME + "." + COLUMN_ID + "<" + id + " AND (";
+        }
         String query = "SELECT DISTINCT " + TABLE_NAME + ".*" + " FROM " + TABLE_NAME +
                         " INNER JOIN " +
                         Follow.TABLE_NAME + ", " + Tweets.TABLE_NAME +
                         " WHERE " +
-                        TABLE_NAME + "." + COLUMN_DATE + "<=? AND (" +
+                        limit +
                         "(" + TABLE_NAME + "." + COLUMN_SENDER + "=" + Follow.TABLE_NAME + "." + Follow.COLUMN_FOLLOWING + " AND " +
                         Follow.TABLE_NAME + "." + Follow.COLUMN_FOLLOWER + "=?) OR " +
+                        "(" + TABLE_NAME + "." + COLUMN_SENDER + "=?) OR " +
                         "(" + Tweets.TABLE_NAME + "." + Tweets.COLUMN_ID + "=" + TABLE_NAME + "." + COLUMN_TWEET_ID + " AND " +
                         Tweets.TABLE_NAME + "." + Tweets.COLUMN_LIKES + ">=10)" +
                         ") ORDER BY " + TABLE_NAME + "." + COLUMN_DATE + " DESC LIMIT 30";
 
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
-        statement.setLong(1, date);
+        statement.setString(1, username);
         statement.setString(2, username);
         ResultSet set = statement.executeQuery();
 
@@ -107,17 +114,22 @@ public class Posts extends Table {
                 post.setSenderUsername(set.getString(COLUMN_SENDER));
                 post.setDate(new Date(set.getLong(COLUMN_DATE)));
                 ((Retweet) post).setTweet((Tweet) SQL.getTweets().select(tweetId));
+                fetchSenderInfo(((Retweet) post).getTweet());
             }
             if (post != null) {
-                User sender = SQL.getUsers().fetchTweetSender(post.getSenderUsername());
-                post.setSenderName(sender.getFirstName() + " " + sender.getLastName());
-                post.setSenderAvatar(MediaManager.getUserAvatar(sender.getUsername()));
+                post.setPostID(set.getInt(COLUMN_ID));
+                fetchSenderInfo(post);
                 result.add(post);
             }
 
         }
-
         set.close();
         return result;
+    }
+
+    private void fetchSenderInfo(Post post) throws IOException, SQLException {
+        User sender = SQL.getUsers().fetchTweetSender(post.getSenderUsername());
+        post.setSenderName(sender.getFirstName() + " " + sender.getLastName());
+        post.setSenderAvatar(MediaManager.getUserAvatar(sender.getUsername()));
     }
 }

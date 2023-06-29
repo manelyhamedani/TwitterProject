@@ -1,6 +1,9 @@
 package com.manely.ap.project.client.controller;
 
 import com.manely.ap.project.client.Main;
+import com.manely.ap.project.client.model.Data;
+import com.manely.ap.project.common.model.Post;
+import com.manely.ap.project.common.model.Retweet;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,7 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.io.ByteArrayInputStream;
@@ -33,9 +35,9 @@ import java.util.Date;
 
 import static com.manely.ap.project.client.util.ButtonUtility.setColorButtonImage;
 
-public class Tweet extends HBox {
+public class Tweet extends VBox {
     private final NumberFormat formatter = NumberFormat.getInstance();
-    private com.manely.ap.project.common.model.Tweet tweet;
+    private Post tweet;
 
     private Image retweetImage;
     private Image coloredRetweetImage;
@@ -98,12 +100,22 @@ public class Tweet extends HBox {
     @FXML
     private HBox quoteHBox;
 
+    @FXML
+    private HBox tweetHBox;
+
+    @FXML
+    private HBox retweetSenderHBox;
+
     public void initialize() throws IOException {
        setButtonImages();
 
        coloredRetweetImage = setColorButtonImage(retweetButton);
        coloredLikeImage = setColorButtonImage(likeButton);
 
+    }
+
+    public Post getTweet() {
+        return tweet;
     }
 
     private void setButtonImages() throws MalformedURLException {
@@ -139,11 +151,40 @@ public class Tweet extends HBox {
         }
     }
 
+    public void setRetweet(Retweet retweet) {
+        this.tweet = retweet;
+
+        setTweet(retweet.getTweet());
+        tweetHBox.setPadding(new Insets(0, 14, 8, 14));
+        retweetSenderHBox.setPadding(new Insets(0, 0, 0, 60));
+
+        ImageView imageView = new ImageView();
+        imageView.setFitHeight(17);
+        imageView.setFitWidth(17);
+        imageView.setImage(retweetImage);
+
+        Hyperlink link = new Hyperlink();
+        link.setTextFill(Color.BLACK);
+        link.setStyle("-fx-border-color: transparent");
+        link.setUnderline(false);
+        link.setStyle("-fx-font-family: 'Apple Braille'");
+        String senderName;
+        if (retweet.getSenderUsername().equals(Data.getUser().getUsername())) {
+            senderName = "You";
+        }
+        else {
+            senderName = retweet.getSenderName();
+        }
+        link.setText(senderName + " Retweeted");
+
+        retweetSenderHBox.getChildren().addAll(imageView, link);
+    }
+
     public void setTweet(com.manely.ap.project.common.model.Tweet tweet) {
         this.tweet = tweet;
 
         nameLink.setText(tweet.getSenderName());
-        usernameLink.setText(tweet.getSenderUsername());
+        usernameLink.setText("@" + tweet.getSenderUsername());
         commentCountLabel.setText(formatter.format(tweet.getCommentsCount()));
         retweetCountLabel.setText(formatter.format(tweet.getRetweetsCount()));
         quoteCountLabel.setText(formatter.format(tweet.getQuotesCount()));

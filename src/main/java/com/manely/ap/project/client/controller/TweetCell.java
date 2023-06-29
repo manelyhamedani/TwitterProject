@@ -13,7 +13,6 @@ public class TweetCell extends ListCell<Tweet> {
             setGraphic(null);
         }
         else {
-//            item.prefWidthProperty().bind(listViewProperty().getValue().widthProperty());
             setGraphic(item);
         }
 

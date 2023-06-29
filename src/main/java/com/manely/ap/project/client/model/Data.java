@@ -6,12 +6,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
+import java.util.*;
 
 
 public class Data {
     private static User user;
-    private static ArrayList<Post> timeLinePosts = new ArrayList<>();
+    private static int earliestTimelinePost = 0;
 
 
     public static User getUser() {
@@ -22,12 +22,14 @@ public class Data {
         user = u;
     }
 
-    public static ArrayList<Post> getTimeLinePosts() {
-        return timeLinePosts;
+    public static int getEarliestTimelinePost() {
+        return earliestTimelinePost;
     }
 
-    public static void setTimeLinePosts(ArrayList<Post> posts) {
-        timeLinePosts = posts;
+    public static void addTimelinePost(int id) {
+        if (id < earliestTimelinePost) {
+            earliestTimelinePost = id;
+        }
     }
 
 }

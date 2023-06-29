@@ -462,11 +462,17 @@ public class HttpHandler {
             try {
                 String username = JWebToken.getPayload(jwt).getSub();
                 HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
-                if (!query.containsKey("date")) {
+                int id;
+                if (query.isEmpty()) {
+                    id = -1;
+                }
+                else if (!query.containsKey("id")) {
                     throw new IllegalArgumentException();
                 }
-                long date = Long.parseLong(query.get("date"));
-                ArrayList<Post> posts = SQL.getPosts().fetchTimelinePosts(username, date);
+                else {
+                    id = Integer.parseInt(query.get("id"));
+                }
+                ArrayList<Post> posts = SQL.getPosts().fetchTimelinePosts(username, id);
                 if (posts.size() != 0) {
                     ArrayList<String> blockers = SQL.getBlacklist().selectBlockers(username);
                     posts = filterBlockedPosts(posts, blockers);

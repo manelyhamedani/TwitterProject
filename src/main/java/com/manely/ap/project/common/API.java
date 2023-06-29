@@ -1,7 +1,7 @@
 package com.manely.ap.project.common;
 
 public class API {
-    public static final int PORT = 8000;
+    public static final int PORT = 7070;
     public static final String IP_ADDRESS = "localhost";
     public static final String BASE_URL = "http://" + IP_ADDRESS + ":" + PORT;
 

@@ -4,6 +4,16 @@ import java.io.Serializable;
 import java.util.Date;
 
 public abstract class Post implements Serializable {
+    private int postID;
+
+    public int getPostID() {
+        return postID;
+    }
+
+    public void setPostID(int postID) {
+        this.postID = postID;
+    }
+
     private int id;
     private String senderUsername;
     private String senderName;
@@ -48,5 +58,21 @@ public abstract class Post implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Post other)) {
+            return false;
+        }
+        return (this.id == other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }
