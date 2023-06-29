@@ -65,7 +65,7 @@
                   <Insets bottom="14.0" top="14.0" />
                </padding>
             </VBox>
-            <ListView fx:id="tweetListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="830.0" />
+            <ListView fx:id="tweetListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="830.0" stylesheets="@../../../../../listview.css" />
          </children>
       </HBox>
    </left>

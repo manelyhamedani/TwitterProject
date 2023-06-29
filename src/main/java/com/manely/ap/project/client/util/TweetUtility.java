@@ -42,6 +42,18 @@ public class TweetUtility {
                     t.unlike();
                 }
             });
+
+            t.retweetedProperty().addListener((ObservableValue, oldValue, newValue) -> {
+                if (newValue) {
+                    ref.retweet();
+                }
+            });
+
+            ref.retweetedProperty().addListener((ObservableValue, oldValue, newValue) -> {
+                if (newValue) {
+                    t.retweet();
+                }
+            });
         }
     }
 

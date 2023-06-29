@@ -9,8 +9,6 @@ import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Retweet;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -72,10 +70,10 @@ public class HomePage {
         coloredSettingsImage = setColorButtonImage(settingsButton, 0xff36b9ff);
 
         tweetListView.setFocusTraversable(false);
-
         tweetListView.setCellFactory((listView) -> {
             TweetCell cell = new TweetCell();
             cell.setFocusTraversable(false);
+            cell.setStyle("-fx-background-color: white;" + "-fx-border-color: grey");
             return cell;
         });
 
@@ -156,12 +154,9 @@ public class HomePage {
                                     tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
                                     tweets.add(tweet);
 
-                                    tweet.retweetedProperty().addListener(new ChangeListener<Boolean>() {
-                                        @Override
-                                        public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-                                            if (newValue) {
-                                                Platform.runLater(() -> homeButtonPressed());
-                                            }
+                                    tweet.retweetedProperty().addListener((observableValue, oldValue, newValue) -> {
+                                        if (newValue) {
+                                            Platform.runLater(HomePage.this::homeButtonPressed);
                                         }
                                     });
 
