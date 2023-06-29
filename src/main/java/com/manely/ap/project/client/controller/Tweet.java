@@ -7,6 +7,7 @@ import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Retweet;
+import com.manely.ap.project.common.model.Tweet.Kind;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
@@ -14,10 +15,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -27,10 +30,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.Scene;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.NumberFormat;
@@ -43,6 +47,7 @@ import static com.manely.ap.project.client.util.ButtonUtility.setColorButtonImag
 public class Tweet extends VBox {
     private final NumberFormat formatter = NumberFormat.getInstance();
     private Post tweet;
+    private Tweet quotedTweet;
 
     private Image retweetImage;
     private Image coloredRetweetImage;
@@ -52,6 +57,37 @@ public class Tweet extends VBox {
     private SimpleBooleanProperty retweetedProperty = new SimpleBooleanProperty(false);
     private boolean isLiked = false;
     private boolean retweeted = false;
+
+    public void setQuotedTweet() {
+        quotedTweet = new Tweet();
+        quotedTweet.setTweet(((com.manely.ap.project.common.model.Tweet) tweet).getRefTweet());
+        new Scene(quotedTweet);
+
+        Rectangle clip = new Rectangle(300, 250);
+        clip.setArcHeight(20);
+        clip.setArcHeight(20);
+
+        quoteImageView.setClip(clip);
+        SnapshotParameters p = new SnapshotParameters();
+        p.setFill(Color.TRANSPARENT);
+        Platform.runLater(() -> {
+            WritableImage roundedImage = quoteImageView.snapshot(p, null);
+            quoteImageView.setClip(null);
+            quoteImageView.setImage(roundedImage);
+        });
+
+        SnapshotParameters parameters = new SnapshotParameters();
+        parameters.setFill(Color.WHITE);
+        Platform.runLater(() -> {
+            WritableImage snapshot = quotedTweet.snapshot(parameters, null);
+            quoteImageView.setFitWidth(300);
+            quoteImageView.setFitHeight(250);
+            quoteImageView.setImage(snapshot);
+            quoteImageView.setEffect(new DropShadow(30, Color.BLACK));
+            quoteTweetButton.setStyle("-fx-background-color: transparent");
+        });
+
+    }
 
     public SimpleBooleanProperty likeProperty() {
         return likedProperty;
@@ -86,6 +122,10 @@ public class Tweet extends VBox {
             likeCountLabel.setText(String.valueOf(--count));
             ((ImageView) likeButton.getGraphic()).setImage(likeImage);
         });    }
+
+
+    @FXML
+    private Button quoteTweetButton;
 
     @FXML
     private Button avatarButton;
@@ -146,6 +186,9 @@ public class Tweet extends VBox {
 
     @FXML
     private HBox retweetSenderHBox;
+
+    @FXML
+    private ImageView quoteImageView;
 
     public void initialize() throws IOException {
        setButtonImages();
@@ -230,6 +273,12 @@ public class Tweet extends VBox {
     public void setTweet(com.manely.ap.project.common.model.Tweet tweet) {
         this.tweet = tweet;
 
+        if (tweet.getKind().equals(Kind.QUOTE)) {
+            setQuotedTweet();
+        }
+        else if (tweet.getKind().equals(Kind.REPLY)) {
+
+        }
         nameLink.setText(tweet.getSenderName());
         usernameLink.setText("@" + tweet.getSenderUsername());
         commentCountLabel.setText(formatter.format(tweet.getCommentsCount()));
@@ -339,7 +388,6 @@ public class Tweet extends VBox {
                 ++count;
             }
         }
-
     }
 
     @FXML
@@ -421,6 +469,11 @@ public class Tweet extends VBox {
 
     @FXML
     void usernameLinkOnMouseMoved(MouseEvent event) {
+
+    }
+
+    @FXML
+    void quoteTweetButtonPressed() {
 
     }
 

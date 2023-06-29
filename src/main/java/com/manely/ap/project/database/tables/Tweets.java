@@ -1,11 +1,10 @@
 package com.manely.ap.project.database.tables;
 
+import com.manely.ap.project.common.model.*;
 import com.manely.ap.project.database.SQL;
-import com.manely.ap.project.common.model.Post;
-import com.manely.ap.project.common.model.Quote;
-import com.manely.ap.project.common.model.Reply;
-import com.manely.ap.project.common.model.Tweet;
+import com.manely.ap.project.filemanager.MediaManager;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,14 +75,14 @@ public class Tweets extends Table {
         statement.setInt(5, tweet.getCommentsCount());
         statement.setInt(6, tweet.getQuotesCount());
         statement.setLong(7, tweet.getDate().getTime());
-        if (tweet instanceof Quote quote) {
-            statement.setInt(8, quote.getTweet().getId());
+        if (tweet.getKind().equals(Tweet.Kind.QUOTE)) {
+            statement.setInt(8, tweet.getRefTweet().getId());
         }
         else {
             statement.setNull(8, Types.INTEGER);
         }
-        if (tweet instanceof Reply reply) {
-            statement.setInt(9, reply.getTweet().getId());
+        if (tweet.getKind().equals(Tweet.Kind.REPLY)) {
+            statement.setInt(9, tweet.getRefTweet().getId());
         }
         else {
             statement.setNull(9, Types.INTEGER);
@@ -95,7 +94,7 @@ public class Tweets extends Table {
         SQL.getPosts().insertTweet(tweet);
     }
 
-    public synchronized Post select(int id) throws SQLException {
+    public synchronized Post select(int id) throws SQLException, IOException {
         String query = "SELECT * FROM " + TABLE_NAME +
                         " WHERE " + COLUMN_ID + "=" + id;
         Statement statement = SQL.getConnection().createStatement();
@@ -111,7 +110,7 @@ public class Tweets extends Table {
         return result.get(0);
     }
 
-    public synchronized ArrayList<Post> query(String quest) throws SQLException {
+    public synchronized ArrayList<Post> query(String quest) throws SQLException, IOException {
         String query = "SELECT * FROM " + TABLE_NAME +
                         " WHERE " + COLUMN_TEXT + " LIKE '%" + quest.trim() + "%'";
         Statement statement = SQL.getConnection().createStatement();
@@ -123,22 +122,23 @@ public class Tweets extends Table {
         return result;
     }
 
-    private ArrayList<Post> read(ResultSet set) throws SQLException {
+    private ArrayList<Post> read(ResultSet set) throws SQLException, IOException {
         ArrayList<Post> tweets = new ArrayList<>();
 
-        Tweet tweet;
+        Tweet tweet = new Tweet();
         while (set.next()) {
             int refTweet;
             if ((refTweet = set.getInt(COLUMN_QUOTED_TWEET)) != 0) {
-                tweet = new Quote();
-                ((Quote) tweet).setTweet((Tweet) select(refTweet));
+                tweet.setKind(Tweet.Kind.QUOTE);
+                tweet.setRefTweet((Tweet) select(refTweet));
             }
             else if ((refTweet = set.getInt(COLUMN_REPLIED_TWEET)) != 0) {
-                tweet = new Reply();
-                ((Reply) tweet).setTweet((Tweet) select(refTweet));
+                tweet.setKind(Tweet.Kind.REPLY);
+                tweet.setRefTweet((Tweet) select(refTweet));
             }
             else {
                 tweet = new Tweet();
+                tweet.setKind(Tweet.Kind.TWEET);
             }
             tweet.setId(set.getInt(COLUMN_ID));
             tweet.setSenderUsername(set.getString(COLUMN_SENDER));
@@ -150,6 +150,9 @@ public class Tweets extends Table {
             tweet.setRetweetsCount(set.getInt(COLUMN_RETWEETS));
             tweet.setLikes(SQL.getLikes().select(tweet.getId()));
             tweet.setRetweets(SQL.getRetweets().select(tweet.getId()));
+            User sender = SQL.getUsers().fetchTweetSender(tweet.getSenderUsername());
+            tweet.setSenderName(sender.getFirstName() + " " + sender.getLastName());
+            tweet.setSenderAvatar(MediaManager.getUserAvatar(sender.getUsername()));
             tweets.add(tweet);
         }
 

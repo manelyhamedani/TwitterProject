@@ -2,10 +2,9 @@ package com.manely.ap.project.client.controller;
 
 import com.google.gson.reflect.TypeToken;
 import com.manely.ap.project.client.HttpCall;
-import com.manely.ap.project.client.Main;
 import com.manely.ap.project.client.ResponseCallback;
 import com.manely.ap.project.client.model.Data;
-import com.manely.ap.project.client.util.Binding;
+import com.manely.ap.project.client.util.TweetUtility;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Retweet;
@@ -15,21 +14,16 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 
 import static com.manely.ap.project.client.util.ButtonUtility.setColorButtonImage;
@@ -156,6 +150,7 @@ public class HomePage {
                                     retweet.setRetweet((Retweet) post);
                                     tweets.add(retweet);
                                 }
+
                                 else if (post instanceof com.manely.ap.project.common.model.Tweet) {
                                     Tweet tweet = new Tweet();
                                     tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
@@ -169,6 +164,7 @@ public class HomePage {
                                             }
                                         }
                                     });
+
                                 }
                                 Data.addTimelinePost(post.getPostID());
                             }
@@ -177,7 +173,7 @@ public class HomePage {
                                 long id2 = o2.getTweet().getDate().getTime();
                                 return Long.compare(id1, id2) * -1;
                             });
-                            Binding.setBindings(tweets);
+                            TweetUtility.setUp(tweets);
                             Platform.runLater(() -> tweetListView.setItems(tweets));
                         }
                         else {
@@ -186,6 +182,7 @@ public class HomePage {
                     }
                 });
     }
+
 
     @FXML
     void profileButtonPressed() {

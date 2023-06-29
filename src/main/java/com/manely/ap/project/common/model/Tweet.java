@@ -12,7 +12,28 @@ public class Tweet extends Post implements Serializable {
     private int quotesCount;
     private ArrayList<String> likes;
     private ArrayList<String> retweets;
+    private Kind kind;
+    private Tweet refTweet;
 
+    public Tweet getRefTweet() {
+        return refTweet;
+    }
+
+    public void setRefTweet(Tweet refTweet) {
+        this.refTweet = refTweet;
+    }
+
+    public Kind getKind() {
+        return kind;
+    }
+
+    public void setKind(Kind kind) {
+        this.kind = kind;
+    }
+
+    public enum Kind {
+        TWEET, REPLY, QUOTE
+    }
     public ArrayList<String> getRetweets() {
         return retweets;
     }

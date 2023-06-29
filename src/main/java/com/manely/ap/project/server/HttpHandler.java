@@ -16,10 +16,7 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 public class HttpHandler {
 
@@ -33,14 +30,14 @@ public class HttpHandler {
                 }
                 if (JWebToken.isValid(query.get("jwt"))) {
                     //TODO: online
-                    response(exchange, 200, "OK", true, null);
+                    response(exchange, 200, "OK", true, null, null);
                 }
                 else {
-                    response(exchange, 401, Error.UNAUTHORIZED.toString(), false, null);
+                    response(exchange, 401, Error.UNAUTHORIZED.toString(), false, null, null);
                 }
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -55,21 +52,21 @@ public class HttpHandler {
                 }
                 User user = SQL.getUsers().select(query.get("username"));
                 if (user == null) {
-                    response(exchange, 401, Error.UNAUTHORIZED.toString(), false, null);
+                    response(exchange, 401, Error.UNAUTHORIZED.toString(), false, null, null);
                 }
                 else if (!user.getPassword().equals(query.get("password"))) {
-                    response(exchange, 403, Error.WRONG_PASS.toString(), false, null);
+                    response(exchange, 403, Error.WRONG_PASS.toString(), false, null, null);
                 }
                 else {
                     user.setAvatar(MediaManager.getUserAvatar(user.getUsername()));
                     user.setHeader(MediaManager.getUserHeader(user.getUsername()));
                     String jwt = JWebToken.generate(user.getUsername(), user.getId(), "user");
                     user.setJwt(jwt);
-                    response(exchange, 200, "OK", true, user);
+                    response(exchange, 200, "OK", true, user, User.class);
                 }
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -106,17 +103,17 @@ public class HttpHandler {
                 user.setLastDateModified(now);
                 SQL.getUsers().insert(user);
                 if (!MediaManager.addUser(user.getUsername())) {
-                    response(exchange, 500, Error.CANNOT_SAVE_IMAGE.toString(), false, null);
+                    response(exchange, 500, Error.CANNOT_SAVE_IMAGE.toString(), false, null, null);
                 }
                 else {
-                    response(exchange, 200, "OK", true, null);
+                    response(exchange, 200, "OK", true, null, null);
                 }
             }
             catch (IllegalArgumentException e) {
-                response(exchange, errCode, err.toString(), false, null);
+                response(exchange, errCode, err.toString(), false, null, null);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -128,10 +125,10 @@ public class HttpHandler {
                 String username = JWebToken.getPayload(jwt).getSub();
                 Image image = getRequestBody(exchange, Image.class);
                 MediaManager.addUserMedia(username, image);
-                response(exchange, 200, "OK", true, null);
+                response(exchange, 200, "OK", true, null, null);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -152,13 +149,13 @@ public class HttpHandler {
                     throw new IllegalArgumentException();
                 }
                 SQL.getUsers().updateInfo(username, userInfo);
-                response(exchange, 200, "OK", true, null);
+                response(exchange, 200, "OK", true, null, null);
             }
             catch (IllegalArgumentException e) {
-                response(exchange, 400, err.toString(), false, null);
+                response(exchange, 400, err.toString(), false, null, null);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -177,10 +174,10 @@ public class HttpHandler {
                     throw new IllegalArgumentException(Error.ILLEGAL_FOLLOW.toString());
                 }
                 SQL.getFollows().insert(followerUsername, followingUsername);
-                response(exchange, 200, "OK", true, null);
+                response(exchange, 200, "OK", true, null, null);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -199,10 +196,10 @@ public class HttpHandler {
                     throw new IllegalArgumentException(Error.ILLEGAL_UNFOLLOW.toString());
                 }
                 SQL.getFollows().deleteUnilateral(followerUsername, followingUsername);
-                response(exchange, 200, "OK", true, null);
+                response(exchange, 200, "OK", true, null, null);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -218,10 +215,11 @@ public class HttpHandler {
                 ArrayList<String> followerIds = SQL.getFollows().selectFollowers(username);
                 ArrayList<User> followers = SQL.getUsers().fetchProfiles(followerIds);
                 fetchUsersImages(followers);
-                response(exchange, 200, "OK", true, followers);
+                Type contentType = new TypeToken<ArrayList<User>>(){}.getType();
+                response(exchange, 200, "OK", true, followers, contentType);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -237,10 +235,11 @@ public class HttpHandler {
                 ArrayList<String> followingsId = SQL.getFollows().selectFollowings(username);
                 ArrayList<User> following = SQL.getUsers().fetchProfiles(followingsId);
                 fetchUsersImages(following);
-                response(exchange, 200, "OK", true, following);
+                Type contentType = new TypeToken<ArrayList<User>>(){}.getType();
+                response(exchange, 200, "OK", true, following, contentType);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -255,10 +254,11 @@ public class HttpHandler {
                String quest = query.get("quest");
                ArrayList<User> result = SQL.getUsers().query(quest);
                fetchUsersImages(result);
-               response(exchange, 200, "OK", true, result);
+               Type contentType = new TypeToken<ArrayList<User>>(){}.getType();
+               response(exchange, 200, "OK", true, result, contentType);
            }
            catch (Exception e) {
-               response(exchange, 400, e.getMessage(), false, null);
+               response(exchange, 400, e.getMessage(), false, null, null);
            }
         }
     }
@@ -279,13 +279,13 @@ public class HttpHandler {
                 tweet.setDate(new Date(currentTime));
                 SQL.getTweets().insert(tweet);
                 MediaManager.addTweetMedia(tweet.getId(), tweet.getImages());
-                response(exchange, 200, "OK", true, tweet);
+                response(exchange, 200, "OK", true, tweet, Tweet.class);
             }
             catch (IllegalArgumentException e) {
-                response(exchange, 400 , err.toString(), false, null);
+                response(exchange, 400 , err.toString(), false, null, null);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -296,8 +296,8 @@ public class HttpHandler {
             Error err = Error.UNUSUAL;
             try {
                 String sender = JWebToken.getPayload(jwt).getSub();
-                Quote quote = getRequestBody(exchange, Quote.class);
-                if (quote.getTweet() == null) {
+                Tweet quote = getRequestBody(exchange, Tweet.class);
+                if (quote.getRefTweet() == null) {
                     err = Error.NULL_QUOTE;
                     throw new IllegalArgumentException();
                 }
@@ -306,14 +306,14 @@ public class HttpHandler {
                 quote.setDate(new Date(currentTime));
                 SQL.getTweets().insert(quote);
                 MediaManager.addTweetMedia(quote.getId(), quote.getImages());
-                SQL.getTweets().quote(quote.getTweet().getId());
-                response(exchange, 200, "OK", true, quote);
+                SQL.getTweets().quote(quote.getRefTweet().getId());
+                response(exchange, 200, "OK", true, quote, Tweet.class);
             }
             catch (IllegalArgumentException e) {
-                response(exchange, 400 , err.toString(), false, null);
+                response(exchange, 400 , err.toString(), false, null, null);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -341,10 +341,10 @@ public class HttpHandler {
 
                 SQL.getRetweets().insert(retweet);
                 SQL.getTweets().retweet(retweet.getId());
-                response(exchange, 200, "OK", true, retweet);
+                response(exchange, 200, "OK", true, retweet, Retweet.class);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -364,10 +364,10 @@ public class HttpHandler {
                 }
                 SQL.getTweets().like(tweetId);
                 SQL.getLikes().insert(username, tweetId);
-                response(exchange, 200, "OK", true, null);
+                response(exchange, 200, "OK", true, null, null);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -387,10 +387,10 @@ public class HttpHandler {
                 }
                 SQL.getTweets().unlike(tweetId);
                 SQL.getLikes().delete(username, tweetId);
-                response(exchange, 200, "OK", true, null);
+                response(exchange, 200, "OK", true, null, null);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -401,8 +401,8 @@ public class HttpHandler {
             Error err = Error.UNUSUAL;
             try {
                 String sender = JWebToken.getPayload(jwt).getSub();
-                Reply reply = getRequestBody(exchange, Reply.class);
-                if (reply.getTweet() == null) {
+                Tweet reply = getRequestBody(exchange, Tweet.class);
+                if (reply.getRefTweet() == null) {
                     err = Error.NULL_REPLY;
                     throw new IllegalArgumentException();
                 }
@@ -411,14 +411,14 @@ public class HttpHandler {
                 reply.setDate(new Date(currentTime));
                 SQL.getTweets().insert(reply);
                 MediaManager.addTweetMedia(reply.getId(), reply.getImages());
-                SQL.getTweets().comment(reply.getTweet().getId());
-                response(exchange, 200, "OK", true, reply);
+                SQL.getTweets().comment(reply.getRefTweet().getId());
+                response(exchange, 200, "OK", true, reply, Tweet.class);
             }
             catch (IllegalArgumentException e) {
-                response(exchange, 400 , err.toString(), false, null);
+                response(exchange, 400 , err.toString(), false, null, null);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -438,10 +438,10 @@ public class HttpHandler {
                 }
                 SQL.getBlacklist().insert(blockerUsername, blockedUsername);
                 SQL.getFollows().deleteBilateral(blockerUsername, blockedUsername);
-                response(exchange, 200, "OK", true, null);
+                response(exchange, 200, "OK", true, null, null);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -460,10 +460,10 @@ public class HttpHandler {
                     throw new IllegalArgumentException(Error.ILLEGAL_UNBLOCK.toString());
                 }
                 SQL.getBlacklist().delete(blockerUsername, blockedUsername);
-                response(exchange, 200, "OK", true, null);
+                response(exchange, 200, "OK", true, null, null);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -490,10 +490,11 @@ public class HttpHandler {
                     posts = filterBlockedPosts(posts, blockers);
                     fetchPostsMedia(posts);
                 }
-                response(exchange, 200, "OK", true, posts);
+                Type contentType = new TypeToken<ArrayList<Post>>(){}.getType();
+                response(exchange, 200, "OK", true, posts, contentType);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -514,10 +515,11 @@ public class HttpHandler {
                     tweets = filterBlockedPosts(tweets, blockers);
                     fetchPostsMedia(tweets);
                 }
-                response(exchange, 200, "OK", true, tweets);
+                Type contentType = new TypeToken<ArrayList<Post>>(){}.getType();
+                response(exchange, 200, "OK", true, tweets, contentType);
             }
             catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null);
+                response(exchange, 400, e.getMessage(), false, null, null);
             }
         }
     }
@@ -533,21 +535,12 @@ public class HttpHandler {
             refPost = ((Retweet) post).getTweet();
         }
 
-        else if (post instanceof Reply) {
-            if (((Reply) post).getImages() == null)
-                ((Reply) post).setImages(MediaManager.getTweetMedia(post.getId()));
-            refPost = ((Reply) post).getTweet();
-        }
-
-        else if (post instanceof Quote) {
-            if (((Quote) post).getImages() == null)
-                ((Quote) post).setImages(MediaManager.getTweetMedia(post.getId()));
-            refPost = ((Quote) post).getTweet();
-        }
-
         else if (post instanceof Tweet){
             if (((Tweet) post).getImages() == null)
                 ((Tweet) post).setImages(MediaManager.getTweetMedia(post.getId()));
+            if (!(((Tweet) post).getKind().equals(Tweet.Kind.TWEET))) {
+                refPost = ((Tweet) post).getRefTweet();
+            }
         }
 
         fetchPostMedia(refPost);
@@ -570,12 +563,8 @@ public class HttpHandler {
             refPost = ((Retweet) post).getTweet();
         }
 
-        else if (post instanceof Reply) {
-            refPost = ((Reply) post).getTweet();
-        }
-
-        else if (post instanceof Quote) {
-            refPost = ((Quote) post).getTweet();
+        else if (!(((Tweet) post).getKind().equals(Tweet.Kind.TWEET))) {
+            refPost = ((Tweet) post).getRefTweet();
         }
 
         if (!blockers.contains(post.getSenderUsername())) {
@@ -607,7 +596,7 @@ public class HttpHandler {
     private static String getJWT(HttpExchange exchange) {
         String jwt = exchange.getRequestHeaders().getFirst("Authorization");
         if (!JWebToken.isValid(jwt)) {
-            response(exchange, 401, Error.INVALID_JWT.toString(), false, null);
+            response(exchange, 401, Error.INVALID_JWT.toString(), false, null, null);
             return null;
         }
         return jwt;
@@ -649,17 +638,17 @@ public class HttpHandler {
            HttpMethod.valueOf(exchange.getRequestMethod());
        }
        catch (IllegalArgumentException e) {
-           response(exchange, 501, "Not Implemented", false, null);
+           response(exchange, 501, "Not Implemented", false, null, null);
            return false;
        }
        if (!(method.equals(exchange.getRequestMethod()))) {
-           response(exchange, 401, "Not Allowed", false, null);
+           response(exchange, 401, "Not Allowed", false, null, null);
            return false;
        }
        return true;
     }
 
-    private static <T> void response(HttpExchange exchange, int status, String msg, boolean success, T content) {
+    private static <T> void response(HttpExchange exchange, int status, String msg, boolean success, T content, Type contentType) {
         try {
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeHierarchyAdapter(Post.class, new PostAdapter());
@@ -668,8 +657,7 @@ public class HttpHandler {
                 type = new TypeToken<HttpResponse<Object>>(){}.getType();
             }
             else {
-                type = TypeToken.getParameterized(HttpResponse.class, content.getClass()).getType();
-
+                type = TypeToken.getParameterized(HttpResponse.class, contentType).getType();
             }
             String response = gsonBuilder.create().toJson(new HttpResponse<>(status, msg, success, content), type);
             exchange.sendResponseHeaders(200, response.getBytes().length);

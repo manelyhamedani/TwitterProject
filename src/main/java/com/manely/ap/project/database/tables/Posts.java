@@ -113,12 +113,11 @@ public class Posts extends Table {
                 post.setId(tweetId);
                 post.setSenderUsername(set.getString(COLUMN_SENDER));
                 post.setDate(new Date(set.getLong(COLUMN_DATE)));
-                ((Retweet) post).setTweet((Tweet) SQL.getTweets().select(tweetId));
-                fetchSenderInfo(((Retweet) post).getTweet());
-            }
-            if (post != null) {
                 post.setPostID(set.getInt(COLUMN_ID));
                 fetchSenderInfo(post);
+                ((Retweet) post).setTweet((Tweet) SQL.getTweets().select(tweetId));
+            }
+            if (post != null) {
                 result.add(post);
             }
 

@@ -33,7 +33,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="380.0" spacing="4.0">
+            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="380.0" spacing="8.0">
                <children>
                   <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
                      <children>
@@ -59,16 +59,25 @@
                         <Font name="Apple Braille" size="14.0" />
                      </font>
                   </Text>
-                  <GridPane fx:id="tweetGridPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                  </GridPane>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <GridPane fx:id="tweetGridPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
+                        <Button fx:id="quoteTweetButton" mnemonicParsing="false" onAction="#quoteTweetButtonPressed" style="-fx-background-color: transparent;">
+                           <graphic>
+                              <ImageView fx:id="quoteImageView" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </Button>
+                     </children>
+                  </VBox>
                   <HBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
                      <children>
                         <HBox fx:id="commentHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
