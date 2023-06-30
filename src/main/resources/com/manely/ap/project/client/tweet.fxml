@@ -41,12 +41,12 @@
                <children>
                   <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
                      <children>
-                        <Hyperlink fx:id="nameLink" onMouseMoved="#nameLinkOnMouseMoved" style="-fx-text-fill: black; -fx-border-color: transparent; -fx-underline: false;" translateX="-6.0">
+                        <Hyperlink fx:id="nameLink" style="-fx-text-fill: black; -fx-border-color: transparent; -fx-underline: false;" translateX="-6.0">
                            <font>
                               <Font name="Apple Braille" size="16.0" />
                            </font>
                         </Hyperlink>
-                        <Hyperlink fx:id="usernameLink" maxHeight="-Infinity" minHeight="-Infinity" onMouseMoved="#usernameLinkOnMouseMoved" prefHeight="27.0" style="-fx-text-fill: grey; -fx-border-color: transparent; -fx-underline: false;" translateY="1.0">
+                        <Hyperlink fx:id="usernameLink" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="27.0" style="-fx-text-fill: grey; -fx-border-color: transparent; -fx-underline: false;" translateY="1.0">
                            <font>
                               <Font name="Apple Braille" size="11.0" />
                            </font>
@@ -75,7 +75,7 @@
                             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
                           </rowConstraints>
                         </GridPane>
-                        <Button fx:id="quoteTweetButton" mnemonicParsing="false" onAction="#quoteTweetButtonPressed" style="-fx-background-color: transparent;">
+                        <Button fx:id="quoteTweetButton" mnemonicParsing="false" style="-fx-background-color: transparent;">
                            <graphic>
                               <ImageView fx:id="quoteImageView" pickOnBounds="true" preserveRatio="true" />
                            </graphic>

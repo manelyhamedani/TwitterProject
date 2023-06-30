@@ -17,6 +17,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
@@ -34,6 +35,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -262,9 +264,9 @@ public class Tweet extends VBox {
 
         Hyperlink link = new Hyperlink();
         link.setTextFill(Color.BLACK);
-        link.setStyle("-fx-border-color: transparent");
+        link.setStyle("-fx-border-color: transparent;" +
+                        "-fx-font-family: 'Apple Braille'");
         link.setUnderline(false);
-        link.setStyle("-fx-font-family: 'Apple Braille'");
         String senderName;
         if (retweet.getSenderUsername().equals(Data.getUser().getUsername())) {
             senderName = "You";
@@ -289,9 +291,9 @@ public class Tweet extends VBox {
 
             Hyperlink link = new Hyperlink();
             link.setTextFill(Color.DEEPSKYBLUE);
-            link.setStyle("-fx-border-color: transparent");
+            link.setStyle("-fx-border-color: transparent;" +
+                           "-fx-font-family: 'Apple Braille'" );
             link.setUnderline(false);
-            link.setStyle("-fx-font-family: 'Apple Braille'");
             link.setText("Reply to >>");
 
             link.setOnMouseEntered((event) -> link.setUnderline(true));
@@ -363,15 +365,15 @@ public class Tweet extends VBox {
         }
 
         int count = 1;
-        int columnIndex = 0;
-        int rowIndex = 0;
+        int columnIndex = 1;
+        int rowIndex = 1;
         if (tweet.getImageCount() > 0) {
             for (com.manely.ap.project.common.model.Image img : tweet.getImages()) {
                 if (count % 2 == 0) {
-                    columnIndex = 1;
+                    columnIndex = 0;
                 }
                 if (count > 2) {
-                    rowIndex = 1;
+                    rowIndex = 0;
                 }
 
                 Button imageButton = new Button();
@@ -406,7 +408,18 @@ public class Tweet extends VBox {
 
     @FXML
     void commentButtonPressed(ActionEvent event) {
-
+        AddTweet addTweet = new AddTweet();
+        addTweet.setTweetKind(Kind.REPLY);
+        if (tweet instanceof Retweet) {
+            addTweet.setRefTweet(((Retweet) tweet).getTweet());
+        }
+        else {
+            addTweet.setRefTweet((com.manely.ap.project.common.model.Tweet) tweet);
+        }
+        Scene scene = new Scene(addTweet);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
@@ -443,13 +456,19 @@ public class Tweet extends VBox {
     }
 
     @FXML
-    void nameLinkOnMouseMoved(MouseEvent event) {
-
-    }
-
-    @FXML
     void quoteButtonPressed(ActionEvent event) {
-
+        AddTweet addTweet = new AddTweet();
+        addTweet.setTweetKind(Kind.QUOTE);
+        if (tweet instanceof Retweet) {
+            addTweet.setRefTweet(((Retweet) tweet).getTweet());
+        }
+        else {
+            addTweet.setRefTweet((com.manely.ap.project.common.model.Tweet) tweet);
+        }
+        Scene scene = new Scene(addTweet);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
@@ -473,16 +492,6 @@ public class Tweet extends VBox {
                         }
                     });
         }
-
-    }
-
-    @FXML
-    void usernameLinkOnMouseMoved(MouseEvent event) {
-
-    }
-
-    @FXML
-    void quoteTweetButtonPressed() {
 
     }
 

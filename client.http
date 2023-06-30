@@ -167,8 +167,8 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZC
 
 ###
 
-POST http://localhost:7070/block?username=PoopPoop
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNZWxNZWwiLCJpZCI6MCwiYXVkIjoidXNlciIsImlhdCI6MTY4NzkxNjU4NDQ1NSwiZXhwIjoxNjg4NzgwNTg0NDU1fQ.Am3pAv9hAwlqMbXmS3uTDEplxLwLrcXagThBzCuDt3c
+POST http://localhost:7070/unblock?username=MelMel
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJzdWIiOiJNYW5NYW4iLCJpZCI6MCwiYXVkIjoidXNlciIsImlhdCI6MTY4ODA4NTY5Njg1NywiZXhwIjoxNjg4OTQ5Njk2ODU3fQ.btRS4BXlNwV_04byvOwNUAFFqo1k7PfZpZxiq1mn_Jc
 
 ###
 
