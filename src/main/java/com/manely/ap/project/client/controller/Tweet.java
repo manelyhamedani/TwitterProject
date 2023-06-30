@@ -26,12 +26,10 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
@@ -57,10 +55,11 @@ public class Tweet extends VBox {
     private Image coloredRetweetImage;
     private Image likeImage;
     private Image coloredLikeImage;
-    private SimpleBooleanProperty likedProperty = new SimpleBooleanProperty(false);
-    private SimpleBooleanProperty retweetedProperty = new SimpleBooleanProperty(false);
+    private final SimpleBooleanProperty likedProperty = new SimpleBooleanProperty(false);
+    private final SimpleBooleanProperty retweetedProperty = new SimpleBooleanProperty(false);
     private boolean isLiked = false;
     private boolean retweeted = false;
+
 
     public void setQuotedTweet() {
         quotedTweet = new Tweet();
@@ -129,7 +128,6 @@ public class Tweet extends VBox {
             likeCountLabel.setText(String.valueOf(--count));
             ((ImageView) likeButton.getGraphic()).setImage(likeImage);
         });    }
-
 
     @FXML
     private Button quoteTweetButton;
@@ -211,6 +209,7 @@ public class Tweet extends VBox {
        quoteCountLabel.setText("0");
        commentCountLabel.setText("0");
 
+
     }
 
     public Post getTweet() {
@@ -218,11 +217,11 @@ public class Tweet extends VBox {
     }
 
     private void setButtonImages() throws MalformedURLException {
-        URL comment = new URL("file:/Users/melody/Downloads/comment.png");
-        URL retweet = new URL("file:/Users/melody/Downloads/retweet.png");
-        URL quote = new URL("file:/Users/melody/Downloads/quote.png");
-        URL like = new URL("file:/Users/melody/Downloads/like.png");
-        URL avatar = new URL("file:/Users/melody/Downloads/avatar.png");
+        URL comment = new URL("file:src/main/resources/comment.png");
+        URL retweet = new URL("file:src/main/resources/retweet.png");
+        URL quote = new URL("file:src/main/resources/quote.png");
+        URL like = new URL("file:src/main/resources/like.png");
+        URL avatar = new URL("file:src/main/resources/avatar.png");
 
         Image commentImage = new Image(comment.toString());
         retweetImage = new Image(retweet.toString());
@@ -290,18 +289,19 @@ public class Tweet extends VBox {
             tweetHBox.setPadding(new Insets(0, 14, 8, 14));
             replyHBox.setPadding(new Insets(0, 0, 0, 60));
 
-            Hyperlink link = new Hyperlink();
-            link.setTextFill(Color.DEEPSKYBLUE);
-            link.setStyle("-fx-border-color: transparent;" +
+            Hyperlink replyLink = new Hyperlink();
+
+            replyLink.setTextFill(Color.DEEPSKYBLUE);
+            replyLink.setStyle("-fx-border-color: transparent;" +
                            "-fx-font-family: 'Apple Braille'" );
-            link.setUnderline(false);
-            link.setText("Reply to >>");
+            replyLink.setUnderline(false);
+            replyLink.setText("Reply to >>");
 
-            link.setOnMouseEntered((event) -> link.setUnderline(true));
-            link.setOnMouseExited((event) -> link.setUnderline(false));
-            link.setOnAction((event) -> TweetUtility.showRefTweet(tweet.getRefTweet()));
+            replyLink.setOnMouseEntered((event) -> replyLink.setUnderline(true));
+            replyLink.setOnMouseExited((event) -> replyLink.setUnderline(false));
+            replyLink.setOnAction((event) -> TweetUtility.showRefTweet(tweet.getRefTweet()));
 
-            replyHBox.getChildren().add(link);
+            replyHBox.getChildren().add(replyLink);
         }
 
         nameLink.setText(tweet.getSenderName());

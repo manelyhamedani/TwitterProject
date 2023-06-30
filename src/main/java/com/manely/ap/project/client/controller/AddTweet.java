@@ -8,6 +8,7 @@ import com.manely.ap.project.client.util.ButtonUtility;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Tweet;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,6 +27,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class AddTweet extends VBox {
@@ -64,7 +67,15 @@ public class AddTweet extends VBox {
             ButtonUtility.setRoundedImageView(avatarImageView, avatar);
         }
 
-        tweetTextArea.requestFocus();
+        try {
+            URL avatar = new URL("file:src/main/resources/avatar.png");
+            avatarImageView.setImage(new Image(avatar.toString()));
+        }
+        catch (MalformedURLException ignore) {
+
+        }
+
+        Platform.runLater(() -> tweetTextArea.requestFocus());
 
         tweetTextArea.textProperty().addListener((observableValue, oldValue, newValue) -> {
             int length = newValue.length();

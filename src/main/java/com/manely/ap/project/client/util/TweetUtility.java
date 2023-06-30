@@ -6,7 +6,6 @@ import com.manely.ap.project.client.ResponseCallback;
 import com.manely.ap.project.client.controller.HomePage;
 import com.manely.ap.project.client.controller.Scene;
 import com.manely.ap.project.client.controller.Tweet;
-import com.manely.ap.project.client.controller.TweetCell;
 import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
@@ -14,53 +13,69 @@ import com.manely.ap.project.common.model.Retweet;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
-import javafx.scene.control.ScrollToEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.SwipeEvent;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Queue;
 
 
 public class TweetUtility {
-    private static ObservableList<Tweet> tweets;
-    private static ListView<Tweet> listView;
+    public enum Kind {
+        TIMELINE, PROFILE, SEARCH
+    }
 
-    public static void setUp(ListView<Tweet> list, ObservableList<Tweet> tweetsList) {
-        listView = list;
-        tweets = tweetsList;
+    public static void setUp(ListView<Tweet> list, ObservableList<Tweet> tweets, Kind kind, String data) {
 
         ScrollBar bar = (ScrollBar) list.lookup(".scroll-bar:vertical");
         bar.valueProperty().addListener((observableValue, ov, nv) -> {
-            if (nv.equals(bar.getMin())) {
 
-                HashMap<String, String> query = new HashMap<>();
+            HashMap<String, String> query = new HashMap<>();
+            Type type = new TypeToken<ArrayList<Post>>(){}.getType();
 
-                Type type = new TypeToken<ArrayList<Post>>(){}.getType();
-
-                HttpCall.get(API.TIMELINE, query,
-                        type, new TimelineResponseCallback<>());
+            boolean flag = false;
+            if (nv.equals(bar.getMax())) {
+                flag = true;
             }
-            else if (nv.equals(bar.getMax())) {
-
-                HashMap<String, String> query = new HashMap<>();
-                query.put("id", String.valueOf(Data.getEarliestTimelinePost()));
-
-                Type type = new TypeToken<ArrayList<Post>>(){}.getType();
-
-                HttpCall.get(API.TIMELINE, query,
-                        type, new TimelineResponseCallback<>());
+            else if (!nv.equals(bar.getMin())){
+                return;
             }
+
+            String path = null;
+
+            switch (kind) {
+                case TIMELINE -> {
+                    path = API.TIMELINE;
+                    if (flag) {
+                        query.put("id", String.valueOf(Data.getEarliestTimelinePost()));
+                    }
+                }
+                case PROFILE -> {
+                    path = API.FETCH_USER_POSTS;
+                    query.put("username", data);
+                    if (flag) {
+                        query.put("id", String.valueOf(Data.getEarliestProfPost()));
+                    }
+                }
+                case SEARCH -> {
+                    path = API.FILTER;
+                    if (flag) {
+//                        query.put("id", String.valueOf(Data.getEarliestSearchPost()));
+                    }
+                }
+            }
+
+            if (path != null) {
+                HttpCall.get(path, query, type, new FetchTweetResponseCallback<>(list, tweets));
+            }
+
         });
 
     }
 
-    public static boolean contains(int id) {
+    public static boolean contains(ObservableList<Tweet> tweets, int id) {
         for (Tweet t : tweets) {
             if (t.getTweet().getPostID() == id) {
                 return true;
@@ -69,60 +84,66 @@ public class TweetUtility {
         return false;
     }
 
-    public static class TimelineResponseCallback<T> extends ResponseCallback<T> {
-            @Override
-            public void run() {
-                if (getResponse().isSuccess()) {
-                    ArrayList<Post> posts = (ArrayList<Post>) getResponse().getContent();
-                    for (Post post : posts) {
-                        if (contains(post.getPostID())) {
-                            continue;
-                        }
-                        if (post instanceof Retweet) {
-                            Tweet retweet = new Tweet();
-                            retweet.setRetweet((Retweet) post);
-                            tweets.add(retweet);
-                        }
+    public static class FetchTweetResponseCallback<T> extends ResponseCallback<T> {
+        private ObservableList<Tweet> tweets;
+        private ListView<Tweet> listView;
 
-                        else if (post instanceof com.manely.ap.project.common.model.Tweet) {
-                            Tweet tweet = new Tweet();
-                            tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
-                            tweets.add(tweet);
+        public FetchTweetResponseCallback(ListView<Tweet> listView, ObservableList<Tweet> tweets) {
+            this.tweets = tweets;
+            this.listView = listView;
+        }
 
-                            tweet.retweetedProperty().addListener((observableValue, oldValue, newValue) -> {
-                                if (newValue) {
-                                    Platform.runLater(() -> {
-                                        Scene.changeScene("home-page.fxml");
-                                    });
-                                }
-                            });
-
-                        }
-                        Data.addTimelinePost(post.getPostID());
+        @Override
+        public void run() {
+            if (getResponse().isSuccess()) {
+                ArrayList<Post> posts = (ArrayList<Post>) getResponse().getContent();
+                for (Post post : posts) {
+                    if (contains(tweets, post.getPostID())) {
+                        continue;
                     }
-                    Platform.runLater(() -> {
-                        tweets.sort((o1, o2) -> {
-                                    long id1 = o1.getTweet().getPostID();
-                                    long id2 = o2.getTweet().getPostID();
-                                    return Long.compare(id1, id2) * -1;
+                    if (post instanceof Retweet) {
+                        Tweet retweet = new Tweet();
+                        retweet.setRetweet((Retweet) post);
+                        tweets.add(retweet);
+                    }
+
+                    else if (post instanceof com.manely.ap.project.common.model.Tweet) {
+                        Tweet tweet = new Tweet();
+                        tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
+                        tweets.add(tweet);
+
+                        tweet.retweetedProperty().addListener((observableValue, oldValue, newValue) -> {
+                            if (newValue) {
+                                Platform.runLater(() -> Scene.gotoHomePage(HomePage.getScene()));
+                            }
                         });
-                        TweetUtility.setRefs();
-                        listView.setItems(tweets);
+
+                    }
+                    Data.addTimelinePost(post.getPostID());
+                }
+                Platform.runLater(() -> {
+                    tweets.sort((o1, o2) -> {
+                                long id1 = o1.getTweet().getPostID();
+                                long id2 = o2.getTweet().getPostID();
+                                return Long.compare(id1, id2) * -1;
                     });
-                }
-                else {
-                    System.out.println(getResponse().getMessage());
-                }
+                    TweetUtility.setRefs(tweets);
+                    listView.setItems(tweets);
+                });
             }
+            else {
+                System.out.println(getResponse().getMessage());
+            }
+        }
     }
 
-    public static void setRefs() {
+    public static void setRefs(ObservableList<Tweet> tweets) {
 
-        for (Tweet t : TweetUtility.tweets) {
+        for (Tweet t : tweets) {
             Post post = t.getTweet();
 
             if (post instanceof Retweet) {
-                Tweet ref = getRefTweet(((Retweet) post).getTweet().getId());
+                Tweet ref = getRefTweet(tweets, ((Retweet) post).getTweet().getId());
                 setBindings(t, ref);
             }
 
@@ -130,6 +151,9 @@ public class TweetUtility {
     }
 
     public static void showRefTweet(Post refTweet) {
+        ListView<Tweet> listView = HomePage.getCurrentList();
+        ObservableList<Tweet> tweets = HomePage.getCurrentTweets();
+
         int index = 0;
 
         for (Tweet t : tweets) {
@@ -190,7 +214,7 @@ public class TweetUtility {
         }
     }
 
-    private static Tweet getRefTweet(int tweetId) {
+    private static Tweet getRefTweet(ObservableList<Tweet> tweets, int tweetId) {
         for (Tweet t : tweets) {
             Post post = t.getTweet();
 

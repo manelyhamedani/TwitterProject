@@ -36,6 +36,7 @@ public class Driver {
         server.createContext(API.UNBLOCK, HttpHandler::handleUnblock);
         server.createContext(API.TIMELINE, HttpHandler::handleTimeline);
         server.createContext(API.FILTER, HttpHandler::handleFilter);
+        server.createContext(API.FETCH_USER_POSTS, HttpHandler::handleFetchUserPosts);
         server.start();
 
         if (!MediaManager.setUp())

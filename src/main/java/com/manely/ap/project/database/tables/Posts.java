@@ -61,14 +61,17 @@ public class Posts extends Table {
         statement.close();
     }
 
-    public synchronized ArrayList<Post> fetchUserPosts(String username, long date) throws SQLException, IOException {
+    public synchronized ArrayList<Post> fetchUserPosts(String username, int id) throws SQLException, IOException {
+        String limit = "";
+        if (id != -1) {
+            limit = COLUMN_ID + "<" + id + " AND ";
+        }
         String query = "SELECT * FROM " + TABLE_NAME +
-                        " WHERE " + COLUMN_DATE + "<=? AND " +
+                        " WHERE " + limit +
                         COLUMN_SENDER + "=? " +
                         "ORDER BY " + COLUMN_DATE + " DESC LIMIT 30";
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
-        statement.setLong(1, date);
-        statement.setString(2, username);
+        statement.setString(1, username);
         ResultSet set = statement.executeQuery();
 
         return readPosts(set);
@@ -89,7 +92,7 @@ public class Posts extends Table {
                         "(" + TABLE_NAME + "." + COLUMN_SENDER + "=?) OR " +
                         "(" + Tweets.TABLE_NAME + "." + Tweets.COLUMN_ID + "=" + TABLE_NAME + "." + COLUMN_TWEET_ID + " AND " +
                         Tweets.TABLE_NAME + "." + Tweets.COLUMN_LIKES + ">=10)" +
-                        ") ORDER BY " + TABLE_NAME + "." + COLUMN_DATE + " DESC LIMIT 30";
+                        ") ORDER BY " + TABLE_NAME + "." + COLUMN_ID + " DESC LIMIT 30";
 
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
         statement.setString(1, username);

@@ -468,6 +468,35 @@ public class HttpHandler {
         }
     }
 
+    static void handleFetchUserPosts(HttpExchange exchange) {
+        if (getJWT(exchange) != null && validateMethod("GET", exchange)) {
+            try {
+                HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
+                int id;
+                String username;
+                if (!query.containsKey("username")) {
+                    throw new IllegalArgumentException();
+                }
+                else if (!query.containsKey("id")) {
+                    id = -1;
+                }
+                else {
+                    id = Integer.parseInt(query.get("id"));
+                }
+                username = query.get("username");
+                ArrayList<Post> posts = SQL.getPosts().fetchUserPosts(username, id);
+                if (posts.size() != 0) {
+                    fetchPostsMedia(posts);
+                }
+                Type contentType = new TypeToken<ArrayList<Post>>(){}.getType();
+                response(exchange, 200, "OK", true, posts, contentType);
+            }
+            catch (Exception e) {
+                response(exchange, 400, e.getMessage(), false, null, null);
+            }
+        }
+    }
+
     static void handleTimeline(HttpExchange exchange) {
         String jwt;
         if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {

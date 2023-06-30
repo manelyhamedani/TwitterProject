@@ -37,4 +37,12 @@ public class Scene {
         }
     }
 
+    public static void gotoHomePage(javafx.scene.Scene homePage) {
+        Platform.runLater(() -> {
+            primaryStage.setScene(homePage);
+            primaryStage.show();
+            HomePage.getInstance().homeButtonPressed();
+        });
+}
+
 }
