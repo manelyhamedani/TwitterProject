@@ -27,7 +27,7 @@ public class Data {
     }
 
     public static void addTimelinePost(int id) {
-        if (id < earliestTimelinePost) {
+        if (earliestTimelinePost == 0 || id < earliestTimelinePost) {
             earliestTimelinePost = id;
         }
     }

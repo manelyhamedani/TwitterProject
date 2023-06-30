@@ -102,8 +102,8 @@ public class TweetUtility {
                     }
                     Platform.runLater(() -> {
                         tweets.sort((o1, o2) -> {
-                                    long id1 = o1.getTweet().getDate().getTime();
-                                    long id2 = o2.getTweet().getDate().getTime();
+                                    long id1 = o1.getTweet().getPostID();
+                                    long id2 = o2.getTweet().getPostID();
                                     return Long.compare(id1, id2) * -1;
                         });
                         TweetUtility.setRefs();
