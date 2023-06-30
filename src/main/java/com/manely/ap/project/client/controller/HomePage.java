@@ -8,14 +8,19 @@ import com.manely.ap.project.client.util.TweetUtility;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Retweet;
+import com.manely.ap.project.common.model.Tweet.Kind;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -29,7 +34,7 @@ import static com.manely.ap.project.client.util.ButtonUtility.setColorButtonImag
 
 public class HomePage {
 
-    private ObservableList<Tweet> tweets = FXCollections.observableArrayList();
+    private final ObservableList<Tweet> tweets = FXCollections.observableArrayList();
 
     private Image homeImage;
     private Image profileImage;
@@ -70,10 +75,11 @@ public class HomePage {
         coloredSettingsImage = setColorButtonImage(settingsButton, 0xff36b9ff);
 
         tweetListView.setFocusTraversable(false);
+
         tweetListView.setCellFactory((listView) -> {
             TweetCell cell = new TweetCell();
             cell.setFocusTraversable(false);
-            cell.setStyle("-fx-background-color: white;" + "-fx-border-color: grey");
+            cell.setStyle("-fx-background-color: white;" + "-fx-border-color: #989797;");
             return cell;
         });
 
@@ -168,7 +174,7 @@ public class HomePage {
                                 long id2 = o2.getTweet().getDate().getTime();
                                 return Long.compare(id1, id2) * -1;
                             });
-                            TweetUtility.setUp(tweets);
+                            TweetUtility.setUp(tweets, tweetListView);
                             Platform.runLater(() -> tweetListView.setItems(tweets));
                         }
                         else {
@@ -201,8 +207,13 @@ public class HomePage {
     }
 
     @FXML
-    void addTweetButtonPressed() {
-
+    void addTweetButtonPressed(ActionEvent event) {
+        AddTweet addTweet = new AddTweet();
+        addTweet.setTweetKind(Kind.TWEET);
+        Scene scene = new Scene(addTweet);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
 }

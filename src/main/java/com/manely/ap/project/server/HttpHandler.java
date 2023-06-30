@@ -279,7 +279,7 @@ public class HttpHandler {
                 tweet.setDate(new Date(currentTime));
                 SQL.getTweets().insert(tweet);
                 MediaManager.addTweetMedia(tweet.getId(), tweet.getImages());
-                response(exchange, 200, "OK", true, tweet, Tweet.class);
+                response(exchange, 200, "OK", true, null, null);
             }
             catch (IllegalArgumentException e) {
                 response(exchange, 400 , err.toString(), false, null, null);
@@ -307,7 +307,7 @@ public class HttpHandler {
                 SQL.getTweets().insert(quote);
                 MediaManager.addTweetMedia(quote.getId(), quote.getImages());
                 SQL.getTweets().quote(quote.getRefTweet().getId());
-                response(exchange, 200, "OK", true, quote, Tweet.class);
+                response(exchange, 200, "OK", true, null, null);
             }
             catch (IllegalArgumentException e) {
                 response(exchange, 400 , err.toString(), false, null, null);
@@ -341,7 +341,7 @@ public class HttpHandler {
 
                 SQL.getRetweets().insert(retweet);
                 SQL.getTweets().retweet(retweet.getId());
-                response(exchange, 200, "OK", true, retweet, Retweet.class);
+                response(exchange, 200, "OK", true, null, null);
             }
             catch (Exception e) {
                 response(exchange, 400, e.getMessage(), false, null, null);
@@ -412,7 +412,7 @@ public class HttpHandler {
                 SQL.getTweets().insert(reply);
                 MediaManager.addTweetMedia(reply.getId(), reply.getImages());
                 SQL.getTweets().comment(reply.getRefTweet().getId());
-                response(exchange, 200, "OK", true, reply, Tweet.class);
+                response(exchange, 200, "OK", true, null, null);
             }
             catch (IllegalArgumentException e) {
                 response(exchange, 400 , err.toString(), false, null, null);

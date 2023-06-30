@@ -27,7 +27,9 @@ public class User implements Serializable {
     }
 
     public void setJwt(String jwt) {
-        this.jwt = jwt;
+        if (jwt != null) {
+            this.jwt = jwt.trim();
+        }
     }
 
     public int getId() {
@@ -71,31 +73,45 @@ public class User implements Serializable {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        if (username != null) {
+            this.username = username.trim();
+        }
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if (password != null) {
+            this.password = password.trim();
+        }
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        if (firstName != null) {
+            this.firstName = firstName.trim();
+        }
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        if (lastName != null) {
+            this.lastName = lastName.trim();
+        }
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if (email != null) {
+            this.email = email.trim();
+        }
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        if (phoneNumber != null) {
+            this.phoneNumber = phoneNumber.trim();
+        }
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        if (country != null) {
+            this.country = country.trim();
+        }
     }
 
     public void setBirthDate(Date birthDate) {

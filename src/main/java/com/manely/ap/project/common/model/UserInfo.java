@@ -16,7 +16,9 @@ public class UserInfo implements Serializable {
     }
 
     public void setBio(String bio) {
-        this.bio = bio;
+        if (bio != null) {
+            this.bio = bio.trim();
+        }
     }
 
     public String getLocation() {
@@ -24,7 +26,9 @@ public class UserInfo implements Serializable {
     }
 
     public void setLocation(String location) {
-        this.location = location;
+        if (location != null) {
+            this.location = location.trim();
+        }
     }
 
     public String getWebsite() {
@@ -32,7 +36,9 @@ public class UserInfo implements Serializable {
     }
 
     public void setWebsite(String website) {
-        this.website = website;
+        if (website != null) {
+            this.website = website.trim();
+        }
     }
 
     public boolean validateBio() {

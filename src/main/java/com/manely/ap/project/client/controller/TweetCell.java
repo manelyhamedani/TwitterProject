@@ -2,6 +2,8 @@ package com.manely.ap.project.client.controller;
 
 import javafx.scene.control.ListCell;
 
+import java.util.ArrayList;
+
 
 public class TweetCell extends ListCell<Tweet> {
 

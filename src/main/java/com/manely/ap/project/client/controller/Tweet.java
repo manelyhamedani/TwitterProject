@@ -4,6 +4,8 @@ import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.Main;
 import com.manely.ap.project.client.ResponseCallback;
 import com.manely.ap.project.client.model.Data;
+import com.manely.ap.project.client.util.ButtonUtility;
+import com.manely.ap.project.client.util.TweetUtility;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Retweet;
@@ -15,7 +17,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
@@ -31,8 +32,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.scene.Scene;
+import javafx.scene.text.Text;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -83,10 +84,13 @@ public class Tweet extends VBox {
             quoteImageView.setFitWidth(300);
             quoteImageView.setFitHeight(250);
             quoteImageView.setImage(snapshot);
-            quoteImageView.setEffect(new DropShadow(30, Color.BLACK));
+            quoteImageView.setEffect(new DropShadow(20, Color.BLACK));
             quoteTweetButton.setStyle("-fx-background-color: transparent");
         });
 
+        quoteTweetButton.setOnAction((event) -> TweetUtility.showRefTweet(quotedTweet.getTweet()));
+        quoteTweetButton.setOnMouseEntered((event) -> quoteImageView.setEffect(new DropShadow(30, Color.BLACK)));
+        quoteTweetButton.setOnMouseExited((event) -> quoteImageView.setEffect(new DropShadow(20, Color.BLACK)));
     }
 
     public SimpleBooleanProperty likeProperty() {
@@ -190,6 +194,9 @@ public class Tweet extends VBox {
     @FXML
     private ImageView quoteImageView;
 
+    @FXML
+    private HBox replyHBox;
+
     public void initialize() throws IOException {
        setButtonImages();
 
@@ -277,8 +284,23 @@ public class Tweet extends VBox {
             setQuotedTweet();
         }
         else if (tweet.getKind().equals(Kind.REPLY)) {
+            tweetHBox.setPadding(new Insets(0, 14, 8, 14));
+            replyHBox.setPadding(new Insets(0, 0, 0, 60));
 
+            Hyperlink link = new Hyperlink();
+            link.setTextFill(Color.DEEPSKYBLUE);
+            link.setStyle("-fx-border-color: transparent");
+            link.setUnderline(false);
+            link.setStyle("-fx-font-family: 'Apple Braille'");
+            link.setText("Reply to >>");
+
+            link.setOnMouseEntered((event) -> link.setUnderline(true));
+            link.setOnMouseExited((event) -> link.setUnderline(false));
+            link.setOnAction((event) -> TweetUtility.showRefTweet(tweet.getRefTweet()));
+
+            replyHBox.getChildren().add(link);
         }
+
         nameLink.setText(tweet.getSenderName());
         usernameLink.setText("@" + tweet.getSenderUsername());
         commentCountLabel.setText(formatter.format(tweet.getCommentsCount()));
@@ -337,20 +359,7 @@ public class Tweet extends VBox {
         if (tweet.getSenderAvatar() != null) {
             Image avatar = new Image(new ByteArrayInputStream(tweet.getSenderAvatar().getBytes()));
             ImageView imageView = (ImageView) avatarButton.getGraphic();
-            double radius = imageView.getFitHeight() / 2;
-            Circle clip = new Circle(radius);
-            clip.setCenterX(radius);
-            clip.setCenterY(radius);
-
-            imageView.setImage(avatar);
-            imageView.setClip(clip);
-            SnapshotParameters parameters = new SnapshotParameters();
-            parameters.setFill(Color.TRANSPARENT);
-            Platform.runLater(() -> {
-                WritableImage roundedImage = imageView.snapshot(parameters, null);
-                imageView.setClip(null);
-                imageView.setImage(roundedImage);
-            });
+            ButtonUtility.setRoundedImageView(imageView, avatar);
         }
 
         int count = 1;
@@ -361,7 +370,7 @@ public class Tweet extends VBox {
                 if (count % 2 == 0) {
                     columnIndex = 1;
                 }
-                if ((double) count / 2 > 1) {
+                if (count > 2) {
                     rowIndex = 1;
                 }
 
