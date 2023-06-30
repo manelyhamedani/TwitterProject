@@ -107,6 +107,7 @@ public class Posts extends Table {
             int tweetId;
             if ((tweetId = set.getInt(COLUMN_TWEET_ID)) != 0) {
                 post = SQL.getTweets().select(tweetId);
+                post.setPostID(set.getInt(COLUMN_ID));
             }
             else if ((tweetId = set.getInt(COLUMN_RETWEET_ID)) != 0) {
                 post = new Retweet();

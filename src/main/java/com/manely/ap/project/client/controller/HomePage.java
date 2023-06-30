@@ -2,14 +2,10 @@ package com.manely.ap.project.client.controller;
 
 import com.google.gson.reflect.TypeToken;
 import com.manely.ap.project.client.HttpCall;
-import com.manely.ap.project.client.ResponseCallback;
-import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.client.util.TweetUtility;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
-import com.manely.ap.project.common.model.Retweet;
 import com.manely.ap.project.common.model.Tweet.Kind;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,6 +29,11 @@ import static com.manely.ap.project.client.util.ButtonUtility.setColorButtonImag
 
 
 public class HomePage {
+    private static HomePage instance;
+
+    public static HomePage getInstance() {
+        return instance;
+    }
 
     private final ObservableList<Tweet> tweets = FXCollections.observableArrayList();
 
@@ -79,12 +80,16 @@ public class HomePage {
         tweetListView.setCellFactory((listView) -> {
             TweetCell cell = new TweetCell();
             cell.setFocusTraversable(false);
-            cell.setStyle("-fx-background-color: white;" + "-fx-border-color: #989797;");
+            if (cell.getGraphic() != null) {
+                cell.setStyle("-fx-background-color: white;" + "-fx-border-color: #989797;");
+            }
             return cell;
         });
 
-        homeButtonPressed();
+        instance = this;
+
     }
+
 
     private void setButtonImages() throws MalformedURLException {
         URL home = new URL("file:/Users/melody/Downloads/home-button.png");
@@ -130,9 +135,10 @@ public class HomePage {
         ((ImageView) settingsButton.getGraphic()).setImage(settingsImage);
     }
 
-
     @FXML
-    void homeButtonPressed() {
+    public void homeButtonPressed() {
+        TweetUtility.setUp(tweetListView, tweets);
+
         resetButtonImages();
         ((ImageView) homeButton.getGraphic()).setImage(coloredHomeImage);
 
@@ -141,47 +147,8 @@ public class HomePage {
 
         HashMap<String, String> query = new HashMap<>();
         Type type = new TypeToken<ArrayList<Post>>(){}.getType();
-        HttpCall.get(API.TIMELINE, query,
-                type,
-                new ResponseCallback<>() {
-                    @Override
-                    public void run() {
-                        if (getResponse().isSuccess()) {
-                            ArrayList<Post> posts = (ArrayList<Post>) getResponse().getContent();
-                            for (Post post : posts) {
-                                if (post instanceof Retweet) {
-                                    Tweet retweet = new Tweet();
-                                    retweet.setRetweet((Retweet) post);
-                                    tweets.add(retweet);
-                                }
+        HttpCall.get(API.TIMELINE, query, type, new TweetUtility.TimelineResponseCallback<>());
 
-                                else if (post instanceof com.manely.ap.project.common.model.Tweet) {
-                                    Tweet tweet = new Tweet();
-                                    tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
-                                    tweets.add(tweet);
-
-                                    tweet.retweetedProperty().addListener((observableValue, oldValue, newValue) -> {
-                                        if (newValue) {
-                                            Platform.runLater(HomePage.this::homeButtonPressed);
-                                        }
-                                    });
-
-                                }
-                                Data.addTimelinePost(post.getPostID());
-                            }
-                            tweets.sort((o1, o2) -> {
-                                long id1 = o1.getTweet().getDate().getTime();
-                                long id2 = o2.getTweet().getDate().getTime();
-                                return Long.compare(id1, id2) * -1;
-                            });
-                            TweetUtility.setUp(tweets, tweetListView);
-                            Platform.runLater(() -> tweetListView.setItems(tweets));
-                        }
-                        else {
-                            System.out.println(getResponse().getMessage());
-                        }
-                    }
-                });
     }
 
 

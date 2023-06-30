@@ -26,6 +26,9 @@ public class Scene {
             Platform.runLater(() -> {
                 primaryStage.setScene(scene);
                 primaryStage.show();
+                if (path.equals("home-page.fxml")) {
+                    HomePage.getInstance().homeButtonPressed();
+                }
             });
         }
         catch (IOException e) {

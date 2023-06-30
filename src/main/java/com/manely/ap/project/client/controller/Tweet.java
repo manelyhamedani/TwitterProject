@@ -44,6 +44,7 @@ import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import static com.manely.ap.project.client.util.ButtonUtility.setColorButtonImage;
 
@@ -335,7 +336,7 @@ public class Tweet extends VBox {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
+        String monthName = calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.ENGLISH);
         int year = calendar.get(Calendar.YEAR);
 
         long diff = currentTime.getTime() - date.getTime();
@@ -352,10 +353,10 @@ public class Tweet extends VBox {
             timeLabel.setText(formatter.format(hour) + "h");
         }
         else if (diff < yearMillis) {
-            timeLabel.setText(formatter.format(month) + " " + formatter.format(day));
+            timeLabel.setText(monthName + " " + formatter.format(day));
         }
         else {
-            timeLabel.setText(formatter.format(year) + " " + formatter.format(month) + " " + formatter.format(day));
+            timeLabel.setText(formatter.format(year) + " " + monthName + " " + formatter.format(day));
         }
 
         if (tweet.getSenderAvatar() != null) {
