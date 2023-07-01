@@ -185,7 +185,7 @@ public class ProfileInfo extends VBox {
         list.setCellFactory((listView) -> new ProfileCell());
         list.setItems(items);
 
-        list.setPrefHeight(USE_COMPUTED_SIZE);
+        list.setPrefHeight(600);
         list.setPrefWidth(830);
         list.setMinHeight(USE_PREF_SIZE);
         list.setMinWidth(USE_PREF_SIZE);
@@ -221,6 +221,9 @@ public class ProfileInfo extends VBox {
         query.put("username", user.getUsername());
         Type type = new TypeToken<ArrayList<User>>(){}.getType();
 
+        HomePage.getInstance().setScreen(followersList);
+        HomePage.getInstance().setBackButton(page);
+
         HttpCall.get(API.LIST_FOLLOWERS, query, type, new SearchUserResponseCallback<>(followersList.getItems(), page));
     }
 
@@ -231,6 +234,9 @@ public class ProfileInfo extends VBox {
         HashMap<String, String> query = new HashMap<>();
         query.put("username", user.getUsername());
         Type type = new TypeToken<ArrayList<User>>(){}.getType();
+
+        HomePage.getInstance().setScreen(followingList);
+        HomePage.getInstance().setBackButton(page);
 
         HttpCall.get(API.LIST_FOLLOWING, query, type, new SearchUserResponseCallback<>(followingList.getItems(), page));
     }

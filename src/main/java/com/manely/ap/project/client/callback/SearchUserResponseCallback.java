@@ -57,9 +57,10 @@ public class SearchUserResponseCallback<T> extends ResponseCallback<T> {
 
             boolean isSelf = user.getUsername().equals(Data.getUser().getUsername());
 
-            profilePage.setUp(user, isSelf);
-
             HomePage.getInstance().setBackButton(preNode);
+            HomePage.getInstance().setScreen(profilePage);
+
+            profilePage.setUp(user, isSelf);
         }
     }
 }
