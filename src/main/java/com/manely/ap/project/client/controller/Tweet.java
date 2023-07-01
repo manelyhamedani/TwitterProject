@@ -421,7 +421,7 @@ public class Tweet extends VBox {
     }
 
     @FXML
-    void likeButtonPressed() {
+    synchronized void likeButtonPressed() {
         String path;
         if (isLiked) {
             path = API.UNLIKE;

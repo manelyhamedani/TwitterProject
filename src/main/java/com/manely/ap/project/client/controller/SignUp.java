@@ -225,6 +225,12 @@ public class SignUp {
         }
 
         if (validateFields()) {
+            if (user.getEmail().isBlank()) {
+                user.setEmail(null);
+            }
+            if (user.getPhoneNumber().isBlank()) {
+                user.setPhoneNumber(null);
+            }
             HttpCall.post(API.SIGNUP, user, Object.class,
                     new ResponseCallback<>() {
                         @Override
@@ -256,6 +262,7 @@ public class SignUp {
                                         }
                                     } else {
                                         signupErrorLabel.setText("Internal Error!");
+                                        System.out.println(getResponse().getMessage());
                                     }
                                 });
                             }

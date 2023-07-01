@@ -109,11 +109,17 @@ public class User implements Serializable {
         if (email != null) {
             this.email = email.trim();
         }
+        else {
+            this.email = null;
+        }
     }
 
     public void setPhoneNumber(String phoneNumber) {
         if (phoneNumber != null) {
             this.phoneNumber = phoneNumber.trim();
+        }
+        else {
+            this.phoneNumber = null;
         }
     }
 

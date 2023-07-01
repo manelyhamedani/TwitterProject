@@ -93,7 +93,7 @@ public class HttpHandler {
                         throw new IllegalArgumentException();
                     }
                 }
-                if (!EmailValidator.getInstance().isValid(user.getEmail())) {
+                if (user.getEmail() != null && !EmailValidator.getInstance().isValid(user.getEmail())) {
                     err = Error.INVALID_EMAIL;
                     errCode = 403;
                     throw new IllegalArgumentException();

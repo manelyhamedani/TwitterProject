@@ -440,7 +440,7 @@ public class HomePage {
                                 profile.getNameHyperlink().setOnAction(handler);
                                 profile.getUsernameHyperlink().setOnAction(handler);
                             }
-                            searchUserListView.setItems(users);
+                            Platform.runLater(() -> searchUserListView.setItems(users));
                         }
                         else {
                             System.out.println(getResponse().getMessage());
