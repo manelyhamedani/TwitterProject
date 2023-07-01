@@ -6,6 +6,7 @@ import com.manely.ap.project.client.Main;
 import com.manely.ap.project.client.callback.TimelineResponseCallback;
 import com.manely.ap.project.client.callback.UserPostResponseCallback;
 import com.manely.ap.project.client.model.Data;
+import com.manely.ap.project.client.util.Scrollable;
 import com.manely.ap.project.client.util.TweetUtility;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
@@ -24,7 +25,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ProfilePage extends ListView<VBox> {
+public class ProfilePage extends ListView<VBox> implements Scrollable {
 
     @FXML
     private ListView<VBox> profileListView;

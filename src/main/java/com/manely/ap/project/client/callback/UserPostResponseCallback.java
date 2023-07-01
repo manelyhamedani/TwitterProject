@@ -35,11 +35,11 @@ public class UserPostResponseCallback<T> extends ResponseCallback<T> {
             for (Post post : posts) {
                 Tweet tweet = new Tweet();
                 if (post instanceof Retweet) {
-                    tweet.setRetweet((Retweet) post);
+                    tweet.setRetweet((Retweet) post, profilePage);
                 }
 
                 else if (post instanceof com.manely.ap.project.common.model.Tweet) {
-                    tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
+                    tweet.setTweet((com.manely.ap.project.common.model.Tweet) post, profilePage);
                 }
 
                 if (tweets.contains(tweet)) {

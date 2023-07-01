@@ -26,5 +26,6 @@ public class API {
     public static final String TIMELINE = "/timeline";
     public static final String FILTER = "/filter";
     public static final String FETCH_USER_POSTS = "/fetch-user-posts";
+    public static final String FETCH_TWEET_REPLIES = "/fetch-tweet-replies";
 
 }

@@ -29,6 +29,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
@@ -46,9 +47,11 @@ import java.util.Locale;
 import static com.manely.ap.project.client.util.ButtonUtility.setColorButtonImage;
 
 public class Tweet extends VBox {
-    private final NumberFormat formatter = NumberFormat.getInstance();
+    private static final NumberFormat formatter = NumberFormat.getInstance();
     private Post tweet;
     private Tweet quotedTweet;
+    private Tweet repliedTweet;
+    private Node parent;
 
     private Image retweetImage;
     private Image coloredRetweetImage;
@@ -58,75 +61,6 @@ public class Tweet extends VBox {
     private final SimpleBooleanProperty retweetedProperty = new SimpleBooleanProperty(false);
     private boolean isLiked = false;
     private boolean retweeted = false;
-
-
-    public void setQuotedTweet() {
-        quotedTweet = new Tweet();
-        quotedTweet.setTweet(((com.manely.ap.project.common.model.Tweet) tweet).getRefTweet());
-        new Scene(quotedTweet);
-
-        Rectangle clip = new Rectangle(300, 250);
-        clip.setArcHeight(20);
-        clip.setArcHeight(20);
-
-        quoteImageView.setClip(clip);
-        SnapshotParameters p = new SnapshotParameters();
-        p.setFill(Color.TRANSPARENT);
-        Platform.runLater(() -> {
-            WritableImage roundedImage = quoteImageView.snapshot(p, null);
-            quoteImageView.setClip(null);
-            quoteImageView.setImage(roundedImage);
-        });
-
-        SnapshotParameters parameters = new SnapshotParameters();
-        parameters.setFill(Color.WHITE);
-        Platform.runLater(() -> {
-            WritableImage snapshot = quotedTweet.snapshot(parameters, null);
-            quoteImageView.setFitWidth(300);
-            quoteImageView.setFitHeight(250);
-            quoteImageView.setImage(snapshot);
-            quoteImageView.setEffect(new DropShadow(20, Color.BLACK));
-            quoteTweetButton.setStyle("-fx-background-color: transparent");
-        });
-
-//        quoteTweetButton.setOnAction((event) -> TweetUtility.showRefTweet(quotedTweet.getTweet()));
-        quoteTweetButton.setOnMouseEntered((event) -> quoteImageView.setEffect(new DropShadow(30, Color.BLACK)));
-        quoteTweetButton.setOnMouseExited((event) -> quoteImageView.setEffect(new DropShadow(20, Color.BLACK)));
-    }
-
-    public SimpleBooleanProperty likeProperty() {
-        return likedProperty;
-    }
-
-    public SimpleBooleanProperty retweetedProperty() {
-        return retweetedProperty;
-    }
-
-    public void retweet() {
-        retweeted = true;
-        Platform.runLater(() -> {
-            int count = Integer.parseInt(retweetCountLabel.getText());
-            retweetCountLabel.setText(String.valueOf(++count));
-            ((ImageView) retweetButton.getGraphic()).setImage(coloredRetweetImage);
-        });
-    }
-
-    public void like() {
-        isLiked = true;
-        Platform.runLater(() -> {
-            int count = Integer.parseInt(likeCountLabel.getText());
-            likeCountLabel.setText(String.valueOf(++count));
-            ((ImageView) likeButton.getGraphic()).setImage(coloredLikeImage);
-        });
-    }
-
-    public void unlike() {
-        isLiked = false;
-        Platform.runLater(() -> {
-            int count = Integer.parseInt(likeCountLabel.getText());
-            likeCountLabel.setText(String.valueOf(--count));
-            ((ImageView) likeButton.getGraphic()).setImage(likeImage);
-        });    }
 
     @FXML
     private Button quoteTweetButton;
@@ -211,6 +145,77 @@ public class Tweet extends VBox {
 
     }
 
+    public void setQuotedTweet() {
+        quotedTweet = new Tweet();
+        quotedTweet.setTweet(((com.manely.ap.project.common.model.Tweet) tweet).getRefTweet(), this.parent);
+        new Scene(quotedTweet);
+
+        Rectangle clip = new Rectangle(300, 250);
+        clip.setArcHeight(20);
+        clip.setArcHeight(20);
+
+        quoteImageView.setClip(clip);
+        SnapshotParameters p = new SnapshotParameters();
+        p.setFill(Color.TRANSPARENT);
+        Platform.runLater(() -> {
+            WritableImage roundedImage = quoteImageView.snapshot(p, null);
+            quoteImageView.setClip(null);
+            quoteImageView.setImage(roundedImage);
+        });
+
+        SnapshotParameters parameters = new SnapshotParameters();
+        parameters.setFill(Color.WHITE);
+        Platform.runLater(() -> {
+            WritableImage snapshot = quotedTweet.snapshot(parameters, null);
+            quoteImageView.setFitWidth(300);
+            quoteImageView.setFitHeight(250);
+            quoteImageView.setImage(snapshot);
+            quoteImageView.setEffect(new DropShadow(20, Color.BLACK));
+            quoteTweetButton.setStyle("-fx-background-color: transparent");
+        });
+
+        quoteTweetButton.setOnAction((event) -> {
+            TweetPage tweetPage = new TweetPage();
+            tweetPage.setUp(quotedTweet, this.parent);
+        });
+        quoteTweetButton.setOnMouseEntered((event) -> quoteImageView.setEffect(new DropShadow(30, Color.BLACK)));
+        quoteTweetButton.setOnMouseExited((event) -> quoteImageView.setEffect(new DropShadow(20, Color.BLACK)));
+    }
+
+    public SimpleBooleanProperty likeProperty() {
+        return likedProperty;
+    }
+
+    public SimpleBooleanProperty retweetedProperty() {
+        return retweetedProperty;
+    }
+
+    public void retweet() {
+        retweeted = true;
+        Platform.runLater(() -> {
+            int count = Integer.parseInt(retweetCountLabel.getText());
+            retweetCountLabel.setText(String.valueOf(++count));
+            ((ImageView) retweetButton.getGraphic()).setImage(coloredRetweetImage);
+        });
+    }
+
+    public void like() {
+        isLiked = true;
+        Platform.runLater(() -> {
+            int count = Integer.parseInt(likeCountLabel.getText());
+            likeCountLabel.setText(String.valueOf(++count));
+            ((ImageView) likeButton.getGraphic()).setImage(coloredLikeImage);
+        });
+    }
+
+    public void unlike() {
+        isLiked = false;
+        Platform.runLater(() -> {
+            int count = Integer.parseInt(likeCountLabel.getText());
+            likeCountLabel.setText(String.valueOf(--count));
+            ((ImageView) likeButton.getGraphic()).setImage(likeImage);
+        });    }
+
     public Post getTweet() {
         return tweet;
     }
@@ -248,10 +253,11 @@ public class Tweet extends VBox {
         }
     }
 
-    public void setRetweet(Retweet retweet) {
+    public void setRetweet(Retweet retweet, Node parent) {
 
-        setTweet(retweet.getTweet());
+        setTweet(retweet.getTweet(), parent);
         this.tweet = retweet;
+        this.parent = parent;
 
         tweetHBox.setPadding(new Insets(0, 14, 8, 14));
         retweetSenderHBox.setPadding(new Insets(0, 0, 0, 60));
@@ -278,8 +284,9 @@ public class Tweet extends VBox {
         retweetSenderHBox.getChildren().addAll(imageView, link);
     }
 
-    public void setTweet(com.manely.ap.project.common.model.Tweet tweet) {
+    public void setTweet(com.manely.ap.project.common.model.Tweet tweet, Node parent) {
         this.tweet = tweet;
+        this.parent = parent;
 
         if (tweet.getKind().equals(Kind.QUOTE)) {
             setQuotedTweet();
@@ -298,7 +305,12 @@ public class Tweet extends VBox {
 
             replyLink.setOnMouseEntered((event) -> replyLink.setUnderline(true));
             replyLink.setOnMouseExited((event) -> replyLink.setUnderline(false));
-//            replyLink.setOnAction((event) -> TweetUtility.showRefTweet(tweet.getRefTweet()));
+            replyLink.setOnAction((event) -> {
+                TweetPage tweetPage = new TweetPage();
+                repliedTweet = new Tweet();
+                repliedTweet.setTweet(tweet.getRefTweet(), this.parent);
+                tweetPage.setUp(repliedTweet, this.parent);
+            });
 
             replyHBox.getChildren().add(replyLink);
         }
@@ -399,11 +411,6 @@ public class Tweet extends VBox {
     }
 
     @FXML
-    void avatarButtonPressed(ActionEvent event) {
-
-    }
-
-    @FXML
     void commentButtonPressed(ActionEvent event) {
         AddTweet addTweet = new AddTweet();
         addTweet.setTweetKind(Kind.REPLY);
@@ -490,6 +497,12 @@ public class Tweet extends VBox {
                     });
         }
 
+    }
+
+    @FXML
+    void showCommentsButtonPressed() {
+        TweetPage tweetPage = new TweetPage();
+        tweetPage.setUp(this, this.parent);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.Main;
 import com.manely.ap.project.client.callback.TimelineResponseCallback;
 import com.manely.ap.project.client.model.Data;
+import com.manely.ap.project.client.util.Scrollable;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import javafx.collections.FXCollections;
@@ -19,7 +20,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TimeLine extends ListView<Tweet> {
+public class TimeLine extends ListView<Tweet> implements Scrollable {
 
     @FXML
     private ListView<Tweet> timeLineListView;

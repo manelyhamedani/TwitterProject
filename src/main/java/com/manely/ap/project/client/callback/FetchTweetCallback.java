@@ -1,20 +1,24 @@
 package com.manely.ap.project.client.callback;
 
-import com.manely.ap.project.client.controller.HomePage;
 import com.manely.ap.project.client.controller.Tweet;
 import com.manely.ap.project.client.util.TweetUtility;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Retweet;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 
 import java.util.ArrayList;
 
-public class FilterResponseCallback<T> extends ResponseCallback<T> {
-    private ObservableList<Tweet> tweets;
+public class FetchTweetCallback<T> extends ResponseCallback<T> {
+    private final ObservableList<Tweet> tweets;
+    private final Tweet lastItem;
+    private final Node parent;
 
-    public FilterResponseCallback(ObservableList<Tweet> tweets) {
+    public FetchTweetCallback(ObservableList<Tweet> tweets, Node parent, Tweet lastItem) {
         this.tweets = tweets;
+        this.parent = parent;
+        this.lastItem = lastItem;
     }
 
     @Override
@@ -22,17 +26,14 @@ public class FilterResponseCallback<T> extends ResponseCallback<T> {
         if (getResponse().isSuccess()) {
             ArrayList<Post> posts = (ArrayList<Post>) getResponse().getContent();
             for (Post post : posts) {
+                Tweet tweet = new Tweet();
                 if (post instanceof Retweet) {
-                    Tweet retweet = new Tweet();
-                    retweet.setRetweet((Retweet) post);
-                    tweets.add(retweet);
+                    tweet.setRetweet((Retweet) post, parent);
                 }
-
                 else if (post instanceof com.manely.ap.project.common.model.Tweet) {
-                    Tweet tweet = new Tweet();
-                    tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
-                    tweets.add(tweet);
+                    tweet.setTweet((com.manely.ap.project.common.model.Tweet) post, parent);
                 }
+                Platform.runLater(() -> tweets.add(tweet));
             }
             Platform.runLater(() -> {
                 tweets.sort((o1, o2) -> {
@@ -40,6 +41,9 @@ public class FilterResponseCallback<T> extends ResponseCallback<T> {
                     long id2 = o2.getTweet().getDate().getTime();
                     return Long.compare(id1, id2) * -1;
                 });
+                if (lastItem != null) {
+                    tweets.add(0, lastItem);
+                }
                 TweetUtility.setRefs(tweets);
             });
         }

@@ -122,6 +122,18 @@ public class Tweets extends Table {
         return result;
     }
 
+    public synchronized ArrayList<Post> fetchTweetReplies(int id) throws SQLException, IOException {
+        String query = "SELECT * FROM " + TABLE_NAME +
+                        " WHERE " + COLUMN_REPLIED_TWEET + "=" + id;
+        Statement statement = SQL.getConnection().createStatement();
+        ResultSet set = statement.executeQuery(query);
+        ArrayList<Post> result = read(set);
+
+        set.close();
+        statement.close();
+        return result;
+    }
+
     private ArrayList<Post> read(ResultSet set) throws SQLException, IOException {
         ArrayList<Post> tweets = new ArrayList<>();
 

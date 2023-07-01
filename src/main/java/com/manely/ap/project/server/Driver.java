@@ -37,6 +37,7 @@ public class Driver {
         server.createContext(API.TIMELINE, HttpHandler::handleTimeline);
         server.createContext(API.FILTER, HttpHandler::handleFilter);
         server.createContext(API.FETCH_USER_POSTS, HttpHandler::handleFetchUserPosts);
+        server.createContext(API.FETCH_TWEET_REPLIES, HttpHandler::handleFetchTweetReplies);
         server.start();
 
         if (!MediaManager.setUp())

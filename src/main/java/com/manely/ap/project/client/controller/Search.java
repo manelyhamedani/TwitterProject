@@ -3,7 +3,7 @@ package com.manely.ap.project.client.controller;
 import com.google.gson.reflect.TypeToken;
 import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.Main;
-import com.manely.ap.project.client.callback.FilterResponseCallback;
+import com.manely.ap.project.client.callback.FetchTweetCallback;
 import com.manely.ap.project.client.callback.SearchUserResponseCallback;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
@@ -83,7 +83,7 @@ public class Search extends VBox {
             query.put("quest", "#" + filter);
             Type type = new TypeToken<ArrayList<Post>>(){}.getType();
 
-            HttpCall.get(API.FILTER, query, type, new FilterResponseCallback<>(tweets));
+            HttpCall.get(API.FILTER, query, type, new FetchTweetCallback<>(tweets, this, null));
         }
 
     }

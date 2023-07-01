@@ -567,6 +567,31 @@ public class HttpHandler {
         }
     }
 
+    static void handleFetchTweetReplies(HttpExchange exchange) {
+        String jwt;
+        if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
+            try {
+                String username = JWebToken.getPayload(jwt).getSub();
+                HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
+                if (!query.containsKey("id")) {
+                    throw new IllegalArgumentException();
+                }
+                int id = Integer.parseInt(query.get("id"));
+                ArrayList<Post> tweets = SQL.getTweets().fetchTweetReplies(id);
+                if (tweets.size() != 0) {
+                    ArrayList<String> blockers = SQL.getBlacklist().selectBlockers(username);
+                    tweets = filterBlockedPosts(tweets, blockers);
+                    fetchPostsMedia(tweets);
+                }
+                Type contentType = new TypeToken<ArrayList<Post>>(){}.getType();
+                response(exchange, 200, "OK", true, tweets, contentType);
+            }
+            catch (Exception e) {
+                response(exchange, 400, e.getMessage(), false, null, null);
+            }
+        }
+    }
+
     private static void fetchPostMedia(Post post) throws IOException {
         Post refPost = null;
 

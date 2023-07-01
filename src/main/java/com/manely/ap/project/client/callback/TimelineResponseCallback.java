@@ -28,15 +28,12 @@ public class TimelineResponseCallback<T> extends ResponseCallback<T> {
             ArrayList<Post> posts = (ArrayList<Post>) getResponse().getContent();
 
             for (Post post : posts) {
-
                 Tweet tweet = new Tweet();
-
                 if (post instanceof Retweet) {
-                    tweet.setRetweet((Retweet) post);
+                    tweet.setRetweet((Retweet) post, timeLine);
                 }
-
                 else if (post instanceof com.manely.ap.project.common.model.Tweet) {
-                    tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
+                    tweet.setTweet((com.manely.ap.project.common.model.Tweet) post, timeLine);
                 }
 
                 if (tweets.contains(tweet)) {
