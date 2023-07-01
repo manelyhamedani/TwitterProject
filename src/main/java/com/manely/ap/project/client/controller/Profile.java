@@ -1,8 +1,13 @@
 package com.manely.ap.project.client.controller;
 
+import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.Main;
+import com.manely.ap.project.client.ResponseCallback;
+import com.manely.ap.project.client.model.Data;
+import com.manely.ap.project.client.util.ButtonUtility;
+import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.User;
-import javafx.event.ActionEvent;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -16,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 
 public class Profile extends HBox {
     private User user;
@@ -68,12 +74,27 @@ public class Profile extends HBox {
         }
 
         if (avatar != null) {
-            avatarImageView.setImage(avatar);
+            ButtonUtility.setRoundedImageView(avatarImageView, avatar);
         }
 
         bioLabel.setText(user.getInfo().getBio());
         nameHyperlink.setText(user.getFirstName() + " " + user.getLastName());
         usernameHyperlink.setText(user.getUsername());
+
+        if (user.getUsername().equals(Data.getUser().getUsername())) {
+            followButton.setDisable(true);
+            followButton.setVisible(false);
+        }
+        else {
+            if (Data.getUser().getFollowings().contains(user.getUsername())) {
+                followButton.setText("Following");
+            }
+            else {
+                followButton.setText("Follow");
+            }
+        }
+
+
     }
 
     @FXML
@@ -96,7 +117,38 @@ public class Profile extends HBox {
 
     @FXML
     void followButtonPressed() {
+        String path;
+        boolean follow = false;
+        if (followButton.getText().equals("Follow")) {
+            path = API.FOLLOW;
+            follow = true;
+        }
+        else {
+            path = API.UNFOLLOW;
+        }
 
+        HashMap<String, String> query = new HashMap<>();
+        query.put("username", user.getUsername());
+        boolean finalFollow = follow;
+        HttpCall.get(path, query, Object.class,
+                new ResponseCallback<>() {
+                    @Override
+                    public void run() {
+                        if (getResponse().isSuccess()) {
+                            if (finalFollow) {
+                                Data.getUser().getFollowings().add(user.getUsername());
+                                Platform.runLater(() -> followButton.setText("Following"));
+                            }
+                            else {
+                                Data.getUser().getFollowings().remove(user.getUsername());
+                                Platform.runLater(() -> followButton.setText("Follow"));
+                            }
+                        }
+                        else {
+                            System.out.println(getResponse().getMessage());
+                        }
+                    }
+                });
     }
 
 }

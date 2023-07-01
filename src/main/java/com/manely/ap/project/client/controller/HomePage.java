@@ -11,7 +11,6 @@ import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Retweet;
 import com.manely.ap.project.common.model.Tweet.Kind;
 import com.manely.ap.project.common.model.User;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,7 +56,6 @@ public class HomePage {
     private final ObservableList<Tweet> filterTweets = FXCollections.observableArrayList();
     private final ObservableList<Profile> users = FXCollections.observableArrayList();
 
-    private boolean start;
     private static ListView<Tweet> currentList;
     private static ObservableList<Tweet> currentTweets;
 
@@ -151,9 +149,6 @@ public class HomePage {
 
 
     public void initialize() throws IOException {
-
-        start = true;
-
         setButtonImages();
 
         coloredHomeImage = setColorButtonImage(homeButton, 0xff36b9ff);
@@ -165,41 +160,13 @@ public class HomePage {
         searchUserListView.setFocusTraversable(false);
         filterTweetListView.setFocusTraversable(false);
 
-        tweetListView.setCellFactory((listView) -> {
-            TweetCell cell = new TweetCell();
-            cell.setFocusTraversable(false);
-            if (cell.getGraphic() != null) {
-                cell.setStyle("-fx-background-color: white;" + "-fx-border-color: #989797;");
-            }
-            return cell;
-        });
+        tweetListView.setCellFactory((listView) -> new TweetCell());
 
-        profTweetListView.setCellFactory((listView) -> {
-            TweetCell cell = new TweetCell();
-            cell.setFocusTraversable(false);
-            if (cell.getGraphic() != null) {
-                cell.setStyle("-fx-background-color: white;" + "-fx-border-color: #989797;");
-            }
-            return cell;
-        });
+        profTweetListView.setCellFactory((listView) -> new TweetCell());
 
-        filterTweetListView.setCellFactory((listView) -> {
-            TweetCell cell = new TweetCell();
-            cell.setFocusTraversable(false);
-            if (cell.getGraphic() != null) {
-                cell.setStyle("-fx-background-color: white;" + "-fx-border-color: #989797;");
-            }
-            return cell;
-        });
+        filterTweetListView.setCellFactory((listView) -> new TweetCell());
 
-        searchUserListView.setCellFactory((listView) -> {
-            ProfileCell cell = new ProfileCell();
-            cell.setFocusTraversable(false);
-            if (cell.getGraphic() != null) {
-                cell.setStyle("-fx-background-color: white;" + "-fx-border-color: #989797;");
-            }
-            return cell;
-        });
+        searchUserListView.setCellFactory((listView) -> new ProfileCell());
 
         URL location = new URL("file:src/main/resources/location.png");
         URL website = new URL("file:src/main/resources/link.png");
@@ -272,16 +239,13 @@ public class HomePage {
         tweetListView.setVisible(true);
         tweetListView.setDisable(false);
 
-        if (start) {
-            tweetListView.setItems(null);
-            tweets.clear();
+        tweetListView.setItems(null);
+        tweets.clear();
 
-            HashMap<String, String> query = new HashMap<>();
-            Type type = new TypeToken<ArrayList<Post>>(){}.getType();
-            HttpCall.get(API.TIMELINE, query, type, new TweetUtility.FetchTweetResponseCallback<>(tweetListView, tweets, TweetUtility.Kind.TIMELINE));
+        HashMap<String, String> query = new HashMap<>();
+        Type type = new TypeToken<ArrayList<Post>>(){}.getType();
+        HttpCall.get(API.TIMELINE, query, type, new TweetUtility.FetchTweetResponseCallback<>(tweetListView, tweets, TweetUtility.Kind.TIMELINE));
 
-            start = false;
-        }
 
     }
 
@@ -407,10 +371,6 @@ public class HomePage {
         searchVBox.setVisible(true);
         searchVBox.setDisable(false);
 
-        searchUserListView.setDisable(true);
-        searchUserListView.setVisible(false);
-        filterTweetListView.setVisible(false);
-        filterTweetListView.setDisable(true);
     }
 
     @FXML
@@ -470,16 +430,17 @@ public class HomePage {
                     @Override
                     public void run() {
                         if (getResponse().isSuccess()) {
-                            ArrayList<User> users = (ArrayList<User>) getResponse().getContent();
-                            for (User user : users) {
+                            ArrayList<User> result = (ArrayList<User>) getResponse().getContent();
+                            for (User user : result) {
                                 Profile profile = new Profile();
                                 profile.setProfile(user);
-
+                                users.add(profile);
                                 FetchProfileEventHandler handler = new FetchProfileEventHandler(user);
                                 profile.getAvatarButton().setOnAction(handler);
                                 profile.getNameHyperlink().setOnAction(handler);
                                 profile.getUsernameHyperlink().setOnAction(handler);
                             }
+                            searchUserListView.setItems(users);
                         }
                         else {
                             System.out.println(getResponse().getMessage());
@@ -490,7 +451,7 @@ public class HomePage {
     }
 
     private class FetchProfileEventHandler implements EventHandler<ActionEvent> {
-        private User user;
+        private final User user;
 
         public FetchProfileEventHandler(User user) {
             this.user = user;
@@ -565,8 +526,8 @@ public class HomePage {
                             }
                             Platform.runLater(() -> {
                                 filterTweets.sort((o1, o2) -> {
-                                    long id1 = o1.getTweet().getPostID();
-                                    long id2 = o2.getTweet().getPostID();
+                                    long id1 = o1.getTweet().getDate().getTime();
+                                    long id2 = o2.getTweet().getDate().getTime();
                                     return Long.compare(id1, id2) * -1;
                                 });
                                 TweetUtility.setRefs(filterTweets);

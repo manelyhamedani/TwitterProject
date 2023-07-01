@@ -125,9 +125,9 @@ public class Tweets extends Table {
     private ArrayList<Post> read(ResultSet set) throws SQLException, IOException {
         ArrayList<Post> tweets = new ArrayList<>();
 
-        Tweet tweet = new Tweet();
         while (set.next()) {
             int refTweet;
+            Tweet tweet = new Tweet();
             if ((refTweet = set.getInt(COLUMN_QUOTED_TWEET)) != 0) {
                 tweet.setKind(Tweet.Kind.QUOTE);
                 tweet.setRefTweet((Tweet) select(refTweet));
@@ -137,7 +137,6 @@ public class Tweets extends Table {
                 tweet.setRefTweet((Tweet) select(refTweet));
             }
             else {
-                tweet = new Tweet();
                 tweet.setKind(Tweet.Kind.TWEET);
             }
             tweet.setId(set.getInt(COLUMN_ID));

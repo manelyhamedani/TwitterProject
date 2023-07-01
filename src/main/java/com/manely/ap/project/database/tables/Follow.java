@@ -86,26 +86,6 @@ public class Follow extends Table {
         return select(followerUsername, COLUMN_FOLLOWING, COLUMN_FOLLOWER);
     }
 
-    public synchronized int selectFollowersCount(String followingUsername) throws SQLException {
-        return selectCount(followingUsername, COLUMN_FOLLOWING);
-    }
-
-    public synchronized int selectFollowingCount(String followerUsername) throws SQLException {
-        return selectCount(followerUsername, COLUMN_FOLLOWER);
-    }
-
-    private int selectCount(String username, String sourceColumn) throws SQLException {
-        String query = "SELECT COUNT() FROM " + TABLE_NAME +
-                " WHERE " + sourceColumn + "=?";
-        PreparedStatement statement = SQL.getConnection().prepareStatement(query);
-        statement.setString(1, username);
-        ResultSet result = statement.executeQuery();
-        int count = result.getInt(1);
-        result.close();
-        statement.close();
-        return count;
-    }
-
     private ArrayList<String> select(String username, String targetColumn, String sourceColumn) throws SQLException {
         String query = "SELECT " + targetColumn + " FROM " + TABLE_NAME +
                         " WHERE " + sourceColumn + "=?";

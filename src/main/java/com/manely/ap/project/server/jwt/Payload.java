@@ -6,10 +6,6 @@ public record Payload (String sub, int id, String aud, long iat, long exp) {
         return sub;
     }
 
-    public String getAud() {
-        return aud;
-    }
-
     public long getExp() {
         return exp;
     }

@@ -1,6 +1,7 @@
 package com.manely.ap.project.common.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class User implements Serializable {
@@ -18,9 +19,25 @@ public class User implements Serializable {
     private Image avatar;
     private Image header;
     private UserInfo info;
-    private int followersCount;
-    private int followingCount;
     private String jwt;
+    private ArrayList<String> followers;
+    private ArrayList<String> followings;
+
+    public ArrayList<String > getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(ArrayList<String> followers) {
+        this.followers = followers;
+    }
+
+    public ArrayList<String> getFollowings() {
+        return followings;
+    }
+
+    public void setFollowings(ArrayList<String> followings) {
+        this.followings = followings;
+    }
 
     public String getJwt() {
         return jwt;
@@ -41,19 +58,11 @@ public class User implements Serializable {
     }
 
     public int getFollowersCount() {
-        return followersCount;
-    }
-
-    public void setFollowersCount(int followersCount) {
-        this.followersCount = followersCount;
+        return followers.size();
     }
 
     public int getFollowingCount() {
-        return followingCount;
-    }
-
-    public void setFollowingCount(int followingCount) {
-        this.followingCount = followingCount;
+        return followings.size();
     }
 
     public UserInfo getInfo() {

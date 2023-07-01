@@ -113,6 +113,10 @@ public class Users extends Table {
         return readAs(Kind.PROFILE, set);
     }
 
+    public synchronized User fetchProfile(String username) throws SQLException {
+        return selectAs(Kind.PROFILE, username);
+    }
+
     public synchronized User fetchTweetSender(String username) throws SQLException {
         return selectAs(Kind.TWEET_SENDER, username);
     }
@@ -165,8 +169,8 @@ public class Users extends Table {
             info.setLocation(set.getString(COLUMN_LOCATION));
             info.setWebsite(set.getString(COLUMN_WEBSITE));
             profile.setInfo(info);
-            profile.setFollowersCount(getFollowersCount(profile.getUsername()));
-            profile.setFollowingCount(getFollowingCount(profile.getUsername()));
+            profile.setFollowers(getFollowers(profile.getUsername()));
+            profile.setFollowings(getFollowing(profile.getUsername()));
             if (kind.equals(Kind.USER)) {
                 profile.setPassword(set.getString(COLUMN_PASSWORD));
                 profile.setEmail(set.getString(COLUMN_EMAIL));
@@ -179,12 +183,12 @@ public class Users extends Table {
         return profiles;
     }
 
-    private int getFollowersCount(String username) throws SQLException {
-        return SQL.getFollows().selectFollowersCount(username);
+    private ArrayList<String> getFollowers(String username) throws SQLException {
+        return SQL.getFollows().selectFollowers(username);
     }
 
-    private int getFollowingCount(String username) throws SQLException {
-        return SQL.getFollows().selectFollowingCount(username);
+    private ArrayList<String> getFollowing(String username) throws SQLException {
+        return SQL.getFollows().selectFollowings(username);
     }
 
     public synchronized void updateInfo(String username, UserInfo info) throws SQLException {

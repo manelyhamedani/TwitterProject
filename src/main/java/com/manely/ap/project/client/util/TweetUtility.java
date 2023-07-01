@@ -84,9 +84,9 @@ public class TweetUtility {
     }
 
     public static class FetchTweetResponseCallback<T> extends ResponseCallback<T> {
-        private ObservableList<Tweet> tweets;
-        private ListView<Tweet> listView;
-        private Kind kind;
+        private final ObservableList<Tweet> tweets;
+        private final ListView<Tweet> listView;
+        private final Kind kind;
 
         public FetchTweetResponseCallback(ListView<Tweet> listView, ObservableList<Tweet> tweets, Kind kind) {
             this.tweets = tweets;
@@ -102,16 +102,13 @@ public class TweetUtility {
                     if (contains(tweets, post.getPostID())) {
                         continue;
                     }
+                    Tweet tweet = new Tweet();
                     if (post instanceof Retweet) {
-                        Tweet retweet = new Tweet();
-                        retweet.setRetweet((Retweet) post);
-                        tweets.add(retweet);
+                        tweet.setRetweet((Retweet) post);
                     }
 
                     else if (post instanceof com.manely.ap.project.common.model.Tweet) {
-                        Tweet tweet = new Tweet();
                         tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
-                        tweets.add(tweet);
 
                         tweet.retweetedProperty().addListener((observableValue, oldValue, newValue) -> {
                             if (newValue) {
@@ -124,12 +121,13 @@ public class TweetUtility {
                         case TIMELINE -> Data.addTimelinePost(post.getPostID());
                         case PROFILE -> Data.addProfPost(post.getPostID());
                     }
+                    Platform.runLater(() -> tweets.add(tweet));
                 }
                 Platform.runLater(() -> {
                     tweets.sort((o1, o2) -> {
-                                long id1 = o1.getTweet().getPostID();
-                                long id2 = o2.getTweet().getPostID();
-                                return Long.compare(id1, id2) * -1;
+                                int id1 = o1.getTweet().getPostID();
+                                int id2 = o2.getTweet().getPostID();
+                                return Integer.compare(id1, id2) * -1;
                     });
                     TweetUtility.setRefs(tweets);
                     listView.setItems(tweets);

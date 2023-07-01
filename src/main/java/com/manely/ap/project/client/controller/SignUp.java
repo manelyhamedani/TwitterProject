@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class SignUp {
-    private User user = new User();
+    private final User user = new User();
     private String repeatedPassword;
 
     @FXML
@@ -122,7 +122,7 @@ public class SignUp {
 
     private boolean validateFields() {
         boolean invalid = false;
-        StringBuffer errMsg = new StringBuffer();
+        StringBuilder errMsg = new StringBuilder();
 
         if (user.getFirstName().isBlank()) {
             firstnameErrorLabel.setText("*");

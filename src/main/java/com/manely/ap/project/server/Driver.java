@@ -49,5 +49,14 @@ public class Driver {
             //TODO : handle
             e.printStackTrace();
         }
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                SQL.closeConnection();
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }));
     }
 }

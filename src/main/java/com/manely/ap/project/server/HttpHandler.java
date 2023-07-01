@@ -162,7 +162,7 @@ public class HttpHandler {
 
     static void handleFollow(HttpExchange exchange) {
         String jwt;
-        if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
+        if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
             try {
                 String followerUsername = JWebToken.getPayload(jwt).getSub();
                 HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
@@ -184,7 +184,7 @@ public class HttpHandler {
 
     static void handleUnfollow(HttpExchange exchange) {
         String jwt;
-        if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
+        if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
             try {
                 String followerUsername = JWebToken.getPayload(jwt).getSub();
                 HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
@@ -439,7 +439,7 @@ public class HttpHandler {
 
     static void handleBlock(HttpExchange exchange) {
         String jwt;
-        if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
+        if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
             try {
                 String blockerUsername = JWebToken.getPayload(jwt).getSub();
                 HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
@@ -462,7 +462,7 @@ public class HttpHandler {
 
     static void handleUnblock(HttpExchange exchange) {
         String jwt;
-        if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
+        if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
             try {
                 String blockerUsername = JWebToken.getPayload(jwt).getSub();
                 HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
@@ -544,7 +544,7 @@ public class HttpHandler {
 
     static void handleFilter(HttpExchange exchange) {
         String jwt;
-        if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
+        if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
             try {
                 String username = JWebToken.getPayload(jwt).getSub();
                 HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());

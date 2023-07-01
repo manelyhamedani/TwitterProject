@@ -65,7 +65,7 @@
             <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="830.0">
                <children>
                   <ListView fx:id="tweetListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="830.0" stylesheets="@../../../../../listview.css" />
-                  <VBox fx:id="profileVBox" prefHeight="600.0" prefWidth="830.0" visible="false">
+                  <VBox fx:id="profileVBox" prefHeight="600.0" prefWidth="830.0">
                      <children>
                         <VBox prefWidth="830.0">
                            <children>
@@ -113,6 +113,9 @@
                                  <font>
                                     <Font name="Apple Braille" size="16.0" />
                                  </font>
+                                 <VBox.margin>
+                                    <Insets left="38.0" top="14.0" />
+                                 </VBox.margin>
                               </Text>
                               <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
                                  <children>
@@ -144,7 +147,7 @@
                                     </Hyperlink>
                                  </children>
                                  <padding>
-                                    <Insets left="35.0" top="20.0" />
+                                    <Insets left="35.0" top="14.0" />
                                  </padding>
                               </HBox>
                               <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
@@ -199,6 +202,9 @@
                                        </font>
                                     </Hyperlink>
                                  </children>
+                                 <padding>
+                                    <Insets left="38.0" top="8.0" />
+                                 </padding>
                               </HBox>
                            </children>
                         </VBox>
@@ -209,7 +215,7 @@
                         </ListView>
                      </children>
                   </VBox>
-                  <VBox fx:id="searchVBox" prefHeight="200.0" prefWidth="100.0">
+                  <VBox fx:id="searchVBox" prefHeight="200.0" prefWidth="100.0" visible="false">
                      <children>
                         <HBox spacing="8.0">
                            <children>

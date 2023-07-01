@@ -6,12 +6,10 @@ import com.manely.ap.project.client.ResponseCallback;
 import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.client.util.ButtonUtility;
 import com.manely.ap.project.common.API;
-import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Tweet;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -32,7 +30,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class AddTweet extends VBox {
-    private Tweet tweet = new Tweet();
+    private final Tweet tweet = new Tweet();
     private boolean isPoll = false;
     private final ArrayList<com.manely.ap.project.common.model.Image> media = new ArrayList<>();
     private final SimpleIntegerProperty mediaCount = new SimpleIntegerProperty(0);
@@ -66,13 +64,14 @@ public class AddTweet extends VBox {
             Image avatar = new Image(new ByteArrayInputStream(Data.getUser().getAvatar().getBytes()));
             ButtonUtility.setRoundedImageView(avatarImageView, avatar);
         }
+        else {
+            try {
+                URL avatar = new URL("file:src/main/resources/avatar.png");
+                avatarImageView.setImage(new Image(avatar.toString()));
+            }
+            catch (MalformedURLException ignore) {
 
-        try {
-            URL avatar = new URL("file:src/main/resources/avatar.png");
-            avatarImageView.setImage(new Image(avatar.toString()));
-        }
-        catch (MalformedURLException ignore) {
-
+            }
         }
 
         Platform.runLater(() -> tweetTextArea.requestFocus());

@@ -3,7 +3,6 @@ package com.manely.ap.project.database.tables;
 import com.manely.ap.project.database.SQL;
 import com.manely.ap.project.common.model.Retweet;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

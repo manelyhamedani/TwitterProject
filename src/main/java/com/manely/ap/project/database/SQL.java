@@ -2,7 +2,6 @@ package com.manely.ap.project.database;
 
 import com.manely.ap.project.database.tables.*;
 import org.sqlite.SQLiteConfig;
-import com.manely.ap.project.common.model.Error;
 
 import java.io.File;
 import java.sql.Connection;
@@ -84,35 +83,4 @@ public class SQL {
         return follows;
     }
 
-    public static Error getError(String errMsg) {
-        if (errMsg.contains("SQLITE_CONSTRAINT_UNIQUE")) {
-            if (errMsg.contains("Users.Username")) {
-                return Error.DUPLICATE_USERNAME;
-            }
-            if (errMsg.contains("Users.Email")) {
-                return Error.DUPLICATE_EMAIL;
-            }
-            if (errMsg.contains("Users.PhoneNumber")) {
-                return Error.DUPLICATE_PHONE;
-            }
-        }
-        if (errMsg.contains("SQLITE_CONSTRAINT_NOTNULL")) {
-            if (errMsg.contains("Users.Username")) {
-                return Error.NULL_USERNAME;
-            }
-            if (errMsg.contains("Users.Password")) {
-                return Error.NULL_PASS;
-            }
-            if (errMsg.contains("Users.Firstname")) {
-                return Error.NULL_FIRSTNAME;
-            }
-            if (errMsg.contains("Users.Lastname")) {
-                return Error.NULL_LASTNAME;
-            }
-        }
-        if (errMsg.contains("SQLITE_CONSTRAINT_FOREIGNKEY")) {
-            return Error.ID_NOT_FOUND;
-        }
-        return Error.SQL_ERROR;
-    }
 }

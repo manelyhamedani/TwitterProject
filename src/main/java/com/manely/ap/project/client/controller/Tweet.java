@@ -382,11 +382,8 @@ public class Tweet extends VBox {
                 imageButton.setMaxWidth(Double.MAX_VALUE);
                 imageButton.setText("");
                 imageButton.setStyle("-fx-background-color: transparent");
-                imageButton.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        //TODO:handle show image
-                    }
+                imageButton.setOnAction(event -> {
+                    //TODO:handle show image
                 });
 
                 ImageView imageView = new ImageView();

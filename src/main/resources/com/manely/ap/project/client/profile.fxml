@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="480.0" type="HBox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="480.0" style="-fx-border-color: black; -fx-background-color: white;" type="HBox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="avatarButton" mnemonicParsing="false" style="-fx-background-color: white; -fx-background-radius: 10em; -fx-min-height: 60px; -fx-min-width: 60px; -fx-max-height: 60px; -fx-max-width: 60px;">
          <graphic>
@@ -28,7 +28,10 @@
                   <Font name="Apple Braille" size="11.0" />
                </font>
             </Hyperlink>
-            <Label fx:id="bioLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0" wrapText="true" />
+            <Label fx:id="bioLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0" wrapText="true">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font></Label>
          </children>
          <HBox.margin>
             <Insets bottom="14.0" left="14.0" right="4.0" top="8.0" />
