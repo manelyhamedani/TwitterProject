@@ -43,6 +43,7 @@ public class TimeLine extends ListView<Tweet> {
         return tweets;
     }
 
+
     public void initialize() {
         timeLineListView.setCellFactory((listView) -> new TweetCell());
         timeLineListView.setFocusTraversable(false);
@@ -50,7 +51,7 @@ public class TimeLine extends ListView<Tweet> {
 
     }
 
-    public void setUp() {
+    public void setUpScroll() {
         ScrollBar bar = (ScrollBar) timeLineListView.lookup(".scroll-bar:vertical");
         bar.valueProperty().addListener((observableValue, ov, nv) -> {
 

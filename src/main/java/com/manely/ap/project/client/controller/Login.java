@@ -34,6 +34,11 @@ public class Login {
     }
 
     @FXML
+    void backButtonPressed() {
+        Scene.changeScene("entry.fxml");
+    }
+
+    @FXML
     void loginButtonPressed() {
         errorLabel.setText("");
 

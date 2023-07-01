@@ -232,43 +232,49 @@ public class SignUp {
                 user.setPhoneNumber(null);
             }
             HttpCall.post(API.SIGNUP, user, Object.class,
-                    new ResponseCallback<>() {
-                        @Override
-                        public void run() {
-                            if (getResponse().isSuccess()) {
-                                Platform.runLater(() -> signupLabel.setText("Your account has been successfully created"));
-                                try{
-                                    sleep(2000);
-                                }
-                                catch (InterruptedException ignore) {
+                new ResponseCallback<>() {
+                    @Override
+                    public void run() {
+                        if (getResponse().isSuccess()) {
+                            Platform.runLater(() -> signupLabel.setText("Your account has been successfully created"));
+                            try{
+                                sleep(2000);
+                            }
+                            catch (InterruptedException ignore) {
 
-                                }
-                                Scene.changeScene("entry.fxml");
                             }
-                            else {
-                                String errMsg = getResponse().getMessage();
-                                Platform.runLater(() ->
-                                {
-                                    if (errMsg.contains("SQLITE_CONSTRAINT_UNIQUE")) {
-                                        if (errMsg.contains("Username")) {
-                                            VBox.setMargin(passwordHBox, new Insets(8, 0, 0, 0));
-                                            usernameErrorLabel2.setText("Username is already in use!");
-                                        } else if (errMsg.contains("Email")) {
-                                            VBox.setMargin(phoneNumberHBox, new Insets(8, 0, 0, 0));
-                                            emailErrorLabel2.setText("Email is already in use!");
-                                        } else if (errMsg.contains("PhoneNumber")) {
-                                            VBox.setMargin(countryHBox, new Insets(8, 0, 0, 0));
-                                            phoneNumberErrorLabel2.setText("Phone number is already in use!");
-                                        }
-                                    } else {
-                                        signupErrorLabel.setText("Internal Error!");
-                                        System.out.println(getResponse().getMessage());
-                                    }
-                                });
-                            }
+                            Scene.changeScene("entry.fxml");
                         }
-                    });
+                        else {
+                            String errMsg = getResponse().getMessage();
+                            Platform.runLater(() ->
+                            {
+                                if (errMsg.contains("SQLITE_CONSTRAINT_UNIQUE")) {
+                                    if (errMsg.contains("Username")) {
+                                        VBox.setMargin(passwordHBox, new Insets(8, 0, 0, 0));
+                                        usernameErrorLabel2.setText("Username is already in use!");
+                                    } else if (errMsg.contains("Email")) {
+                                        VBox.setMargin(phoneNumberHBox, new Insets(8, 0, 0, 0));
+                                        emailErrorLabel2.setText("Email is already in use!");
+                                    } else if (errMsg.contains("PhoneNumber")) {
+                                        VBox.setMargin(countryHBox, new Insets(8, 0, 0, 0));
+                                        phoneNumberErrorLabel2.setText("Phone number is already in use!");
+                                    }
+                                } else {
+                                    signupErrorLabel.setText("Internal Error!");
+                                    System.out.println(getResponse().getMessage());
+                                }
+                            });
+                        }
+                    }
+                });
         }
     }
+
+    @FXML
+    void backButtonPressed() {
+        Scene.changeScene("entry.fxml");
+    }
+
 
 }

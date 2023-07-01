@@ -19,9 +19,11 @@ import java.util.ArrayList;
 public class UserPostResponseCallback<T> extends ResponseCallback<T> {
     private final ObservableList<Tweet> tweets = FXCollections.observableArrayList();
     private final ListView<VBox> listView;
+    private final ProfilePage profilePage;
 
     public UserPostResponseCallback(ProfilePage profilePage) {
         this.listView = profilePage.getProfileListView();
+        this.profilePage = profilePage;
     }
 
     @Override
@@ -29,27 +31,20 @@ public class UserPostResponseCallback<T> extends ResponseCallback<T> {
         if (getResponse().isSuccess()) {
 
             ArrayList<Post> posts = (ArrayList<Post>) getResponse().getContent();
-            Tweet tweet = new Tweet();
 
             for (Post post : posts) {
-                if (tweets.contains(tweet)) {
-                    continue;
-                }
+                Tweet tweet = new Tweet();
                 if (post instanceof Retweet) {
                     tweet.setRetweet((Retweet) post);
                 }
 
                 else if (post instanceof com.manely.ap.project.common.model.Tweet) {
                     tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
-
-                    tweet.retweetedProperty().addListener((observableValue, oldValue, newValue) -> {
-                        if (newValue) {
-                            Platform.runLater(() -> Scene.gotoHomePage(HomePage.getScene()));
-                        }
-                    });
-
                 }
 
+                if (tweets.contains(tweet)) {
+                    continue;
+                }
                 Data.addProfPost(post.getPostID());
                 Platform.runLater(() -> tweets.add(tweet));
             }
@@ -61,6 +56,7 @@ public class UserPostResponseCallback<T> extends ResponseCallback<T> {
                 });
                 TweetUtility.setRefs(tweets);
                 listView.getItems().addAll(tweets);
+                profilePage.setUpScroll();
             });
         }
         else {

@@ -32,13 +32,6 @@ public class FilterResponseCallback<T> extends ResponseCallback<T> {
                     Tweet tweet = new Tweet();
                     tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
                     tweets.add(tweet);
-
-                    tweet.retweetedProperty().addListener((observableValue, oldValue, newValue) -> {
-                        if (newValue) {
-                            Platform.runLater(() -> com.manely.ap.project.client.controller.Scene.gotoHomePage(HomePage.getScene()));
-                        }
-                    });
-
                 }
             }
             Platform.runLater(() -> {

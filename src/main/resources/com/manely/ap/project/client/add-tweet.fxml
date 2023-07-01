@@ -18,15 +18,20 @@
    <children>
       <HBox alignment="TOP_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="620.0">
          <children>
+            <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#cancelButtonPressed" style="-fx-background-radius: 10em; -fx-min-height: 25px; -fx-min-width: 25px; -fx-max-height: 25px; -fx-max-width: 25px;" text="X" textAlignment="CENTER">
+               <font>
+                  <Font name="Apple Braille" size="10.0" />
+               </font>
+            </Button>
             <Label fx:id="imageErrorLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Invalid image format!" textFill="#e42626" visible="false">
                <HBox.margin>
-                  <Insets right="175.0" />
+                  <Insets left="220.0" right="175.0" />
                </HBox.margin>
                <font>
                   <Font name="Apple Braille Outline 6 Dot" size="13.0" />
                </font>
             </Label>
-            <Button fx:id="tweetButton" mnemonicParsing="false" onAction="#tweetButtonPressed" text="Tweet">
+            <Button fx:id="tweetButton" focusTraversable="false" mnemonicParsing="false" onAction="#tweetButtonPressed" text="Tweet">
                <font>
                   <Font name="Apple Braille" size="13.0" />
                </font>

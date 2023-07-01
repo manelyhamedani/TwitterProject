@@ -69,7 +69,7 @@ public class Posts extends Table {
         String query = "SELECT * FROM " + TABLE_NAME +
                         " WHERE " + limit +
                         COLUMN_SENDER + "=? " +
-                        "ORDER BY " + COLUMN_DATE + " DESC LIMIT 30";
+                        "ORDER BY " + COLUMN_ID + " DESC LIMIT 30";
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
         statement.setString(1, username);
         ResultSet set = statement.executeQuery();

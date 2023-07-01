@@ -15,7 +15,7 @@
    <children>
       <Pane maxHeight="-Infinity" minHeight="-Infinity">
          <children>
-            <ImageView fx:id="headerImageView" fitHeight="150.0" fitWidth="830.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="headerImageView" fitHeight="150.0" fitWidth="830.0" pickOnBounds="true" />
             <Button focusTraversable="false" layoutX="50.0" layoutY="105.0" mnemonicParsing="false" style="-fx-background-color: white; -fx-background-radius: 10em; -fx-min-height: 100px; -fx-min-width: 100px; -fx-max-height: 100px; -fx-max-width: 100px;">
                <graphic>
                   <ImageView fx:id="avatarImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />

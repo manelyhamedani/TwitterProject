@@ -10,6 +10,7 @@ import java.io.*;
 
 public class Scene {
     private static Stage primaryStage;
+    private static javafx.scene.Scene homeScene = null;
 
     public static void setPrimaryStage(Stage stage) {
         primaryStage = stage;
@@ -28,6 +29,7 @@ public class Scene {
                 primaryStage.show();
                 primaryStage.centerOnScreen();
                 if (path.equals("home-page.fxml")) {
+                    homeScene = scene;
                     HomePage.getInstance().homeButtonPressed();
                 }
             });
@@ -38,11 +40,13 @@ public class Scene {
         }
     }
 
-    public static void gotoHomePage(javafx.scene.Scene homePage) {
+    public static void gotoHomePage() {
         Platform.runLater(() -> {
-            primaryStage.setScene(homePage);
+            while (homeScene == null) {
+
+            }
+            primaryStage.setScene(homeScene);
             primaryStage.show();
-            HomePage.getInstance().homeButtonPressed();
         });
 }
 

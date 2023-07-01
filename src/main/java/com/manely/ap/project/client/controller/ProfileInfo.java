@@ -198,12 +198,19 @@ public class ProfileInfo extends VBox {
 
     @FXML
     void button1Pressed(ActionEvent event) {
-
+        Profile.follow_unfollow(button1, user);
     }
 
     @FXML
     void button2Pressed(ActionEvent event) {
+        String cmd = button2.getText();
 
+        if (cmd.equals("Edit Profile")) {
+
+        }
+        else {
+            Profile.block_unblock(button2, user);
+        }
     }
 
     @FXML

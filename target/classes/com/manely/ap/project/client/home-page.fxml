@@ -2,19 +2,13 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manely.ap.project.client.controller.HomePage">
    <left>
@@ -74,7 +68,7 @@
                         <Font name="Apple Braille" size="13.0" />
                      </font>
                   </Button>
-                  <Button fx:id="backButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Back">
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#backButtonPressed" text="Back">
                      <font>
                         <Font name="Apple Braille" size="13.0" />
                      </font>
@@ -84,218 +78,7 @@
                   <Insets bottom="14.0" top="14.0" />
                </padding>
             </VBox>
-            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="830.0">
-               <children>
-                  <ListView fx:id="tweetListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="830.0" stylesheets="@../../../../../listview.css" />
-                  <ListView fx:id="followListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="830.0" />
-                  <VBox fx:id="profileVBox" prefHeight="600.0" prefWidth="830.0" visible="false">
-                     <children>
-                        <VBox prefWidth="830.0">
-                           <children>
-                              <Pane maxHeight="-Infinity" minHeight="-Infinity">
-                                 <children>
-                                    <ImageView fx:id="headerImageView" fitHeight="150.0" fitWidth="830.0" pickOnBounds="true" />
-                                    <Button focusTraversable="false" layoutX="50.0" layoutY="105.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-background-radius: 10em; -fx-min-height: 100px; -fx-min-width: 100px; -fx-max-height: 100px; -fx-max-width: 100px;">
-                                       <graphic>
-                                          <ImageView fx:id="avatarImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
-                                       </graphic>
-                                    </Button>
-                                    <HBox layoutX="600.0" layoutY="164.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="14.0">
-                                       <children>
-                                          <Button fx:id="button1" focusTraversable="false" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#button1Pressed" prefWidth="90.0" style="-fx-background-radius: 10em;">
-                                             <font>
-                                                <Font name="Apple Braille" size="13.0" />
-                                             </font>
-                                          </Button>
-                                          <Button fx:id="button2" focusTraversable="false" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#button2Pressed" prefWidth="90.0" style="-fx-background-radius: 10em;">
-                                             <font>
-                                                <Font name="Apple Braille" size="13.0" />
-                                             </font>
-                                          </Button>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </Pane>
-                              <Label fx:id="nameLabel">
-                                 <padding>
-                                    <Insets left="38.0" top="20.0" />
-                                 </padding>
-                                 <font>
-                                    <Font name="Apple Braille" size="25.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="usernameLabel">
-                                 <padding>
-                                    <Insets left="38.0" top="8.0" />
-                                 </padding>
-                                 <font>
-                                    <Font name="Apple Braille" size="13.0" />
-                                 </font>
-                              </Label>
-                              <Text fx:id="bioText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="750.0">
-                                 <font>
-                                    <Font name="Apple Braille" size="16.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets left="38.0" top="14.0" />
-                                 </VBox.margin>
-                              </Text>
-                              <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
-                                 <children>
-                                    <ImageView fx:id="locationImageView" fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../../../../../../../../../Downloads/location.png" />
-                                       </image>
-                                       <HBox.margin>
-                                          <Insets right="4.0" />
-                                       </HBox.margin>
-                                    </ImageView>
-                                    <Label fx:id="locationLabel" wrapText="true">
-                                       <font>
-                                          <Font name="Apple Braille" size="13.0" />
-                                       </font>
-                                       <padding>
-                                          <Insets right="14.0" />
-                                       </padding>
-                                    </Label>
-                                    <ImageView fx:id="websiteImageView" fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../../../../../../../../../Downloads/link.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Hyperlink fx:id="websiteHyperlink" onAction="#websiteHyperlinkClicked" style="-fx-border-color: transparent; -fx-underline: false;" translateY="-3.0" wrapText="true">
-                                       <font>
-                                          <Font name="Apple Braille" size="13.0" />
-                                       </font>
-                                    </Hyperlink>
-                                 </children>
-                                 <padding>
-                                    <Insets left="35.0" top="14.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
-                                 <children>
-                                    <ImageView fx:id="calendarImageView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../../../../../../../../../Downloads/calendar.jpg" />
-                                       </image>
-                                       <HBox.margin>
-                                          <Insets right="4.0" />
-                                       </HBox.margin>
-                                    </ImageView>
-                                    <Label fx:id="dateAddedLabel" text="Joined " translateY="2.0">
-                                       <font>
-                                          <Font name="Apple Braille" size="13.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                                 <padding>
-                                    <Insets left="33.0" top="4.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
-                                 <children>
-                                    <Label fx:id="followingLabel">
-                                       <font>
-                                          <Font name="Apple Braille" size="13.0" />
-                                       </font>
-                                       <padding>
-                                          <Insets right="4.0" />
-                                       </padding>
-                                    </Label>
-                                    <Hyperlink onAction="#followingHyperlinkClicked" style="-fx-text-fill: black; -fx-underline: false; -fx-border-color: transparent;" text="Following">
-                                       <padding>
-                                          <Insets right="20.0" />
-                                       </padding>
-                                       <font>
-                                          <Font name="Apple Braille" size="13.0" />
-                                       </font>
-                                    </Hyperlink>
-                                    <Label fx:id="followersLabel" translateY="1.0">
-                                       <font>
-                                          <Font name="Apple Braille" size="13.0" />
-                                       </font>
-                                       <padding>
-                                          <Insets right="4.0" />
-                                       </padding>
-                                    </Label>
-                                    <Hyperlink onAction="#followersHyperlinkClicked" style="-fx-text-fill: black; -fx-border-color: transparent; -fx-underline: false;" text="Followers" translateY="-2.0">
-                                       <font>
-                                          <Font name="Apple Braille" size="13.0" />
-                                       </font>
-                                    </Hyperlink>
-                                 </children>
-                                 <padding>
-                                    <Insets left="38.0" top="8.0" />
-                                 </padding>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <ListView fx:id="profTweetListView" prefWidth="830.0" stylesheets="@../../../../../listview.css">
-                           <VBox.margin>
-                              <Insets top="8.0" />
-                           </VBox.margin>
-                        </ListView>
-                     </children>
-                  </VBox>
-                  <VBox fx:id="searchVBox" prefHeight="200.0" prefWidth="100.0" visible="false">
-                     <children>
-                        <HBox spacing="8.0">
-                           <children>
-                              <VBox spacing="16.0">
-                                 <children>
-                                    <TextField fx:id="searchTextField" prefWidth="500.0" promptText="search" style="-fx-background-radius: 10em;">
-                                       <font>
-                                          <Font name="Apple Braille" size="13.0" />
-                                       </font>
-                                    </TextField>
-                                    <HBox spacing="4.0">
-                                       <children>
-                                          <TextField alignment="CENTER" disable="true" editable="false" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefColumnCount="1" style="-fx-background-radius: 10em;" text="#">
-                                             <font>
-                                                <Font name="Apple Braille" size="13.0" />
-                                             </font>
-                                          </TextField>
-                                          <TextField fx:id="filterTextField" promptText="filter">
-                                             <font>
-                                                <Font name="Apple Braille" size="13.0" />
-                                             </font></TextField>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets right="200.0" />
-                                 </HBox.margin>
-                              </VBox>
-                              <VBox spacing="19.0" translateY="-3.0">
-                                 <children>
-                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#searchUserButtonPressed" text="Search">
-                                       <font>
-                                          <Font name="Apple Braille" size="13.0" />
-                                       </font>
-                                    </Button>
-                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#filterButtonPressed" text="Filter">
-                                       <font>
-                                          <Font name="Apple Braille" size="13.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </VBox>
-                           </children>
-                           <padding>
-                              <Insets bottom="14.0" left="8.0" right="20.0" top="20.0" />
-                           </padding>
-                        </HBox>
-                        <StackPane>
-                           <children>
-                              <ListView fx:id="filterTweetListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="830.0" />
-                              <ListView fx:id="searchUserListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="830.0" />
-                           </children>
-                        </StackPane>
-                     </children>
-                  </VBox>
-               </children>
-            </StackPane>
+            <StackPane fx:id="stackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="830.0" />
          </children>
       </HBox>
    </left>

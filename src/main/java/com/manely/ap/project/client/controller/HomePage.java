@@ -7,9 +7,11 @@ import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Tweet.Kind;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.*;
@@ -30,14 +32,13 @@ import static com.manely.ap.project.client.util.ButtonUtility.setColorButtonImag
 
 public class HomePage {
     private static HomePage instance;
-    private static Scene scene;
 
     public static HomePage getInstance() {
         return instance;
     }
 
-    public static Scene getScene() {
-        return scene;
+    public Parent getRoot() {
+        return root;
     }
 
     private Image homeImage;
@@ -64,7 +65,13 @@ public class HomePage {
     private StackPane stackPane;
 
     public void setScreen(Node node) {
-        stackPane.getChildren().set(0, node);
+        ObservableList<Node> nodes = stackPane.getChildren();
+        if (nodes.size() == 0) {
+            nodes.add(node);
+        }
+        else {
+            stackPane.getChildren().set(0, node);
+        }
     }
 
     public void setBackButton(Node preNode) {
@@ -79,7 +86,6 @@ public class HomePage {
         coloredSearchImage = setColorButtonImage(searchButton, 0xff36b9ff);
 
         instance = this;
-        scene = root.getScene();
     }
 
 
@@ -127,13 +133,11 @@ public class HomePage {
         ((ImageView) homeButton.getGraphic()).setImage(coloredHomeImage);
 
         TimeLine timeLine = new TimeLine();
-        timeLine.setUp();
+        setScreen(timeLine);
 
         HashMap<String, String> query = new HashMap<>();
         Type type = new TypeToken<ArrayList<Post>>(){}.getType();
         HttpCall.get(API.TIMELINE, query, type, new TimelineResponseCallback<>(timeLine));
-
-        setScreen(timeLine);
     }
 
     @FXML
@@ -142,9 +146,10 @@ public class HomePage {
         ((ImageView) profileButton.getGraphic()).setImage(coloredProfileImage);
 
         ProfilePage profilePage = new ProfilePage();
+        setScreen(profilePage);
+
         profilePage.setUp(Data.getUser(), true);
 
-        setScreen(profilePage);
     }
 
 

@@ -44,6 +44,78 @@ public class Profile extends HBox {
         }
     }
 
+    public synchronized static void block_unblock(Button blockButton, User user) {
+        String path;
+        if (blockButton.getText().equals("Block")) {
+            path = API.BLOCK;
+        }
+        else {
+            path = API.UNBLOCK;
+        }
+
+        boolean block = path.equals(API.BLOCK);
+
+        HashMap<String, String> query = new HashMap<>();
+        query.put("username", user.getUsername());
+
+        HttpCall.get(path, query, Object.class,
+            new ResponseCallback<>() {
+                @Override
+                public void run() {
+                    if (getResponse().isSuccess()) {
+                        if (block) {
+                            Data.getUser().getFollowings().remove(user.getUsername());
+                            Data.getUser().getFollowers().remove(user.getUsername());
+                            Platform.runLater(() -> blockButton.setText("Unblock"));
+                        }
+                        else {
+                            Platform.runLater(() -> blockButton.setText("Block"));
+                        }
+                    }
+                    else {
+                        System.out.println(getResponse().getMessage());
+                    }
+                }
+            });
+
+    }
+
+    public synchronized static void follow_unfollow(Button followButton, User user) {
+        String path;
+        if (followButton.getText().equals("Follow")) {
+            path = API.FOLLOW;
+        }
+        else {
+            path = API.UNFOLLOW;
+        }
+
+        boolean follow = path.equals(API.FOLLOW);
+
+        HashMap<String, String> query = new HashMap<>();
+        query.put("username", user.getUsername());
+
+        HttpCall.get(path, query, Object.class,
+            new ResponseCallback<>() {
+                @Override
+                public void run() {
+                    if (getResponse().isSuccess()) {
+                        if (follow) {
+                            Data.getUser().getFollowings().add(user.getUsername());
+                            Platform.runLater(() -> followButton.setText("Following"));
+                        }
+                        else {
+                            Data.getUser().getFollowings().remove(user.getUsername());
+                            Platform.runLater(() -> followButton.setText("Follow"));
+                        }
+                    }
+                    else {
+                        System.out.println(getResponse().getMessage());
+                    }
+                }
+            });
+
+    }
+
     public Button getAvatarButton() {
         return avatarButton;
     }
@@ -116,39 +188,7 @@ public class Profile extends HBox {
 
     @FXML
     void followButtonPressed() {
-        String path;
-        boolean follow = false;
-        if (followButton.getText().equals("Follow")) {
-            path = API.FOLLOW;
-            follow = true;
-        }
-        else {
-            path = API.UNFOLLOW;
-        }
-
-        HashMap<String, String> query = new HashMap<>();
-        query.put("username", user.getUsername());
-        boolean finalFollow = follow;
-        HttpCall.get(path, query, Object.class,
-            new ResponseCallback<>() {
-                @Override
-                public void run() {
-                    if (getResponse().isSuccess()) {
-                        if (finalFollow) {
-                            Data.getUser().getFollowings().add(user.getUsername());
-                            Platform.runLater(() -> followButton.setText("Following"));
-                        }
-                        else {
-                            Data.getUser().getFollowings().remove(user.getUsername());
-                            Platform.runLater(() -> followButton.setText("Follow"));
-                        }
-                    }
-                    else {
-                        System.out.println(getResponse().getMessage());
-                    }
-                }
-            });
-
+       follow_unfollow(followButton, user);
     }
 
 }

@@ -89,7 +89,7 @@ public class Tweet extends VBox {
             quoteTweetButton.setStyle("-fx-background-color: transparent");
         });
 
-        quoteTweetButton.setOnAction((event) -> TweetUtility.showRefTweet(quotedTweet.getTweet()));
+//        quoteTweetButton.setOnAction((event) -> TweetUtility.showRefTweet(quotedTweet.getTweet()));
         quoteTweetButton.setOnMouseEntered((event) -> quoteImageView.setEffect(new DropShadow(30, Color.BLACK)));
         quoteTweetButton.setOnMouseExited((event) -> quoteImageView.setEffect(new DropShadow(20, Color.BLACK)));
     }
@@ -298,7 +298,7 @@ public class Tweet extends VBox {
 
             replyLink.setOnMouseEntered((event) -> replyLink.setUnderline(true));
             replyLink.setOnMouseExited((event) -> replyLink.setUnderline(false));
-            replyLink.setOnAction((event) -> TweetUtility.showRefTweet(tweet.getRefTweet()));
+//            replyLink.setOnAction((event) -> TweetUtility.showRefTweet(tweet.getRefTweet()));
 
             replyHBox.getChildren().add(replyLink);
         }

@@ -161,11 +161,20 @@
             <Insets left="30.0" right="30.0" top="30.0" />
          </padding>
          <children>
-            <Button fx:id="signupButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#signupButtonPressed" text="SignUp">
-               <font>
-                  <Font name="Apple Braille" size="13.0" />
-               </font>
-            </Button>
+            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="8.0">
+               <children>
+                  <Button fx:id="signupButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#signupButtonPressed" text="SignUp">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Button>
+                  <Button focusTraversable="false" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#backButtonPressed" prefWidth="60.0" text="Back">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
             <Label fx:id="signupErrorLabel" alignment="CENTER" focusTraversable="false" textAlignment="CENTER" textFill="#e42626">
                <font>
                   <Font name="Apple Braille" size="13.0" />

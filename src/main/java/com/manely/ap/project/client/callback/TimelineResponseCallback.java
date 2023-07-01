@@ -1,7 +1,5 @@
 package com.manely.ap.project.client.callback;
 
-import com.manely.ap.project.client.controller.HomePage;
-import com.manely.ap.project.client.controller.Scene;
 import com.manely.ap.project.client.controller.TimeLine;
 import com.manely.ap.project.client.controller.Tweet;
 import com.manely.ap.project.client.model.Data;
@@ -15,13 +13,16 @@ import java.util.ArrayList;
 
 public class TimelineResponseCallback<T> extends ResponseCallback<T> {
     private final ObservableList<Tweet> tweets;
+    private final TimeLine timeLine;
 
     public TimelineResponseCallback(TimeLine timeLine) {
         this.tweets = timeLine.getTweets();
+        this.timeLine = timeLine;
     }
 
     @Override
     public void run() {
+
         if (getResponse().isSuccess()) {
 
             ArrayList<Post> posts = (ArrayList<Post>) getResponse().getContent();
@@ -29,9 +30,6 @@ public class TimelineResponseCallback<T> extends ResponseCallback<T> {
             for (Post post : posts) {
 
                 Tweet tweet = new Tweet();
-                if (tweets.contains(tweet)) {
-                    continue;
-                }
 
                 if (post instanceof Retweet) {
                     tweet.setRetweet((Retweet) post);
@@ -39,13 +37,10 @@ public class TimelineResponseCallback<T> extends ResponseCallback<T> {
 
                 else if (post instanceof com.manely.ap.project.common.model.Tweet) {
                     tweet.setTweet((com.manely.ap.project.common.model.Tweet) post);
+                }
 
-                    tweet.retweetedProperty().addListener((observableValue, oldValue, newValue) -> {
-                        if (newValue) {
-                            Platform.runLater(() -> Scene.gotoHomePage(HomePage.getScene()));
-                        }
-                    });
-
+                if (tweets.contains(tweet)) {
+                    continue;
                 }
 
                 Data.addTimelinePost(post.getPostID());
@@ -62,6 +57,7 @@ public class TimelineResponseCallback<T> extends ResponseCallback<T> {
                 });
 
                 TweetUtility.setRefs(tweets);
+                timeLine.setUpScroll();
             });
         }
         else {

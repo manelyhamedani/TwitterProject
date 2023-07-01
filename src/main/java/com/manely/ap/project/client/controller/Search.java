@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
@@ -47,6 +48,16 @@ public class Search extends VBox {
         }
     }
 
+    private void setScreen(Node node) {
+        ObservableList<Node> nodes = stackPane.getChildren();
+        if (nodes.size() == 0) {
+            nodes.add(node);
+        }
+        else {
+            nodes.set(0, node);
+        }
+    }
+
     @FXML
     void filterButtonPressed(ActionEvent event) {
         String filter = filterTextField.getText();
@@ -66,7 +77,7 @@ public class Search extends VBox {
             tweetListView.setCellFactory((listView) -> new TweetCell());
             tweetListView.setItems(tweets);
 
-            stackPane.getChildren().set(0, tweetListView);
+            setScreen(tweetListView);
 
             HashMap<String, String> query = new HashMap<>();
             query.put("quest", "#" + filter);
@@ -96,7 +107,7 @@ public class Search extends VBox {
             profileListView.setCellFactory((listView) -> new ProfileCell());
             profileListView.setItems(profiles);
 
-            stackPane.getChildren().set(0, profileListView);
+            setScreen(profileListView);
 
             HashMap<String, String> query = new HashMap<>();
             query.put("quest", search);

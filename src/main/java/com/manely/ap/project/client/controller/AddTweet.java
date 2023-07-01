@@ -233,19 +233,24 @@ public class AddTweet extends VBox {
 
         if (path != null) {
             HttpCall.post(path, tweet, Object.class,
-                    new ResponseCallback<>() {
-                        @Override
-                        public void run() {
-                            if (getResponse().isSuccess()) {
-                                Scene.changeScene("home-page.fxml");
-                            }
-                            else {
-                                System.out.println(getResponse().getMessage());
-                                System.exit(1);
-                            }
-                        }
-                    });
+                new ResponseCallback<>() {
+                    @Override
+                    public void run() {
+                    if (getResponse().isSuccess()) {
+                        Scene.gotoHomePage();
+                    }
+                    else {
+                        System.out.println(getResponse().getMessage());
+                        System.exit(1);
+                    }
+                    }
+                });
         }
+    }
+
+    @FXML
+    void cancelButtonPressed() {
+        Scene.gotoHomePage();
     }
 
 }
