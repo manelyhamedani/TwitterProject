@@ -2,7 +2,7 @@ package com.manely.ap.project.client.controller;
 
 import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.Main;
-import com.manely.ap.project.client.ResponseCallback;
+import com.manely.ap.project.client.callback.ResponseCallback;
 import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.client.util.ButtonUtility;
 import com.manely.ap.project.client.util.TweetUtility;
@@ -13,7 +13,6 @@ import com.manely.ap.project.common.model.Tweet.Kind;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -491,6 +490,20 @@ public class Tweet extends VBox {
                     });
         }
 
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof Tweet other))
+            return false;
+        return (this.getTweet().getPostID() == other.getTweet().getPostID());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getTweet().getPostID();
     }
 
 }

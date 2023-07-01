@@ -2,7 +2,7 @@ package com.manely.ap.project.client.controller;
 
 import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.Main;
-import com.manely.ap.project.client.ResponseCallback;
+import com.manely.ap.project.client.callback.ResponseCallback;
 import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.client.util.ButtonUtility;
 import com.manely.ap.project.common.API;

@@ -1,4 +1,4 @@
-package com.manely.ap.project.client;
+package com.manely.ap.project.client.callback;
 
 import com.manely.ap.project.common.model.HttpResponse;
 

@@ -24,4 +24,6 @@ module com.manely.ap.project.twitterproject {
     exports com.manely.ap.project.server;
     exports com.manely.ap.project.server.jwt;
     opens com.manely.ap.project.client.controller to com.google.gson, commons.validator, javafx.controls, javafx.fxml, jdk.httpserver;
+    exports com.manely.ap.project.client.callback;
+    opens com.manely.ap.project.client.callback to com.google.gson, javafx.controls, javafx.fxml, jdk.httpserver;
 }

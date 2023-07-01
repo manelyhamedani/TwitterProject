@@ -7,6 +7,12 @@ public class Data {
     private static int earliestTimelinePost = 0;
     private static int earliestProfPost = 0;
 
+    public static void reset() {
+        user = null;
+        earliestProfPost = 0;
+        earliestTimelinePost = 0;
+    }
+
     public static User getUser() {
         return user;
     }

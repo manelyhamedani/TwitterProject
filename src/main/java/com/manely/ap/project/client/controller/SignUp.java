@@ -1,7 +1,7 @@
 package com.manely.ap.project.client.controller;
 
 import com.manely.ap.project.client.HttpCall;
-import com.manely.ap.project.client.ResponseCallback;
+import com.manely.ap.project.client.callback.ResponseCallback;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.User;
 import javafx.application.Platform;

@@ -3,7 +3,6 @@ package com.manely.ap.project.client.controller;
 import javafx.scene.control.ListCell;
 
 
-
 public class TweetCell extends ListCell<Tweet> {
 
     @Override

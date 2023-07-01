@@ -3,6 +3,7 @@ package com.manely.ap.project.client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.manely.ap.project.client.callback.ResponseCallback;
 import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.common.model.PostAdapter;
 import com.manely.ap.project.common.model.HttpResponse;

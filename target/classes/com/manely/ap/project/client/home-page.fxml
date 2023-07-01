@@ -20,7 +20,7 @@
    <left>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="70.0" spacing="60.0">
+            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="70.0">
                <children>
                 <Button fx:id="homeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#homeButtonPressed" prefHeight="30.0" prefWidth="70.0" style="-fx-background-color: transparent;">
                      <graphic>
@@ -30,6 +30,9 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <VBox.margin>
+                        <Insets bottom="30.0" />
+                     </VBox.margin>
                   </Button>
                   <Button fx:id="searchButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchButtonPressed" prefHeight="30.0" prefWidth="70.0" style="-fx-background-color: transparent;">
                      <graphic>
@@ -39,6 +42,9 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <VBox.margin>
+                        <Insets bottom="30.0" />
+                     </VBox.margin>
                   </Button>
                   <Button fx:id="profileButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#profileButtonPressed" prefHeight="30.0" prefWidth="70.0" style="-fx-background-color: transparent;">
                      <graphic>
@@ -48,14 +54,30 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <VBox.margin>
+                        <Insets bottom="70.0" />
+                     </VBox.margin>
                   </Button>
                   <Button fx:id="addTweetButton" mnemonicParsing="false" onAction="#addTweetButtonPressed" style="-fx-background-radius: 10em; -fx-min-width: 40px; -fx-min-height: 40px; -fx-max-height: 40px; -fx-max-width: 40px; -fx-background-color: #36b9ff;" text="+">
                      <font>
                         <Font name="Apple Braille" size="20.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="220.0" />
+                        <Insets bottom="14.0" top="220.0" />
                      </VBox.margin>
+                  </Button>
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#logoutButtonPressed" text="Logout">
+                     <VBox.margin>
+                        <Insets bottom="8.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="backButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Back">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
                   </Button>
                </children>
                <padding>
@@ -65,7 +87,8 @@
             <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="830.0">
                <children>
                   <ListView fx:id="tweetListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="830.0" stylesheets="@../../../../../listview.css" />
-                  <VBox fx:id="profileVBox" prefHeight="600.0" prefWidth="830.0">
+                  <ListView fx:id="followListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="830.0" />
+                  <VBox fx:id="profileVBox" prefHeight="600.0" prefWidth="830.0" visible="false">
                      <children>
                         <VBox prefWidth="830.0">
                            <children>

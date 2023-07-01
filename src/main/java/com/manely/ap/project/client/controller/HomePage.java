@@ -2,7 +2,8 @@ package com.manely.ap.project.client.controller;
 
 import com.google.gson.reflect.TypeToken;
 import com.manely.ap.project.client.HttpCall;
-import com.manely.ap.project.client.ResponseCallback;
+import com.manely.ap.project.client.callback.ResponseCallback;
+import com.manely.ap.project.client.callback.TimelineResponseCallback;
 import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.client.util.ButtonUtility;
 import com.manely.ap.project.client.util.TweetUtility;
@@ -20,12 +21,18 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -51,13 +58,10 @@ public class HomePage {
         return scene;
     }
 
-    private final ObservableList<Tweet> tweets = FXCollections.observableArrayList();
     private final ObservableList<Tweet> profTweets = FXCollections.observableArrayList();
     private final ObservableList<Tweet> filterTweets = FXCollections.observableArrayList();
     private final ObservableList<Profile> users = FXCollections.observableArrayList();
-
-    private static ListView<Tweet> currentList;
-    private static ObservableList<Tweet> currentTweets;
+    private final ObservableList<Profile> follows = FXCollections.observableArrayList();
 
     private Image homeImage;
     private Image profileImage;
@@ -65,6 +69,7 @@ public class HomePage {
     private Image coloredHomeImage;
     private Image coloredProfileImage;
     private Image coloredSearchImage;
+    private User currentProfile;
 
     @FXML
     private ImageView locationImageView;
@@ -83,9 +88,6 @@ public class HomePage {
 
     @FXML
     private Button searchButton;
-
-    @FXML
-    private ListView<Tweet> tweetListView;
 
     @FXML
     private VBox profileVBox;
@@ -147,6 +149,14 @@ public class HomePage {
     @FXML
     private ListView<Profile> searchUserListView;
 
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private ListView<Profile> followListView;
+
+    @FXML
+    private StackPane stackPane;
 
     public void initialize() throws IOException {
         setButtonImages();
@@ -155,18 +165,14 @@ public class HomePage {
         coloredProfileImage = setColorButtonImage(profileButton, 0xff36b9ff);
         coloredSearchImage = setColorButtonImage(searchButton, 0xff36b9ff);
 
-        tweetListView.setFocusTraversable(false);
         profTweetListView.setFocusTraversable(false);
         searchUserListView.setFocusTraversable(false);
         filterTweetListView.setFocusTraversable(false);
 
-        tweetListView.setCellFactory((listView) -> new TweetCell());
-
         profTweetListView.setCellFactory((listView) -> new TweetCell());
-
         filterTweetListView.setCellFactory((listView) -> new TweetCell());
-
         searchUserListView.setCellFactory((listView) -> new ProfileCell());
+        followListView.setCellFactory((listView) -> new ProfileCell());
 
         URL location = new URL("file:src/main/resources/location.png");
         URL website = new URL("file:src/main/resources/link.png");
@@ -175,6 +181,9 @@ public class HomePage {
         locationImageView.setImage(new Image(location.toString()));
         websiteImageView.setImage(new Image(website.toString()));
         calendarImageView.setImage(new Image(calendar.toString()));
+
+        backButton.setVisible(false);
+        backButton.setDisable(true);
 
         instance = this;
         scene = root.getScene();
@@ -213,8 +222,6 @@ public class HomePage {
 
     }
 
-
-
     private void resetButtonImages() {
         ((ImageView) homeButton.getGraphic()).setImage(homeImage);
         ((ImageView) profileButton.getGraphic()).setImage(profileImage);
@@ -223,137 +230,30 @@ public class HomePage {
 
     @FXML
     public void homeButtonPressed() {
-        currentList = tweetListView;
-        currentTweets = tweets;
-
         resetButtonImages();
         ((ImageView) homeButton.getGraphic()).setImage(coloredHomeImage);
 
-        TweetUtility.setUp(tweetListView, tweets, TweetUtility.Kind.TIMELINE, null);
-
-        profileVBox.setVisible(false);
-        profileVBox.setDisable(true);
-        searchVBox.setVisible(false);
-        searchVBox.setDisable(true);
-
-        tweetListView.setVisible(true);
-        tweetListView.setDisable(false);
-
-        tweetListView.setItems(null);
-        tweets.clear();
+        TimeLine timeLine = new TimeLine();
+        timeLine.setUp();
+        stackPane.getChildren().set(0, timeLine);
 
         HashMap<String, String> query = new HashMap<>();
         Type type = new TypeToken<ArrayList<Post>>(){}.getType();
-        HttpCall.get(API.TIMELINE, query, type, new TweetUtility.FetchTweetResponseCallback<>(tweetListView, tweets, TweetUtility.Kind.TIMELINE));
+        HttpCall.get(API.TIMELINE, query, type, new TimelineResponseCallback<>(timeLine));
 
-
-    }
-
-
-    public static ObservableList<Tweet> getCurrentTweets() {
-        return currentTweets;
-    }
-
-    public static ListView<Tweet> getCurrentList() {
-        return currentList;
     }
 
     @FXML
     public void profileButtonPressed() {
-        currentTweets = profTweets;
-        currentList = profTweetListView;
-
         resetButtonImages();
         ((ImageView) profileButton.getGraphic()).setImage(coloredProfileImage);
 
-        TweetUtility.setUp(profTweetListView, profTweets, TweetUtility.Kind.PROFILE, Data.getUser().getUsername());
+        ProfilePage profilePage = new ProfilePage();
+        profilePage.setUp(Data.getUser(), true);
 
-        setProfile(Data.getUser(), true);
-
-        tweetListView.setDisable(true);
-        tweetListView.setVisible(false);
-        searchVBox.setVisible(false);
-        searchVBox.setDisable(true);
-
-        profileVBox.setDisable(false);
-        profileVBox.setVisible(true);
+        stackPane.getChildren().set(0, profilePage);
     }
 
-    public void setProfile(User user, boolean self) {
-        Image avatar = null, header = null;
-
-        if (user.getAvatar() == null) {
-            try {
-                URL url = new URL("file:src/main/resources/avatar.png");
-                avatar = new Image(url.toString());
-            }
-            catch (MalformedURLException ignore) {
-            }
-        }
-        else {
-            avatar = new Image(new ByteArrayInputStream(user.getAvatar().getBytes()));
-        }
-
-        if (avatar != null) {
-            ButtonUtility.setRoundedImageView(avatarImageView, avatar);
-        }
-
-        if (user.getHeader() == null) {
-            try {
-                URL url = new URL("file:src/main/resources/grey.jpg");
-                header = new Image(url.toString());
-            }
-            catch (MalformedURLException ignore) {
-            }
-        }
-        else {
-            header = new Image(new ByteArrayInputStream(user.getHeader().getBytes()));
-        }
-
-        if (header != null) {
-            headerImageView.setImage(header);
-        }
-
-        if (self) {
-            button2.setVisible(true);
-            button2.setDisable(false);
-            button2.setText("Edit Profile");
-            button1.setDisable(true);
-            button1.setVisible(false);
-        }
-        else {
-            button2.setVisible(true);
-            button2.setDisable(false);
-            button1.setDisable(false);
-            button1.setVisible(true);
-            button1.setText("Follow");
-            button2.setText("Block");
-        }
-
-        nameLabel.setText(user.getFirstName() + " " + user.getLastName());
-        usernameLabel.setText("@" + user.getUsername());
-        bioText.setText(user.getInfo().getBio());
-        locationLabel.setText(user.getInfo().getLocation());
-        websiteHyperlink.setText(user.getInfo().getWebsite());
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(user.getDateAdded());
-        String monthName = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);
-        int year = calendar.get(Calendar.YEAR);
-        dateAddedLabel.setText("Joined " + monthName + " " + year);
-
-        followingLabel.setText(String.valueOf(user.getFollowingCount()));
-        followersLabel.setText(String.valueOf(user.getFollowersCount()));
-
-        int lastTweetId = Data.getEarliestProfPost();
-        HashMap<String, String> query = new HashMap<>();
-        query.put("username", user.getUsername());
-        if (lastTweetId != 0) {
-            query.put("id", String.valueOf(lastTweetId));
-        }
-        Type type = new TypeToken<ArrayList<Post>>(){}.getType();
-        HttpCall.get(API.FETCH_USER_POSTS, query, type, new TweetUtility.FetchTweetResponseCallback<>(profTweetListView, profTweets, TweetUtility.Kind.PROFILE));
-    }
 
     @FXML
     void searchButtonPressed() {
@@ -367,6 +267,8 @@ public class HomePage {
         tweetListView.setDisable(true);
         profileVBox.setDisable(true);
         profileVBox.setVisible(false);
+        followListView.setVisible(false);
+        followListView.setDisable(true);
 
         searchVBox.setVisible(true);
         searchVBox.setDisable(false);
@@ -387,7 +289,7 @@ public class HomePage {
     void button1Pressed() {
 
     }
-
+// set buttons in profiling
     @FXML
     void button2Pressed() {
 
@@ -395,18 +297,55 @@ public class HomePage {
 
     @FXML
     void websiteHyperlinkClicked() {
+        String link = websiteHyperlink.getText();
+        if (!link.isBlank()) {
+            try {
+                URL url = new URL(link);
+                Desktop.getDesktop().browse(url.toURI());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    private void setFollowsListView() {
+        tweetListView.setVisible(false);
+        tweetListView.setDisable(true);
+        profileVBox.setDisable(true);
+        profileVBox.setVisible(false);
+        searchVBox.setVisible(false);
+        searchVBox.setDisable(true);
+
+        followListView.setVisible(true);
+        followListView.setDisable(false);
+
+        follows.clear();
     }
 
     @FXML
     void followingHyperlinkClicked() {
+        setFollowsListView();
 
+        HashMap<String, String> query = new HashMap<>();
+        query.put("username", currentProfile.getUsername());
+        Type type = new TypeToken<ArrayList<User>>(){}.getType();
+
+        HttpCall.get(API.LIST_FOLLOWING, query, type, new FetchUsersResponseCallback<>(followListView, follows, profileVBox));
     }
 
     @FXML
     void followersHyperlinkClicked() {
+        setFollowsListView();
+        HashMap<String, String> query = new HashMap<>();
+        query.put("username", currentProfile.getUsername());
+        Type type = new TypeToken<ArrayList<User>>(){}.getType();
 
+        HttpCall.get(API.LIST_FOLLOWERS, query, type, new FetchUsersResponseCallback<>(followListView, follows, profileVBox));
     }
+
+
+
 
     @FXML
     void searchUserButtonPressed() {
@@ -425,36 +364,17 @@ public class HomePage {
             query.put("quest", search);
             Type type = new TypeToken<ArrayList<User>>(){}.getType();
 
-            HttpCall.get(API.SEARCH, query, type,
-                new ResponseCallback<>() {
-                    @Override
-                    public void run() {
-                        if (getResponse().isSuccess()) {
-                            ArrayList<User> result = (ArrayList<User>) getResponse().getContent();
-                            for (User user : result) {
-                                Profile profile = new Profile();
-                                profile.setProfile(user);
-                                users.add(profile);
-                                FetchProfileEventHandler handler = new FetchProfileEventHandler(user);
-                                profile.getAvatarButton().setOnAction(handler);
-                                profile.getNameHyperlink().setOnAction(handler);
-                                profile.getUsernameHyperlink().setOnAction(handler);
-                            }
-                            Platform.runLater(() -> searchUserListView.setItems(users));
-                        }
-                        else {
-                            System.out.println(getResponse().getMessage());
-                        }
-                    }
-                });
+            HttpCall.get(API.SEARCH, query, type, new FetchUsersResponseCallback<>(searchUserListView, users, searchVBox));
         }
     }
 
     private class FetchProfileEventHandler implements EventHandler<ActionEvent> {
         private final User user;
+        private final Node preNode;
 
-        public FetchProfileEventHandler(User user) {
+        public FetchProfileEventHandler(User user, Node node) {
             this.user = user;
+            this.preNode = node;
         }
 
         @Override
@@ -467,12 +387,26 @@ public class HomePage {
 
             TweetUtility.setUp(profTweetListView, profTweets, TweetUtility.Kind.PROFILE, user.getUsername());
 
+            currentProfile = user;
             setProfile(user, true);
+
+            backButton.setDisable(false);
+            backButton.setVisible(true);
+
+            backButton.setOnAction((e) -> {
+                profileVBox.setDisable(true);
+                profileVBox.setVisible(false);
+
+                preNode.setVisible(true);
+                preNode.setDisable(false);
+            });
 
             tweetListView.setDisable(true);
             tweetListView.setVisible(false);
             searchVBox.setVisible(false);
             searchVBox.setDisable(true);
+            followListView.setDisable(true);
+            followListView.setVisible(false);
 
             profileVBox.setDisable(false);
             profileVBox.setVisible(true);
@@ -543,4 +477,9 @@ public class HomePage {
 
     }
 
+    @FXML
+    void logoutButtonPressed() {
+        Data.reset();
+        com.manely.ap.project.client.controller.Scene.changeScene("entry.fxml");
+    }
 }

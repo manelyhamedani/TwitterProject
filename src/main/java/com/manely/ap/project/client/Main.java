@@ -33,7 +33,8 @@ public class Main extends Application {
         launch(args);
     }
 
-    //TODO: reply to (fetch tweet / show them connected)
+    //TODO: reply / quote to (fetch tweet / show them connected)
     //TODO: back buttons (login / signup / other profiles / tweet showing / open website)
     //TODO: logout button
+    //TODO: cancel tweeting
 }

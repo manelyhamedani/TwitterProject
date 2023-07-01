@@ -2,7 +2,7 @@ package com.manely.ap.project.client.util;
 
 import com.google.gson.reflect.TypeToken;
 import com.manely.ap.project.client.HttpCall;
-import com.manely.ap.project.client.ResponseCallback;
+import com.manely.ap.project.client.callback.ResponseCallback;
 import com.manely.ap.project.client.controller.HomePage;
 import com.manely.ap.project.client.controller.Scene;
 import com.manely.ap.project.client.controller.Tweet;
@@ -149,36 +149,6 @@ public class TweetUtility {
                 setBindings(t, ref);
             }
 
-        }
-    }
-
-    public static void showRefTweet(Post refTweet) {
-        ListView<Tweet> listView = HomePage.getCurrentList();
-        ObservableList<Tweet> tweets = HomePage.getCurrentTweets();
-
-        int index = 0;
-
-        for (Tweet t : tweets) {
-            Post post = t.getTweet();
-
-            if (!(post instanceof Retweet) && post.equals(refTweet)) {
-                int finalIndex = index;
-                new Thread(() -> {
-                    Platform.runLater(() -> {
-                        listView.scrollTo(finalIndex);
-                        listView.getItems().get(finalIndex).setStyle("-fx-background-color: #9b9b9b");
-                    });
-                    try {
-                        Thread.sleep(1000);
-                    }
-                    catch (InterruptedException ignore) {
-
-                    }
-                    Platform.runLater(() -> listView.getItems().get(finalIndex).setStyle("-fx-background-color: white"));
-                }).start();
-            }
-
-            ++index;
         }
     }
 
