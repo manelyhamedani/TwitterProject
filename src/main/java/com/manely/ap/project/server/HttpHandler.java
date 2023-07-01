@@ -245,14 +245,18 @@ public class HttpHandler {
     }
 
     static void handleSearch(HttpExchange exchange) {
-        if (getJWT(exchange) != null && validateMethod("GET", exchange)) {
+        String jwt;
+        if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
            try {
+               String username = JWebToken.getPayload(jwt).getSub();
                HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
                if (!query.containsKey("quest")) {
                    throw new IllegalArgumentException();
                }
                String quest = query.get("quest");
                ArrayList<User> result = SQL.getUsers().query(quest);
+               ArrayList<String> blockers = SQL.getBlacklist().selectBlockers(username);
+               result = filterBlockerUsers(result, blockers);
                fetchUsersImages(result);
                Type contentType = new TypeToken<ArrayList<User>>(){}.getType();
                response(exchange, 200, "OK", true, result, contentType);
@@ -261,6 +265,16 @@ public class HttpHandler {
                response(exchange, 400, e.getMessage(), false, null, null);
            }
         }
+    }
+
+    private static ArrayList<User> filterBlockerUsers(ArrayList<User> users, ArrayList<String > blockers) {
+        ArrayList<User> result = new ArrayList<>();
+        for (User user : users) {
+            if (!blockers.contains(user.getUsername())) {
+                result.add(user);
+            }
+        }
+        return result;
     }
 
     static void handleTweet(HttpExchange exchange) {

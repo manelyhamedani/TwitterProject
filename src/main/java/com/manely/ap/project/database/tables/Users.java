@@ -113,10 +113,6 @@ public class Users extends Table {
         return readAs(Kind.PROFILE, set);
     }
 
-    public synchronized User fetchProfile(String username) throws SQLException {
-        return selectAs(Kind.PROFILE, username);
-    }
-
     public synchronized User fetchTweetSender(String username) throws SQLException {
         return selectAs(Kind.TWEET_SENDER, username);
     }

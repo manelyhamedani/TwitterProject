@@ -19,12 +19,11 @@ import javafx.scene.control.ScrollBar;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Queue;
 
 
 public class TweetUtility {
     public enum Kind {
-        TIMELINE, PROFILE, SEARCH
+        TIMELINE, PROFILE
     }
 
     public static void setUp(ListView<Tweet> list, ObservableList<Tweet> tweets, Kind kind, String data) {
@@ -44,31 +43,31 @@ public class TweetUtility {
             }
 
             String path = null;
-
+            int id;
             switch (kind) {
                 case TIMELINE -> {
                     path = API.TIMELINE;
                     if (flag) {
-                        query.put("id", String.valueOf(Data.getEarliestTimelinePost()));
+                        id = Data.getEarliestTimelinePost();
+                        if (id != 0) {
+                            query.put("id", String.valueOf(id));
+                        }
                     }
                 }
                 case PROFILE -> {
                     path = API.FETCH_USER_POSTS;
                     query.put("username", data);
                     if (flag) {
-                        query.put("id", String.valueOf(Data.getEarliestProfPost()));
-                    }
-                }
-                case SEARCH -> {
-                    path = API.FILTER;
-                    if (flag) {
-//                        query.put("id", String.valueOf(Data.getEarliestSearchPost()));
+                        id = Data.getEarliestProfPost();
+                        if (id != 0) {
+                            query.put("id", String.valueOf(id));
+                        }
                     }
                 }
             }
 
             if (path != null) {
-                HttpCall.get(path, query, type, new FetchTweetResponseCallback<>(list, tweets));
+                HttpCall.get(path, query, type, new FetchTweetResponseCallback<>(list, tweets, kind));
             }
 
         });
@@ -87,10 +86,12 @@ public class TweetUtility {
     public static class FetchTweetResponseCallback<T> extends ResponseCallback<T> {
         private ObservableList<Tweet> tweets;
         private ListView<Tweet> listView;
+        private Kind kind;
 
-        public FetchTweetResponseCallback(ListView<Tweet> listView, ObservableList<Tweet> tweets) {
+        public FetchTweetResponseCallback(ListView<Tweet> listView, ObservableList<Tweet> tweets, Kind kind) {
             this.tweets = tweets;
             this.listView = listView;
+            this.kind = kind;
         }
 
         @Override
@@ -119,7 +120,10 @@ public class TweetUtility {
                         });
 
                     }
-                    Data.addTimelinePost(post.getPostID());
+                    switch (kind) {
+                        case TIMELINE -> Data.addTimelinePost(post.getPostID());
+                        case PROFILE -> Data.addProfPost(post.getPostID());
+                    }
                 }
                 Platform.runLater(() -> {
                     tweets.sort((o1, o2) -> {

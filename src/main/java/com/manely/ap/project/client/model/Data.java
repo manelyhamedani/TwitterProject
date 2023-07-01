@@ -23,6 +23,7 @@ public class Data {
         return earliestProfPost;
     }
 
+
     public static void addTimelinePost(int id) {
         if (earliestTimelinePost == 0 || id < earliestTimelinePost) {
             earliestTimelinePost = id;
@@ -34,5 +35,6 @@ public class Data {
             earliestProfPost = id;
         }
     }
+
 
 }
