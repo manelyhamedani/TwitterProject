@@ -55,7 +55,7 @@ public class ProfilePage extends ListView<VBox> {
 
     public void setUp(User user, boolean isSelf) {
         ProfileInfo profileInfo = new ProfileInfo();
-        profileInfo.setUp(user, isSelf);
+        profileInfo.setUp(this, user, isSelf);
 
         profileListView.getItems().add(profileInfo);
 

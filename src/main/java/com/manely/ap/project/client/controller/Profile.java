@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -93,8 +94,6 @@ public class Profile extends HBox {
                 followButton.setText("Follow");
             }
         }
-
-
     }
 
     @FXML
@@ -131,24 +130,25 @@ public class Profile extends HBox {
         query.put("username", user.getUsername());
         boolean finalFollow = follow;
         HttpCall.get(path, query, Object.class,
-                new ResponseCallback<>() {
-                    @Override
-                    public void run() {
-                        if (getResponse().isSuccess()) {
-                            if (finalFollow) {
-                                Data.getUser().getFollowings().add(user.getUsername());
-                                Platform.runLater(() -> followButton.setText("Following"));
-                            }
-                            else {
-                                Data.getUser().getFollowings().remove(user.getUsername());
-                                Platform.runLater(() -> followButton.setText("Follow"));
-                            }
+            new ResponseCallback<>() {
+                @Override
+                public void run() {
+                    if (getResponse().isSuccess()) {
+                        if (finalFollow) {
+                            Data.getUser().getFollowings().add(user.getUsername());
+                            Platform.runLater(() -> followButton.setText("Following"));
                         }
                         else {
-                            System.out.println(getResponse().getMessage());
+                            Data.getUser().getFollowings().remove(user.getUsername());
+                            Platform.runLater(() -> followButton.setText("Follow"));
                         }
                     }
-                });
+                    else {
+                        System.out.println(getResponse().getMessage());
+                    }
+                }
+            });
+
     }
 
 }

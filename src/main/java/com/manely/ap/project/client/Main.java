@@ -34,7 +34,8 @@ public class Main extends Application {
     }
 
     //TODO: reply / quote to (fetch tweet / show them connected)
-    //TODO: back buttons (login / signup / other profiles / tweet showing / open website)
-    //TODO: logout button
+    //TODO: back buttons (login / signup / other profiles / tweet showing)
     //TODO: cancel tweeting
+
+    //TODO: poll / video
 }

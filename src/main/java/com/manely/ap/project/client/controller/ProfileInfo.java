@@ -3,23 +3,25 @@ package com.manely.ap.project.client.controller;
 import com.google.gson.reflect.TypeToken;
 import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.Main;
-import com.manely.ap.project.client.model.Data;
+import com.manely.ap.project.client.callback.SearchUserResponseCallback;
 import com.manely.ap.project.client.util.ButtonUtility;
-import com.manely.ap.project.client.util.TweetUtility;
 import com.manely.ap.project.common.API;
-import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.awt.Desktop;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -31,6 +33,9 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class ProfileInfo extends VBox {
+
+    private User user;
+    private ProfilePage page;
 
     @FXML
     private ImageView avatarImageView;
@@ -90,7 +95,23 @@ public class ProfileInfo extends VBox {
         }
     }
 
-    public void setUp(User user, boolean isSelf) {
+    public void setUp(ProfilePage page, User user, boolean isSelf) {
+        this.user = user;
+        this.page = page;
+
+        try {
+            URL location = new URL("file:src/main/resources/location.png");
+            URL website = new URL("file:src/main/resources/link.png");
+            URL calendar = new URL("file:src/main/resources/calendar.jpg");
+
+            locationImageView.setImage(new Image(location.toString()));
+            websiteImageView.setImage(new Image(website.toString()));
+            calendarImageView.setImage(new Image(calendar.toString()));
+        }
+        catch (MalformedURLException ignore) {
+
+        }
+
         Image avatar = null, header = null;
 
         if (user.getAvatar() == null) {
@@ -157,6 +178,24 @@ public class ProfileInfo extends VBox {
         followersLabel.setText(String.valueOf(user.getFollowersCount()));
     }
 
+    private ListView<Profile> makeList() {
+        ListView<Profile> list = new ListView<>();
+        ObservableList<Profile> items = FXCollections.observableArrayList();
+
+        list.setCellFactory((listView) -> new ProfileCell());
+        list.setItems(items);
+
+        list.setPrefHeight(USE_COMPUTED_SIZE);
+        list.setPrefWidth(830);
+        list.setMinHeight(USE_PREF_SIZE);
+        list.setMinWidth(USE_PREF_SIZE);
+        list.setMaxHeight(USE_PREF_SIZE);
+        list.setMaxWidth(USE_PREF_SIZE);
+        list.setFocusTraversable(false);
+
+        return list;
+    }
+
     @FXML
     void button1Pressed(ActionEvent event) {
 
@@ -169,17 +208,38 @@ public class ProfileInfo extends VBox {
 
     @FXML
     void followersHyperlinkClicked(ActionEvent event) {
+        ListView<Profile> followersList = makeList();
 
+        HashMap<String, String> query = new HashMap<>();
+        query.put("username", user.getUsername());
+        Type type = new TypeToken<ArrayList<User>>(){}.getType();
+
+        HttpCall.get(API.LIST_FOLLOWERS, query, type, new SearchUserResponseCallback<>(followersList.getItems(), page));
     }
 
     @FXML
     void followingHyperlinkClicked(ActionEvent event) {
+        ListView<Profile> followingList = makeList();
 
+        HashMap<String, String> query = new HashMap<>();
+        query.put("username", user.getUsername());
+        Type type = new TypeToken<ArrayList<User>>(){}.getType();
+
+        HttpCall.get(API.LIST_FOLLOWING, query, type, new SearchUserResponseCallback<>(followingList.getItems(), page));
     }
 
     @FXML
     void websiteHyperlinkClicked(ActionEvent event) {
-
+        String link = websiteHyperlink.getText();
+        if (!link.isBlank()) {
+            try {
+                URL url = new URL(link);
+                Desktop.getDesktop().browse(url.toURI());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
