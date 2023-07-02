@@ -47,6 +47,7 @@ public class Scene {
             }
             primaryStage.setScene(homeScene);
             primaryStage.show();
+            primaryStage.centerOnScreen();
         });
 }
 

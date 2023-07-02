@@ -33,7 +33,5 @@ public class Main extends Application {
         launch(args);
     }
 
-    //TODO: reply / quote to (fetch tweet / show them connected)
-    // TODO: clean tweet class
     //TODO: poll / video
 }

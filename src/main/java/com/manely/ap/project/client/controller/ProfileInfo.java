@@ -6,12 +6,15 @@ import com.manely.ap.project.client.Main;
 import com.manely.ap.project.client.callback.SearchUserResponseCallback;
 import com.manely.ap.project.client.util.ButtonUtility;
 import com.manely.ap.project.common.API;
+import com.manely.ap.project.common.model.Tweet;
 import com.manely.ap.project.common.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -20,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.awt.Desktop;
 import java.io.ByteArrayInputStream;
@@ -206,7 +210,11 @@ public class ProfileInfo extends VBox {
         String cmd = button2.getText();
 
         if (cmd.equals("Edit Profile")) {
-
+            EditProfile editProfile = new EditProfile();
+            javafx.scene.Scene scene = new Scene(editProfile);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
         }
         else {
             Profile.block_unblock(button2, user);

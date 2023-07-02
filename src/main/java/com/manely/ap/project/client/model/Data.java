@@ -13,6 +13,14 @@ public class Data {
         earliestTimelinePost = 0;
     }
 
+    public static void resetTimeline() {
+        earliestTimelinePost = 0;
+    }
+
+    public static void resetProfile() {
+        earliestProfPost = 0;
+    }
+
     public static User getUser() {
         return user;
     }

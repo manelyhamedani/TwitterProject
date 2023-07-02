@@ -132,6 +132,7 @@ public class HomePage {
         resetButtonImages();
         ((ImageView) homeButton.getGraphic()).setImage(coloredHomeImage);
 
+        Data.resetTimeline();
         TimeLine timeLine = new TimeLine();
         setScreen(timeLine);
 
@@ -145,6 +146,7 @@ public class HomePage {
         resetButtonImages();
         ((ImageView) profileButton.getGraphic()).setImage(coloredProfileImage);
 
+        Data.resetProfile();
         ProfilePage profilePage = new ProfilePage();
         setScreen(profilePage);
 
@@ -171,6 +173,7 @@ public class HomePage {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+        stage.centerOnScreen();
     }
 
     @FXML

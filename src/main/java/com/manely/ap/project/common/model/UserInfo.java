@@ -17,7 +17,12 @@ public class UserInfo implements Serializable {
 
     public void setBio(String bio) {
         if (bio != null) {
-            this.bio = bio.trim();
+            if (bio.isBlank()) {
+                this.bio = null;
+            }
+            else {
+                this.bio = bio.trim();
+            }
         }
     }
 
@@ -27,7 +32,12 @@ public class UserInfo implements Serializable {
 
     public void setLocation(String location) {
         if (location != null) {
-            this.location = location.trim();
+            if (location.isBlank()) {
+                this.location = null;
+            }
+            else {
+                this.location = location.trim();
+            }
         }
     }
 
@@ -37,7 +47,12 @@ public class UserInfo implements Serializable {
 
     public void setWebsite(String website) {
         if (website != null) {
-            this.website = website.trim();
+            if (website.isBlank()) {
+                this.website = null;
+            }
+            else {
+                this.website = website.trim();
+            }
         }
     }
 

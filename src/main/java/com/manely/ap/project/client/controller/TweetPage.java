@@ -43,14 +43,7 @@ public class TweetPage extends ListView<Tweet> {
 
     public void initialize() {
         tweetsListView.setFocusTraversable(false);
-        tweetsListView.setCellFactory((listView) -> {
-            TweetCell cell = new TweetCell();
-            if (tweetsListView.getChildrenUnmodifiable().size() == 0) {
-                cell.setEffect(new DropShadow(20, Color.BLACK));
-            }
-            return cell;
-        });
-        tweetsListView.setItems(tweets);
+        tweetsListView.setCellFactory((listView) -> new TweetCell());
     }
 
     public void setUp(Tweet tweet, Node preNode) {
@@ -63,6 +56,7 @@ public class TweetPage extends ListView<Tweet> {
         Type type = new TypeToken<ArrayList<Post>>(){}.getType();
 
         HttpCall.get(API.FETCH_TWEET_REPLIES, query, type, new FetchTweetCallback<>(tweets, this, tweet));
+        tweetsListView.setItems(tweets);
 
         HomePage.getInstance().setScreen(this);
         HomePage.getInstance().setBackButton(preNode);
