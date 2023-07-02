@@ -18,6 +18,8 @@ public class SQL {
     private static final Posts posts = new Posts();
     private static final Likes likes = new Likes();
     private static final Blacklist blacklist = new Blacklist();
+    private static final Polls polls = new Polls();
+    private static final Vote vote = new Vote();
 
     private SQL() {
     }
@@ -53,6 +55,8 @@ public class SQL {
         posts.create();
         likes.create();
         blacklist.create();
+        polls.create();
+        vote.create();
     }
 
     public static Blacklist getBlacklist() {
@@ -83,4 +87,11 @@ public class SQL {
         return follows;
     }
 
+    public static Polls getPolls() {
+        return polls;
+    }
+
+    public static Vote getVote() {
+        return vote;
+    }
 }

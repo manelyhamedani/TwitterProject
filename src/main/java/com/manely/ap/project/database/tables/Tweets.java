@@ -23,6 +23,7 @@ public class Tweets extends Table {
     private static final String COLUMN_DATE = "Date";
     private static final String COLUMN_QUOTED_TWEET = "QuotedTweet";
     private static final String COLUMN_REPLIED_TWEET = "RepliedTweet";
+    private static final String COLUMN_POLL_ID = "PollID";
 
 
     @Override
@@ -39,9 +40,11 @@ public class Tweets extends Table {
                             COLUMN_DATE + " BIGINT, " +
                             COLUMN_QUOTED_TWEET + " INTEGER, " +
                             COLUMN_REPLIED_TWEET + " INTEGER, " +
+                            COLUMN_POLL_ID + " INTEGER, " +
                             "FOREIGN KEY(" + COLUMN_SENDER + ") REFERENCES " + Users.TABLE_NAME + "(" + Users.COLUMN_USERNAME + "), " +
                             "FOREIGN KEY(" + COLUMN_QUOTED_TWEET + ") REFERENCES " + TABLE_NAME + "(" + COLUMN_ID + "), " +
-                            "FOREIGN KEY(" + COLUMN_REPLIED_TWEET + ") REFERENCES " + TABLE_NAME + "(" + COLUMN_ID + ") " +
+                            "FOREIGN KEY(" + COLUMN_REPLIED_TWEET + ") REFERENCES " + TABLE_NAME + "(" + COLUMN_ID + "), " +
+                            "FOREIGN KEY(" + COLUMN_POLL_ID + ") REFERENCES " + Polls.TABLE_NAME + "(" + Polls.COLUMN_ID + ") " +
                             ")");
     }
 
@@ -65,8 +68,9 @@ public class Tweets extends Table {
                         COLUMN_QUOTES + ", " +
                         COLUMN_DATE + ", " +
                         COLUMN_QUOTED_TWEET + ", " +
-                        COLUMN_REPLIED_TWEET +
-                        ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        COLUMN_REPLIED_TWEET + ", " +
+                        COLUMN_POLL_ID +
+                        ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
         statement.setString(1, tweet.getSenderUsername());
         statement.setString(2, tweet.getText());
@@ -87,6 +91,7 @@ public class Tweets extends Table {
         else {
             statement.setNull(9, Types.INTEGER);
         }
+        statement.setInt(10, tweet.getPollId());
         statement.executeUpdate();
         statement.close();
         ++tweetsCount;
@@ -161,6 +166,8 @@ public class Tweets extends Table {
             tweet.setRetweetsCount(set.getInt(COLUMN_RETWEETS));
             tweet.setLikes(SQL.getLikes().select(tweet.getId()));
             tweet.setRetweets(SQL.getRetweets().select(tweet.getId()));
+            tweet.setPollId(set.getInt(COLUMN_POLL_ID));
+            tweet.setPoll(SQL.getPolls().select(tweet.getPollId()));
             User sender = SQL.getUsers().fetchTweetSender(tweet.getSenderUsername());
             tweet.setSenderName(sender.getFirstName() + " " + sender.getLastName());
             tweet.setSenderAvatar(MediaManager.getUserAvatar(sender.getUsername()));

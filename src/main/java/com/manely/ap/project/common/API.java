@@ -5,7 +5,6 @@ public class API {
     public static final String IP_ADDRESS = "localhost";
     public static final String BASE_URL = "http://" + IP_ADDRESS + ":" + PORT;
 
-    public static final String CONNECT = "/connect";
     public static final String LOGIN = "/login";
     public static final String SIGNUP = "/signup";
     public static final String SET_USER_IMAGE = "/set-user-image";
@@ -27,5 +26,5 @@ public class API {
     public static final String FILTER = "/filter";
     public static final String FETCH_USER_POSTS = "/fetch-user-posts";
     public static final String FETCH_TWEET_REPLIES = "/fetch-tweet-replies";
-
+    public static final String VOTE = "/vote";
 }

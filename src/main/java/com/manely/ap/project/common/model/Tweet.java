@@ -14,6 +14,24 @@ public class Tweet extends Post implements Serializable {
     private ArrayList<String> retweets;
     private Kind kind;
     private Tweet refTweet;
+    private Poll poll;
+    private int pollId;
+
+    public int getPollId() {
+        return pollId;
+    }
+
+    public void setPollId(int pollId) {
+        this.pollId = pollId;
+    }
+
+    public Poll getPoll() {
+        return poll;
+    }
+
+    public void setPoll(Poll poll) {
+        this.poll = poll;
+    }
 
     public Tweet getRefTweet() {
         return refTweet;

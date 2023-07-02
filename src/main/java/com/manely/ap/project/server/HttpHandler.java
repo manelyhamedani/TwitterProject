@@ -20,28 +20,6 @@ import java.util.*;
 
 public class HttpHandler {
 
-    static void handleConnect(HttpExchange exchange) {
-        if (validateMethod("GET", exchange)) {
-            try {
-                HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
-                String[] validQuery = {"jwt"};
-                if (!validateRequestQuery(validQuery, query.keySet())) {
-                    throw new IllegalArgumentException();
-                }
-                if (JWebToken.isValid(query.get("jwt"))) {
-                    //TODO: online
-                    response(exchange, 200, "OK", true, null, null);
-                }
-                else {
-                    response(exchange, 401, Error.UNAUTHORIZED.toString(), false, null, null);
-                }
-            }
-            catch (Exception e) {
-                response(exchange, 400, e.getMessage(), false, null, null);
-            }
-        }
-    }
-
     static void handleLogin(HttpExchange exchange) {
         if (validateMethod("GET", exchange)) {
             try {
@@ -277,6 +255,31 @@ public class HttpHandler {
         return result;
     }
 
+    static void handleVote(HttpExchange exchange) {
+        String jwt;
+        if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
+            try {
+                String username = JWebToken.getPayload(jwt).getSub();
+                HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
+                if (!query.containsKey("id") || !query.containsKey("choice")) {
+                    throw new IllegalArgumentException();
+                }
+                int pollId = Integer.parseInt(query.get("id"));
+                int choice = Integer.parseInt(query.get("choice"));
+
+                SQL.getPolls().vote(pollId, choice);
+                Poll poll = SQL.getPolls().select(pollId);
+                SQL.getVote().insert(username, pollId, choice);
+                Type contentType = new TypeToken<Poll>(){}.getType();
+
+                response(exchange, 200, "OK", true, poll, contentType);
+            }
+            catch (Exception e) {
+                response(exchange, 400, e.getMessage(), false, null, null);
+            }
+        }
+    }
+
     static void handleTweet(HttpExchange exchange) {
         String jwt;
         if ((jwt = getJWT(exchange)) != null && validateMethod("POST", exchange)) {
@@ -291,6 +294,9 @@ public class HttpHandler {
                 tweet.setSenderUsername(senderUsername);
                 long currentTime = System.currentTimeMillis();
                 tweet.setDate(new Date(currentTime));
+                if (tweet.getPoll() != null) {
+                    SQL.getPolls().insert(tweet.getPoll(), tweet);
+                }
                 SQL.getTweets().insert(tweet);
                 MediaManager.addTweetMedia(tweet.getId(), tweet.getImages());
                 response(exchange, 200, "OK", true, null, null);
@@ -336,8 +342,6 @@ public class HttpHandler {
         String jwt;
         if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
             try {
-
-                //TODO: handle double retweet
                 String sender = JWebToken.getPayload(jwt).getSub();
 
                 HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
@@ -500,7 +504,9 @@ public class HttpHandler {
                 username = query.get("username");
                 ArrayList<Post> posts = SQL.getPosts().fetchUserPosts(username, id);
                 if (posts.size() != 0) {
-                    fetchPostsMedia(posts);
+                     ArrayList<String> blockers = SQL.getBlacklist().selectBlockers(username);
+                     posts = filterBlockedPosts(posts, blockers);
+                     fetchPostsMedia(posts);
                 }
                 Type contentType = new TypeToken<ArrayList<Post>>(){}.getType();
                 response(exchange, 200, "OK", true, posts, contentType);

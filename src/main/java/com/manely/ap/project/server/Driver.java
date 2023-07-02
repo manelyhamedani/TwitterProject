@@ -16,7 +16,6 @@ public class Driver {
         HttpServer server = HttpServer.create(new InetSocketAddress(API.PORT), 0);
         server.setExecutor(Executors.newCachedThreadPool());
 
-        server.createContext(API.CONNECT, HttpHandler::handleConnect);
         server.createContext(API.LOGIN, HttpHandler::handleLogin);
         server.createContext(API.SIGNUP, HttpHandler::handleSignUp);
         server.createContext(API.SET_USER_IMAGE, HttpHandler::handleSetUserImage);
@@ -38,6 +37,7 @@ public class Driver {
         server.createContext(API.FILTER, HttpHandler::handleFilter);
         server.createContext(API.FETCH_USER_POSTS, HttpHandler::handleFetchUserPosts);
         server.createContext(API.FETCH_TWEET_REPLIES, HttpHandler::handleFetchTweetReplies);
+        server.createContext(API.VOTE, HttpHandler::handleVote);
         server.start();
 
         if (!MediaManager.setUp())

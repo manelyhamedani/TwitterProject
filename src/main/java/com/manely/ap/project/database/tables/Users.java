@@ -173,6 +173,7 @@ public class Users extends Table {
                 profile.setPhoneNumber(set.getString(COLUMN_PHONE_NUMBER));
                 profile.setCountry(set.getString(COLUMN_COUNTRY));
                 profile.setLastDateModified(new Date(set.getLong(COLUMN_LAST_DATE_MODIFIED)));
+                profile.setVotes(SQL.getVote().select(profile.getUsername()));
             }
             profiles.add(profile);
         }

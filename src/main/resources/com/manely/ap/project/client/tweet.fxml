@@ -46,7 +46,7 @@
                   </Button>
                </children>
             </VBox>
-            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="380.0" spacing="8.0">
+            <VBox fx:id="tweetVBox" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="380.0" spacing="8.0">
                <children>
                   <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
                      <children>

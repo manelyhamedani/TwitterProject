@@ -130,6 +130,7 @@ public class Tweet extends VBox {
     @FXML
     private HBox replyHBox;
 
+
     public void initialize() throws IOException {
        setButtonImages();
 
@@ -312,6 +313,12 @@ public class Tweet extends VBox {
             });
 
             replyHBox.getChildren().add(replyLink);
+        }
+
+        if (tweet.getPoll() != null) {
+            Poll poll = new Poll();
+            poll.setPoll(tweet.getPoll());
+            tweetVBox.getChildren().add(poll);
         }
 
         nameLink.setText(tweet.getSenderName());

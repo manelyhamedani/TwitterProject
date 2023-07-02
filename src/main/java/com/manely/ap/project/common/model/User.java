@@ -3,6 +3,7 @@ package com.manely.ap.project.common.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class User implements Serializable {
     private int id;
@@ -22,6 +23,15 @@ public class User implements Serializable {
     private String jwt;
     private ArrayList<String> followers;
     private ArrayList<String> followings;
+    private HashMap<Integer, Integer> votes;
+
+    public HashMap<Integer, Integer> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(HashMap<Integer, Integer> votes) {
+        this.votes = votes;
+    }
 
     public ArrayList<String > getFollowers() {
         return followers;

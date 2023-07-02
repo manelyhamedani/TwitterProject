@@ -6,11 +6,14 @@ import com.manely.ap.project.common.model.Tweet;
 import com.manely.ap.project.common.model.User;
 import com.manely.ap.project.database.SQL;
 import com.manely.ap.project.filemanager.MediaManager;
+import javafx.stage.Stage;
 
+import javax.swing.plaf.nimbus.State;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -88,15 +91,13 @@ public class Posts extends Table {
                         " WHERE " +
                         limit +
                         "(" + TABLE_NAME + "." + COLUMN_SENDER + "=" + Follow.TABLE_NAME + "." + Follow.COLUMN_FOLLOWING + " AND " +
-                        Follow.TABLE_NAME + "." + Follow.COLUMN_FOLLOWER + "=?) OR " +
-                        "(" + TABLE_NAME + "." + COLUMN_SENDER + "=?) OR " +
+                        Follow.TABLE_NAME + "." + Follow.COLUMN_FOLLOWER + "=?) OR" +
                         "(" + Tweets.TABLE_NAME + "." + Tweets.COLUMN_ID + "=" + TABLE_NAME + "." + COLUMN_TWEET_ID + " AND " +
                         Tweets.TABLE_NAME + "." + Tweets.COLUMN_LIKES + ">=10)" +
                         ") ORDER BY " + TABLE_NAME + "." + COLUMN_ID + " DESC LIMIT 30";
 
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
         statement.setString(1, username);
-        statement.setString(2, username);
         ResultSet set = statement.executeQuery();
 
         return readPosts(set);

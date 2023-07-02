@@ -33,5 +33,4 @@ public class Main extends Application {
         launch(args);
     }
 
-    //TODO: poll / video
 }
