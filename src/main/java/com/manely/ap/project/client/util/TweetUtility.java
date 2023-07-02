@@ -8,6 +8,15 @@ import javafx.collections.ObservableList;
 
 public class TweetUtility {
 
+    public static boolean contains(ObservableList<Tweet> tweets, Tweet tweet) {
+        for (Tweet t : tweets) {
+            if (t.getTweet().getPostID() == tweet.getTweet().getPostID()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void setRefs(ObservableList<Tweet> tweets) {
 
         for (Tweet t : tweets) {

@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import com.manely.ap.project.client.HttpCall;
 import com.manely.ap.project.client.Main;
 import com.manely.ap.project.client.callback.SearchUserResponseCallback;
+import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.client.util.ButtonUtility;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Tweet;
@@ -162,8 +163,18 @@ public class ProfileInfo extends VBox {
             button2.setDisable(false);
             button1.setDisable(false);
             button1.setVisible(true);
-            button1.setText("Follow");
-            button2.setText("Block");
+            if (Data.getUser().getFollowings().contains(user.getUsername())) {
+                button1.setText("Following");
+            }
+            else {
+                button1.setText("Follow");
+            }
+            if (Data.getUser().getBlocked().contains(user.getUsername())) {
+                button2.setText("Unblock");
+            }
+            else {
+                button2.setText("Block");
+            }
         }
 
         nameLabel.setText(user.getFirstName() + " " + user.getLastName());

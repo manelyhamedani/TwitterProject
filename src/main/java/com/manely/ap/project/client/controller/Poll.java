@@ -105,6 +105,25 @@ public class Poll extends VBox {
         }
 
         if (Data.getUser().getVotes().containsKey(poll.getId())) {
+            switch (Data.getUser().getVotes().get(poll.getId())) {
+                case 1 -> {
+                    choice1RadioButton.setOnAction(null);
+                    choice1RadioButton.fire();
+                }
+                case 2 -> {
+                    choice2RadioButton.setOnAction(null);
+                    choice2RadioButton.fire();
+                }
+                case 3 -> {
+                    choice3RadioButton.setOnAction(null);
+                    choice3RadioButton.fire();
+                }
+                case 4 -> {
+                    choice4RadioButton.setOnAction(null);
+                    choice4RadioButton.fire();
+                }
+            }
+
             choice1RadioButton.setDisable(true);
             choice2RadioButton.setDisable(true);
             choice3RadioButton.setDisable(true);

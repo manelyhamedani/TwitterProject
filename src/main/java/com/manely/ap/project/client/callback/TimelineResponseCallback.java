@@ -36,11 +36,10 @@ public class TimelineResponseCallback<T> extends ResponseCallback<T> {
                     tweet.setTweet((com.manely.ap.project.common.model.Tweet) post, timeLine);
                 }
 
-                if (tweets.contains(tweet)) {
+                if (TweetUtility.contains(tweets, tweet)) {
                     continue;
                 }
 
-                Data.addTimelinePost(post.getPostID());
                 Platform.runLater(() -> tweets.add(tweet));
 
             }
@@ -54,7 +53,6 @@ public class TimelineResponseCallback<T> extends ResponseCallback<T> {
                 });
 
                 TweetUtility.setRefs(tweets);
-                timeLine.setUpScroll();
             });
         }
         else {

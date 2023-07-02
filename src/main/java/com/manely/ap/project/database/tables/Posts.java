@@ -64,15 +64,11 @@ public class Posts extends Table {
         statement.close();
     }
 
-    public synchronized ArrayList<Post> fetchUserPosts(String username, int id) throws SQLException, IOException {
-        String limit = "";
-        if (id != -1) {
-            limit = COLUMN_ID + "<" + id + " AND ";
-        }
+    public synchronized ArrayList<Post> fetchUserPosts(String username) throws SQLException, IOException {
         String query = "SELECT * FROM " + TABLE_NAME +
-                        " WHERE " + limit +
+                        " WHERE " +
                         COLUMN_SENDER + "=? " +
-                        "ORDER BY " + COLUMN_ID + " DESC LIMIT 30";
+                        "ORDER BY " + COLUMN_ID + " DESC";
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
         statement.setString(1, username);
         ResultSet set = statement.executeQuery();
@@ -80,21 +76,16 @@ public class Posts extends Table {
         return readPosts(set);
     }
 
-    public synchronized ArrayList<Post> fetchTimelinePosts(String username, int id) throws SQLException, IOException {
-        String limit = "(";
-        if (id != -1) {
-            limit = TABLE_NAME + "." + COLUMN_ID + "<" + id + " AND (";
-        }
+    public synchronized ArrayList<Post> fetchTimelinePosts(String username) throws SQLException, IOException {
         String query = "SELECT DISTINCT " + TABLE_NAME + ".*" + " FROM " + TABLE_NAME +
                         " INNER JOIN " +
                         Follow.TABLE_NAME + ", " + Tweets.TABLE_NAME +
-                        " WHERE " +
-                        limit +
+                        " WHERE (" +
                         "(" + TABLE_NAME + "." + COLUMN_SENDER + "=" + Follow.TABLE_NAME + "." + Follow.COLUMN_FOLLOWING + " AND " +
                         Follow.TABLE_NAME + "." + Follow.COLUMN_FOLLOWER + "=?) OR" +
                         "(" + Tweets.TABLE_NAME + "." + Tweets.COLUMN_ID + "=" + TABLE_NAME + "." + COLUMN_TWEET_ID + " AND " +
                         Tweets.TABLE_NAME + "." + Tweets.COLUMN_LIKES + ">=10)" +
-                        ") ORDER BY " + TABLE_NAME + "." + COLUMN_ID + " DESC LIMIT 30";
+                        ") ORDER BY " + TABLE_NAME + "." + COLUMN_ID + " DESC";
 
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
         statement.setString(1, username);

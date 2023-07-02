@@ -42,10 +42,10 @@ public class UserPostResponseCallback<T> extends ResponseCallback<T> {
                     tweet.setTweet((com.manely.ap.project.common.model.Tweet) post, profilePage);
                 }
 
-                if (tweets.contains(tweet)) {
+
+                if (TweetUtility.contains(tweets, tweet)) {
                     continue;
                 }
-                Data.addProfPost(post.getPostID());
                 Platform.runLater(() -> tweets.add(tweet));
             }
             Platform.runLater(() -> {
@@ -56,7 +56,6 @@ public class UserPostResponseCallback<T> extends ResponseCallback<T> {
                 });
                 TweetUtility.setRefs(tweets);
                 listView.getItems().addAll(tweets);
-                profilePage.setUpScroll();
             });
         }
         else {

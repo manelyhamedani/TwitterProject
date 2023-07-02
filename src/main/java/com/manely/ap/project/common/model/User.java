@@ -21,9 +21,18 @@ public class User implements Serializable {
     private Image header;
     private UserInfo info;
     private String jwt;
-    private ArrayList<String> followers;
-    private ArrayList<String> followings;
-    private HashMap<Integer, Integer> votes;
+    private ArrayList<String> followers = new ArrayList<>();
+    private ArrayList<String> followings = new ArrayList<>();
+    private HashMap<Integer, Integer> votes = new HashMap<>();
+    private ArrayList<String> blocked = new ArrayList<>();
+
+    public ArrayList<String> getBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(ArrayList<String> blocked) {
+        this.blocked = blocked;
+    }
 
     public HashMap<Integer, Integer> getVotes() {
         return votes;

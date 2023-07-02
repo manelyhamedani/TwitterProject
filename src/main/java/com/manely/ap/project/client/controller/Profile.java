@@ -16,7 +16,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -66,9 +65,11 @@ public class Profile extends HBox {
                         if (block) {
                             Data.getUser().getFollowings().remove(user.getUsername());
                             Data.getUser().getFollowers().remove(user.getUsername());
+                            Data.getUser().getBlocked().add(user.getUsername());
                             Platform.runLater(() -> blockButton.setText("Unblock"));
                         }
                         else {
+                            Data.getUser().getBlocked().remove(user.getUsername());
                             Platform.runLater(() -> blockButton.setText("Block"));
                         }
                     }
@@ -152,7 +153,7 @@ public class Profile extends HBox {
 
         bioLabel.setText(user.getInfo().getBio());
         nameHyperlink.setText(user.getFirstName() + " " + user.getLastName());
-        usernameHyperlink.setText(user.getUsername());
+        usernameHyperlink.setText("@" + user.getUsername());
 
         if (user.getUsername().equals(Data.getUser().getUsername())) {
             followButton.setDisable(true);

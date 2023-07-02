@@ -129,10 +129,10 @@ public class HomePage {
 
     @FXML
     public void homeButtonPressed() {
+        preNodes.clear();
         resetButtonImages();
         ((ImageView) homeButton.getGraphic()).setImage(coloredHomeImage);
 
-        Data.resetTimeline();
         TimeLine timeLine = new TimeLine();
         setScreen(timeLine);
 
@@ -143,10 +143,10 @@ public class HomePage {
 
     @FXML
     public void profileButtonPressed() {
+        preNodes.clear();
         resetButtonImages();
         ((ImageView) profileButton.getGraphic()).setImage(coloredProfileImage);
 
-        Data.resetProfile();
         ProfilePage profilePage = new ProfilePage();
         setScreen(profilePage);
 
@@ -157,6 +157,7 @@ public class HomePage {
 
     @FXML
     void searchButtonPressed() {
+        preNodes.clear();
         resetButtonImages();
         ((ImageView) searchButton.getGraphic()).setImage(coloredSearchImage);
 

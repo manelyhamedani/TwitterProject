@@ -318,7 +318,7 @@ public class Tweet extends VBox {
         if (tweet.getPoll() != null) {
             Poll poll = new Poll();
             poll.setPoll(tweet.getPoll());
-            tweetVBox.getChildren().add(poll);
+            tweetVBox.getChildren().add(2, poll);
         }
 
         nameLink.setText(tweet.getSenderName());

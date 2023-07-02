@@ -490,19 +490,12 @@ public class HttpHandler {
         if (getJWT(exchange) != null && validateMethod("GET", exchange)) {
             try {
                 HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
-                int id;
                 String username;
                 if (!query.containsKey("username")) {
                     throw new IllegalArgumentException();
                 }
-                else if (!query.containsKey("id")) {
-                    id = -1;
-                }
-                else {
-                    id = Integer.parseInt(query.get("id"));
-                }
                 username = query.get("username");
-                ArrayList<Post> posts = SQL.getPosts().fetchUserPosts(username, id);
+                ArrayList<Post> posts = SQL.getPosts().fetchUserPosts(username);
                 if (posts.size() != 0) {
                      ArrayList<String> blockers = SQL.getBlacklist().selectBlockers(username);
                      posts = filterBlockedPosts(posts, blockers);
@@ -522,18 +515,7 @@ public class HttpHandler {
         if ((jwt = getJWT(exchange)) != null && validateMethod("GET", exchange)) {
             try {
                 String username = JWebToken.getPayload(jwt).getSub();
-                HashMap<String, String> query = parseQuery(exchange.getRequestURI().getQuery());
-                int id;
-                if (query.isEmpty()) {
-                    id = -1;
-                }
-                else if (!query.containsKey("id")) {
-                    throw new IllegalArgumentException();
-                }
-                else {
-                    id = Integer.parseInt(query.get("id"));
-                }
-                ArrayList<Post> posts = SQL.getPosts().fetchTimelinePosts(username, id);
+                ArrayList<Post> posts = SQL.getPosts().fetchTimelinePosts(username);
                 if (posts.size() != 0) {
                     ArrayList<String> blockers = SQL.getBlacklist().selectBlockers(username);
                     posts = filterBlockedPosts(posts, blockers);

@@ -82,4 +82,23 @@ public class Blacklist extends Table {
         return blockers;
     }
 
+    public synchronized ArrayList<String> selectBlockedUsers(String blockerUsername) throws SQLException {
+        String query = "SELECT " + COLUMN_BLOCKED + " FROM " + TABLE_NAME +
+                " WHERE " + COLUMN_BLOCKER + "=?";
+
+        PreparedStatement statement = SQL.getConnection().prepareStatement(query);
+        statement.setString(1, blockerUsername);
+        ResultSet set = statement.executeQuery();
+
+        ArrayList<String> blockers = new ArrayList<>();
+
+        while (set.next()) {
+            blockers.add(set.getString(COLUMN_BLOCKED));
+        }
+
+        set.close();
+        statement.close();
+        return blockers;
+    }
+
 }

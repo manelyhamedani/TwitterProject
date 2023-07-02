@@ -92,10 +92,11 @@ public class Polls extends Table {
         poll.setChoice1(set.getString(COLUMN_CHOICE_1));
         poll.setChoice1Count(set.getInt(COLUMN_CHOICE_1_COUNT));
         poll.setChoice2(set.getString(COLUMN_CHOICE_2));
+        poll.setChoice2Count(set.getInt(COLUMN_CHOICE_2_COUNT));
         poll.setChoice3(set.getString(COLUMN_CHOICE_3));
         poll.setChoice3Count(set.getInt(COLUMN_CHOICE_3_COUNT));
         poll.setChoice4(set.getString(COLUMN_CHOICE_4));
-        poll.setChoice4Count(set.getInt(COLUMN_CHOICE_4));
+        poll.setChoice4Count(set.getInt(COLUMN_CHOICE_4_COUNT));
 
         set.close();
         statement.close();

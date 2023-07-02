@@ -174,6 +174,7 @@ public class Users extends Table {
                 profile.setCountry(set.getString(COLUMN_COUNTRY));
                 profile.setLastDateModified(new Date(set.getLong(COLUMN_LAST_DATE_MODIFIED)));
                 profile.setVotes(SQL.getVote().select(profile.getUsername()));
+                profile.setBlocked(SQL.getBlacklist().selectBlockedUsers(profile.getUsername()));
             }
             profiles.add(profile);
         }

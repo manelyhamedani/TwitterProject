@@ -168,9 +168,10 @@ public class EditProfile extends VBox {
 
     @FXML
     void saveButtonPressed(ActionEvent event) {
-        String website = websiteTextField.getText();
+        websiteErrorLabel.setText(null);
+        String website = "http://" + websiteTextField.getText();
         UrlValidator urlValidator = new UrlValidator();
-        if (!website.isBlank() && !urlValidator.isValid(website)) {
+        if (!website.equals("http://") && !urlValidator.isValid(website)) {
             websiteErrorLabel.setText("Invalid URL");
             return;
         }
