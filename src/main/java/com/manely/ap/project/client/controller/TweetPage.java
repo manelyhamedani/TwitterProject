@@ -13,8 +13,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -47,7 +45,6 @@ public class TweetPage extends ListView<Tweet> {
     }
 
     public void setUp(Tweet tweet, Node preNode) {
-
         int tweetId = tweet.getTweet().getId();
 
         HashMap<String, String> query = new HashMap<>();

@@ -5,7 +5,6 @@ import com.manely.ap.project.client.Main;
 import com.manely.ap.project.client.callback.ResponseCallback;
 import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.client.util.ButtonUtility;
-import com.manely.ap.project.client.util.TweetUtility;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Retweet;
@@ -60,6 +59,17 @@ public class Tweet extends VBox {
     private final SimpleBooleanProperty retweetedProperty = new SimpleBooleanProperty(false);
     private boolean isLiked = false;
     private boolean retweeted = false;
+
+    public Tweet clone() {
+        Tweet nt = new Tweet();
+        if (this.getTweet() instanceof Retweet) {
+            nt.setRetweet((Retweet) this.getTweet(), this.parent);
+        }
+        else {
+            nt.setTweet((com.manely.ap.project.common.model.Tweet) this.getTweet(), this.parent);
+        }
+        return nt;
+    }
 
     @FXML
     private Button quoteTweetButton;
@@ -176,7 +186,7 @@ public class Tweet extends VBox {
 
         quoteTweetButton.setOnAction((event) -> {
             TweetPage tweetPage = new TweetPage();
-            tweetPage.setUp(quotedTweet, this.parent);
+            tweetPage.setUp(quotedTweet.clone(), this.parent);
         });
         quoteTweetButton.setOnMouseEntered((event) -> quoteImageView.setEffect(new DropShadow(30, Color.BLACK)));
         quoteTweetButton.setOnMouseExited((event) -> quoteImageView.setEffect(new DropShadow(20, Color.BLACK)));
@@ -309,7 +319,7 @@ public class Tweet extends VBox {
                 TweetPage tweetPage = new TweetPage();
                 repliedTweet = new Tweet();
                 repliedTweet.setTweet(tweet.getRefTweet(), this.parent);
-                tweetPage.setUp(repliedTweet, this.parent);
+                tweetPage.setUp(repliedTweet.clone(), this.parent);
             });
 
             replyHBox.getChildren().add(replyLink);
@@ -508,7 +518,7 @@ public class Tweet extends VBox {
     @FXML
     void showCommentsButtonPressed() {
         TweetPage tweetPage = new TweetPage();
-        tweetPage.setUp(this, this.parent);
+        tweetPage.setUp(this.clone(), this.parent);
     }
 
     @Override
