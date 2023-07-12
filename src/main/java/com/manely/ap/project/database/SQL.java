@@ -27,7 +27,7 @@ public class SQL {
     public static void connect() throws SQLException {
         if (connection != null)
             return;
-        connection = DriverManager.getConnection("jdbc:sqlite:" + DATABASE.getAbsolutePath());
+         connection = DriverManager.getConnection("jdbc:sqlite:" + DATABASE.getAbsolutePath());
         if (connection == null)
             throw new SQLException();
         createTables();

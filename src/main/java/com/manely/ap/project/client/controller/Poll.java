@@ -175,13 +175,14 @@ public class Poll extends VBox {
                 new ResponseCallback<>() {
                     @Override
                     public void run() {
-                        if (getResponse().isSuccess()) {
-                            com.manely.ap.project.common.model.Poll poll = (com.manely.ap.project.common.model.Poll) getResponse().getContent();
-                            showPoll(poll);
-                        }
-                        else {
-                            System.out.println(getResponse().getMessage());
-                        }
+                    if (getResponse().isSuccess()) {
+                        Data.getUser().getVotes().put(poll.getId(), choice);
+                        com.manely.ap.project.common.model.Poll poll = (com.manely.ap.project.common.model.Poll) getResponse().getContent();
+                        showPoll(poll);
+                    }
+                    else {
+                        System.out.println(getResponse().getMessage());
+                    }
                     }
                 });
     }

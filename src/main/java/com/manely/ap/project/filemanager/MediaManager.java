@@ -2,10 +2,7 @@ package com.manely.ap.project.filemanager;
 
 import com.manely.ap.project.common.model.Image;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class MediaManager {
@@ -45,12 +42,30 @@ public class MediaManager {
 
     public static void addUserMedia(String username, Image image) throws IOException {
         String dirPath = USERS_DIR_PATH + "/" + username;
+
+        File usrDir = new File(dirPath);
+        if (!usrDir.exists()) {
+            throw new IOException("User dir not found!");
+        }
+        String[] avatarFile = usrDir.list((dir, name) -> name.contains("avatar"));
+        String[]  headerFile = usrDir.list((dir, name) -> name.contains("header"));
+
         String imgPath;
         if (image.getKind() == Image.KIND.AVATAR) {
             imgPath = dirPath + "/avatar." + image.getFormat();
+            if (avatarFile != null && avatarFile.length == 1) {
+                if (!new File(dirPath + "/" + avatarFile[0]).delete()) {
+                    return;
+                }
+            }
         }
         else {
             imgPath = dirPath + "/header." + image.getFormat();
+            if (headerFile != null && headerFile.length == 1) {
+                if (!new File(dirPath + "/" + headerFile[0]).delete()) {
+                    return;
+                }
+            }
         }
 
         FileOutputStream fos = new FileOutputStream(imgPath);

@@ -103,6 +103,11 @@ public class EditProfile extends VBox {
             headerImageView.setImage(header);
         }
 
+        bioTextField.setText(user.getInfo().getBio());
+        locationTextField.setText(user.getInfo().getLocation());
+        String website = user.getInfo().getWebsite().split("//")[1];
+        websiteTextField.setText(website);
+
         bioTextField.textProperty().addListener((observableValue, oldValue, newValue) -> {
             int length = newValue.length();
             if (newValue.length() > 160) {
@@ -169,17 +174,34 @@ public class EditProfile extends VBox {
     @FXML
     void saveButtonPressed(ActionEvent event) {
         websiteErrorLabel.setText(null);
-        String website = "http://" + websiteTextField.getText();
-        UrlValidator urlValidator = new UrlValidator();
-        if (!website.equals("http://") && !urlValidator.isValid(website)) {
-            websiteErrorLabel.setText("Invalid URL");
-            return;
+        UserInfo userInfo = Data.getUser().getInfo();
+        String website = websiteTextField.getText();
+        if (website.isBlank()) {
+            userInfo.setWebsite(null);
+        }
+        else {
+            website = "http://" + website;
+            UrlValidator urlValidator = new UrlValidator();
+            if (!website.equals("http://") && !urlValidator.isValid(website)) {
+                websiteErrorLabel.setText("Invalid URL");
+                return;
+            }
         }
 
-        UserInfo userInfo = new UserInfo();
-        userInfo.setBio(bioTextField.getText());
-        userInfo.setLocation(locationTextField.getText());
-        userInfo.setWebsite(website);
+        String bio = bioTextField.getText();
+        String location = locationTextField.getText();
+
+        if (!bio.isBlank()) {
+            userInfo.setBio(bio);
+        }
+
+        if (!location.isBlank()) {
+            userInfo.setLocation(location);
+        }
+
+        if (!website.isBlank()) {
+            userInfo.setWebsite(website);
+        }
 
         HttpCall.post(API.SET_USER_INFO, userInfo, Object.class,
                 new ResponseCallback<>() {

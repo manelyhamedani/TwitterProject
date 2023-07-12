@@ -31,6 +31,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -389,6 +390,7 @@ public class AddTweet extends VBox {
             case QUOTE -> path = API.QUOTE;
             case REPLY -> path = API.REPLY;
         }
+
 
         if (path != null) {
             HttpCall.post(path, tweet, Object.class,

@@ -4,7 +4,7 @@ module com.manely.ap.project.twitterproject {
     requires commons.validator;
     requires java.desktop;
     requires java.sql;
-    requires sqlite.jdbc;
+    requires org.xerial.sqlitejdbc;
     requires jjwt.api;
     requires com.google.gson;
     requires jdk.httpserver;
