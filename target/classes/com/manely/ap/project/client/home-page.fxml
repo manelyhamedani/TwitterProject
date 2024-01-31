@@ -68,7 +68,7 @@
                         <Font name="Apple Braille" size="13.0" />
                      </font>
                   </Button>
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#backButtonPressed" text="Back">
+                  <Button fx:id="backButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#backButtonPressed" text="Back">
                      <font>
                         <Font name="Apple Braille" size="13.0" />
                      </font>

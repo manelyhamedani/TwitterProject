@@ -7,6 +7,9 @@ import com.manely.ap.project.client.model.Data;
 import com.manely.ap.project.common.API;
 import com.manely.ap.project.common.model.Post;
 import com.manely.ap.project.common.model.Tweet.Kind;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,7 +50,9 @@ public class HomePage {
     private Image coloredHomeImage;
     private Image coloredProfileImage;
     private Image coloredSearchImage;
-    private ArrayList<Node> preNodes = new ArrayList<>();
+    private final ObservableList<Node> preNodes = FXCollections.observableArrayList();
+    private final IntegerBinding preNodeSize = Bindings.size(preNodes);
+
 
     @FXML
     private Button homeButton;
@@ -63,6 +68,9 @@ public class HomePage {
 
     @FXML
     private StackPane stackPane;
+
+    @FXML
+    private Button backButton;
 
     public void setScreen(Node node) {
         ObservableList<Node> nodes = stackPane.getChildren();
@@ -84,6 +92,20 @@ public class HomePage {
         coloredHomeImage = setColorButtonImage(homeButton, 0xff36b9ff);
         coloredProfileImage = setColorButtonImage(profileButton, 0xff36b9ff);
         coloredSearchImage = setColorButtonImage(searchButton, 0xff36b9ff);
+
+        backButton.setDisable(true);
+        backButton.setVisible(false);
+
+        preNodeSize.addListener((observableValue, oldValue, newValue) -> {
+            if (newValue.intValue() > 0) {
+                backButton.setVisible(true);
+                backButton.setDisable(false);
+            }
+            else {
+                backButton.setVisible(false);
+                backButton.setDisable(true);
+            }
+        });
 
         instance = this;
     }

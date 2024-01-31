@@ -8,10 +8,8 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.time.LocalDate;
@@ -78,9 +76,6 @@ public class SignUp {
     private PasswordField repeatPasswordTextField;
 
     @FXML
-    private Label signupErrorLabel;
-
-    @FXML
     private Label usernameErrorLabel1;
 
     @FXML
@@ -102,7 +97,7 @@ public class SignUp {
     private HBox countryHBox;
 
     @FXML
-    private Label signupLabel;
+    private Label statusLabel;
 
     public void initialize() {
         passwordErrorLabel2.setWrapText(true);
@@ -157,7 +152,6 @@ public class SignUp {
         }
 
         if (!user.getPassword().isBlank() && (user.getPassword().length() < 8 || !user.getPassword().matches("[a-zA-Z]+"))) {
-            VBox.setMargin(repeatPassHBox, new Insets(8, 0, 0, 0));
             passwordErrorLabel2.setText("Your password must be at least 8 characters!");
             invalid = true;
         }
@@ -168,19 +162,18 @@ public class SignUp {
         }
 
         if (!user.getEmail().isBlank() && !EmailValidator.getInstance().isValid(user.getEmail())) {
-            VBox.setMargin(phoneNumberHBox, new Insets(8, 0, 0, 0));
             emailErrorLabel2.setText("Email is invalid!");
             invalid = true;
         }
 
         if (!user.getPhoneNumber().isBlank() && !user.getPhoneNumber().matches("[0-9]+")) {
-            VBox.setMargin(countryHBox, new Insets(8, 0, 0, 0));
             phoneNumberErrorLabel2.setText("Phone number is invalid!");
             invalid = true;
         }
 
         if (invalid) {
-            signupErrorLabel.setText(errMsg.toString());
+            statusLabel.setStyle("-fx-text-fill: #e42626");
+            statusLabel.setText(errMsg.toString());
             return false;
         }
 
@@ -188,7 +181,7 @@ public class SignUp {
     }
 
     private void resetErrorLabels() {
-        signupErrorLabel.setText("");
+        statusLabel.setText("");
         firstnameErrorLabel.setText(" ");
         lastnameErrorLabel.setText(" ");
         usernameErrorLabel1.setText(" ");
@@ -201,10 +194,6 @@ public class SignUp {
         emailErrorLabel2.setText("");
         phoneNumberErrorLabel1.setText(" ");
         phoneNumberErrorLabel2.setText("");
-        VBox.setMargin(repeatPassHBox, new Insets(0, 0, 0, 0));
-        VBox.setMargin(phoneNumberHBox, new Insets(0, 0, 0, 0));
-        VBox.setMargin(countryHBox, new Insets(0, 0, 0, 0));
-        VBox.setMargin(passwordHBox, new Insets(0, 0, 0, 0));
     }
 
     @FXML
@@ -236,7 +225,10 @@ public class SignUp {
                     @Override
                     public void run() {
                         if (getResponse().isSuccess()) {
-                            Platform.runLater(() -> signupLabel.setText("Your account has been successfully created"));
+                            Platform.runLater(() -> {
+                                statusLabel.setStyle("-fx-text-fill: #1b6b94");
+                                statusLabel.setText("Your account has been successfully created");
+                            });
                             try{
                                 sleep(2000);
                             }
@@ -251,17 +243,15 @@ public class SignUp {
                             {
                                 if (errMsg.contains("SQLITE_CONSTRAINT_UNIQUE")) {
                                     if (errMsg.contains("Username")) {
-                                        VBox.setMargin(passwordHBox, new Insets(8, 0, 0, 0));
                                         usernameErrorLabel2.setText("Username is already in use!");
                                     } else if (errMsg.contains("Email")) {
-                                        VBox.setMargin(phoneNumberHBox, new Insets(8, 0, 0, 0));
                                         emailErrorLabel2.setText("Email is already in use!");
                                     } else if (errMsg.contains("PhoneNumber")) {
-                                        VBox.setMargin(countryHBox, new Insets(8, 0, 0, 0));
                                         phoneNumberErrorLabel2.setText("Phone number is already in use!");
                                     }
                                 } else {
-                                    signupErrorLabel.setText("Internal Error!");
+                                    statusLabel.setStyle("-fx-text-fill: #e42626");
+                                    statusLabel.setText("Internal Error!");
                                     System.out.println(getResponse().getMessage());
                                 }
                             });
@@ -275,6 +265,5 @@ public class SignUp {
     void backButtonPressed() {
         Scene.changeScene("entry.fxml");
     }
-
 
 }

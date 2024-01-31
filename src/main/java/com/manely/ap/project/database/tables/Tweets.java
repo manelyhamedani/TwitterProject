@@ -205,5 +205,4 @@ public class Tweets extends Table {
                 COLUMN_ID + "=" + id);
     }
 
-
 }

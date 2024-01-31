@@ -1,8 +1,11 @@
 package com.manely.ap.project.filemanager;
 
 import com.manely.ap.project.common.model.Image;
+import com.manely.ap.project.database.SQL;
 
 import java.io.*;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MediaManager {

@@ -8,39 +8,59 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manely.ap.project.client.controller.SignUp">
-   <left>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" BorderPane.alignment="CENTER">
+   <padding>
+      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+   </padding>
+   <center>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" percentWidth="32.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" percentWidth="50.0" />
+            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" percentWidth="50.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" percentHeight="20.0" valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" percentHeight="20.0" valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" percentHeight="20.0" valignment="CENTER" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" percentHeight="20.0" valignment="CENTER" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" percentHeight="20.0" valignment="CENTER" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" percentHeight="20.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <HBox maxHeight="-Infinity" maxWidth="-Infinity">
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity" GridPane.columnIndex="1">
                <children>
                   <Label fx:id="firstnameErrorLabel" focusTraversable="false" text=" " textFill="#e42626">
                      <font>
                         <Font name="Apple Braille" size="13.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="firstnameTextField" promptText="firstname">
+                  <TextField fx:id="firstnameTextField">
                      <font>
                         <Font name="Apple Braille" size="13.0" />
                      </font>
                   </TextField>
                </children>
                <padding>
-                  <Insets right="2.0" />
+                  <Insets bottom="14.0" right="2.0" />
                </padding>
             </HBox>
-            <HBox maxHeight="-Infinity" maxWidth="-Infinity">
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <Label fx:id="lastnameErrorLabel" focusTraversable="false" text=" " textFill="#e42626">
                      <font>
                         <Font name="Apple Braille" size="13.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="lastnameTextField" promptText="lastname">
+                  <TextField fx:id="lastnameTextField">
                      <font>
                         <Font name="Apple Braille" size="13.0" />
                      </font>
@@ -50,13 +70,13 @@
                   </TextField>
                </children>
                <padding>
-                  <Insets right="2.0" />
+                  <Insets bottom="14.0" right="2.0" />
                </padding>
-               <VBox.margin>
-                  <Insets top="14.0" />
-               </VBox.margin>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
             </HBox>
-            <HBox maxHeight="-Infinity" maxWidth="-Infinity">
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
                   <Label fx:id="usernameErrorLabel1" focusTraversable="false" text=" " textFill="#e42626">
                      <font>
@@ -68,7 +88,7 @@
                         <Insets />
                      </HBox.margin>
                      <children>
-                        <TextField fx:id="usernameTextField" promptText="username">
+                        <TextField fx:id="usernameTextField">
                            <font>
                               <Font name="Apple Braille" size="13.0" />
                            </font>
@@ -81,14 +101,14 @@
                      </children>
                   </VBox>
                </children>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
                <padding>
                   <Insets right="2.0" />
                </padding>
-               <VBox.margin>
-                  <Insets top="14.0" />
-               </VBox.margin>
             </HBox>
-            <HBox fx:id="passwordHBox" maxHeight="-Infinity" maxWidth="-Infinity">
+            <HBox fx:id="passwordHBox" maxHeight="-Infinity" maxWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
                   <Label fx:id="passwordErrorLabel1" focusTraversable="false" text=" " textFill="#e42626">
                      <font>
@@ -97,12 +117,12 @@
                   </Label>
                   <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="162.5">
                      <children>
-                        <PasswordField fx:id="passwordTextField" promptText="password">
+                        <PasswordField fx:id="passwordTextField">
                            <font>
                               <Font name="Apple Braille" size="13.0" />
                            </font>
                         </PasswordField>
-                        <Label fx:id="passwordErrorLabel2" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" textFill="#e42626">
+                        <Label fx:id="passwordErrorLabel2" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" textFill="#e42626" wrapText="true">
                            <font>
                               <Font name="Apple Braille" size="11.0" />
                            </font>
@@ -113,11 +133,8 @@
                <padding>
                   <Insets right="2.0" />
                </padding>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
             </HBox>
-            <HBox fx:id="repeatPassHBox" maxHeight="-Infinity" maxWidth="-Infinity">
+            <HBox fx:id="repeatPassHBox" maxHeight="-Infinity" maxWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
                   <Label fx:id="repeatPasswordErrorLabel1" focusTraversable="false" text=" " textFill="#e32727">
                      <font>
@@ -126,7 +143,7 @@
                   </Label>
                   <VBox>
                      <children>
-                        <PasswordField fx:id="repeatPasswordTextField" promptText="repeat password">
+                        <PasswordField fx:id="repeatPasswordTextField">
                            <font>
                               <Font name="Apple Braille" size="13.0" />
                            </font>
@@ -142,65 +159,11 @@
                <padding>
                   <Insets right="2.0" />
                </padding>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
             </HBox>
-         </children>
-         <padding>
-            <Insets bottom="20.0" right="20.0" top="20.0" />
-         </padding>
-      </VBox>
-   </left>
-   <padding>
-      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-   </padding>
-   <bottom>
-      <VBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
-         <padding>
-            <Insets left="30.0" right="30.0" top="30.0" />
-         </padding>
-         <children>
-            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="8.0">
-               <children>
-                  <Button fx:id="signupButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#signupButtonPressed" text="SignUp">
-                     <font>
-                        <Font name="Apple Braille" size="13.0" />
-                     </font>
-                  </Button>
-                  <Button focusTraversable="false" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#backButtonPressed" prefWidth="60.0" text="Back">
-                     <font>
-                        <Font name="Apple Braille" size="13.0" />
-                     </font>
-                  </Button>
-               </children>
-            </HBox>
-            <Label fx:id="signupErrorLabel" alignment="CENTER" focusTraversable="false" textAlignment="CENTER" textFill="#e42626">
-               <font>
-                  <Font name="Apple Braille" size="13.0" />
-               </font>
-            </Label>
-            <Label fx:id="signupLabel">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <font>
-                  <Font name="Apple Braille" size="18.0" />
-               </font>
-            </Label>
-         </children>
-      </VBox>
-   </bottom>
-   <right>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="189.0" BorderPane.alignment="CENTER">
-         <children>
-            <HBox fx:id="emailHBox" maxHeight="-Infinity" maxWidth="-Infinity">
+            <HBox fx:id="emailHBox" maxHeight="-Infinity" maxWidth="-Infinity" GridPane.columnIndex="3">
                <padding>
                   <Insets right="2.0" />
                </padding>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
                <children>
                   <Label fx:id="emailErrorLabel1" focusTraversable="false" text=" " textFill="#e42626">
                      <font>
@@ -209,7 +172,7 @@
                   </Label>
                   <VBox>
                      <children>
-                        <TextField fx:id="emailTextField" promptText="email">
+                        <TextField fx:id="emailTextField">
                            <font>
                               <Font name="Apple Braille" size="13.0" />
                            </font>
@@ -223,13 +186,10 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox fx:id="phoneNumberHBox" maxHeight="-Infinity" maxWidth="-Infinity">
+            <HBox fx:id="phoneNumberHBox" maxHeight="-Infinity" maxWidth="-Infinity" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <padding>
                   <Insets right="2.0" />
                </padding>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
                <children>
                   <Label fx:id="phoneNumberErrorLabel1" focusTraversable="false" text=" " textFill="#e42626">
                      <font>
@@ -238,7 +198,7 @@
                   </Label>
                   <VBox>
                      <children>
-                        <TextField fx:id="phoneNumberTextField" maxWidth="-Infinity" promptText="phone number">
+                        <TextField fx:id="phoneNumberTextField" maxWidth="-Infinity">
                            <font>
                               <Font name="Apple Braille" size="13.0" />
                            </font>
@@ -251,37 +211,134 @@
                      </children>
                   </VBox>
                </children>
-            </HBox>
-            <HBox fx:id="countryHBox" maxHeight="-Infinity" maxWidth="-Infinity">
-               <children>
-                  <Label focusTraversable="false" text=" ">
-                     <font>
-                        <Font name="Apple Braille" size="13.0" />
-                     </font>
-                  </Label>
-                  <ComboBox fx:id="countryComboBox" prefWidth="162.5" promptText="country" />
-               </children>
-               <VBox.margin>
+               <GridPane.margin>
                   <Insets />
-               </VBox.margin>
+               </GridPane.margin>
             </HBox>
-            <HBox maxHeight="-Infinity" maxWidth="-Infinity">
+            <HBox fx:id="countryHBox" maxHeight="-Infinity" maxWidth="-Infinity" GridPane.columnIndex="3" GridPane.rowIndex="2">
                <children>
                   <Label focusTraversable="false" text=" ">
                      <font>
                         <Font name="Apple Braille" size="13.0" />
                      </font>
                   </Label>
-                  <DatePicker fx:id="birthdatePicker" prefWidth="162.5" promptText="birthdate" />
+                  <ComboBox fx:id="countryComboBox" prefWidth="162.5" />
                </children>
-               <VBox.margin>
-                  <Insets top="14.0" />
-               </VBox.margin>
+               <padding>
+                  <Insets bottom="14.0" />
+               </padding>
             </HBox>
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity" GridPane.columnIndex="3" GridPane.rowIndex="3">
+               <children>
+                  <Label focusTraversable="false" text=" ">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Label>
+                  <DatePicker fx:id="birthdatePicker" prefWidth="162.5" />
+               </children>
+               <padding>
+                  <Insets bottom="14.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="8.0" translateX="20.0" translateY="40.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+               <children>
+                  <Button fx:id="signupButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#signupButtonPressed" text="SignUp">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Button>
+                  <Button focusTraversable="false" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#backButtonPressed" prefWidth="60.0" text="Back">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Button>
+               </children>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </HBox>
+            <Label fx:id="statusLabel" alignment="CENTER" focusTraversable="false" textAlignment="CENTER" textFill="#1b6b94" translateX="-10.0" translateY="10.0" wrapText="true" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+               <font>
+                  <Font name="Apple Braille" size="18.0" />
+               </font>
+            </Label>
+            <Label text="Firstname">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+               <padding>
+                  <Insets bottom="14.0" />
+               </padding>
+            </Label>
+            <Label text="Email" GridPane.columnIndex="2">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="14.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Lastname" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+               <padding>
+                  <Insets bottom="14.0" />
+               </padding>
+            </Label>
+            <Label text="Phone Number" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="14.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Username" GridPane.rowIndex="2">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+               <padding>
+                  <Insets bottom="14.0" />
+               </padding>
+            </Label>
+            <Label text="Country" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="14.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Password" GridPane.rowIndex="3">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+               <padding>
+                  <Insets bottom="14.0" />
+               </padding>
+            </Label>
+            <Label text="Birthdate" GridPane.columnIndex="2" GridPane.rowIndex="3">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="14.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Repeat Password" GridPane.rowIndex="4">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+               <padding>
+                  <Insets bottom="14.0" />
+               </padding>
+            </Label>
          </children>
-         <padding>
-            <Insets bottom="20.0" left="20.0" top="20.0" />
-         </padding>
-      </VBox>
-   </right>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </GridPane>
+   </center>
 </BorderPane>

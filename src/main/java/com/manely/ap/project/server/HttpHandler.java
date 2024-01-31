@@ -117,16 +117,16 @@ public class HttpHandler {
             Error err = Error.UNUSUAL;
             try {
                 String username = JWebToken.getPayload(jwt).getSub();
-                UserInfo userInfo = getRequestBody(exchange, UserInfo.class);
-                if (!userInfo.validateBio()) {
+                User user = getRequestBody(exchange, User.class);
+                if (!user.getInfo().validateBio()) {
                     err = Error.BIO_TOO_LONG;
                     throw new IllegalArgumentException();
                 }
-                if (!userInfo.validateWebsite()) {
+                if (!user.getInfo().validateWebsite()) {
                     err = Error.INVALID_URL;
                     throw new IllegalArgumentException();
                 }
-                SQL.getUsers().updateInfo(username, userInfo);
+                SQL.getUsers().updateInfo(username, user);
                 response(exchange, 200, "OK", true, null, null);
             }
             catch (IllegalArgumentException e) {

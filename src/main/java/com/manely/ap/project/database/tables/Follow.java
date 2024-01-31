@@ -100,5 +100,6 @@ public class Follow extends Table {
         statement.close();
         return result;
     }
+
 }
 

@@ -127,4 +127,5 @@ public class Posts extends Table {
         post.setSenderName(sender.getFirstName() + " " + sender.getLastName());
         post.setSenderAvatar(MediaManager.getUserAvatar(sender.getUsername()));
     }
+
 }

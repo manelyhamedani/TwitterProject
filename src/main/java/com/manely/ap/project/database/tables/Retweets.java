@@ -59,4 +59,5 @@ public class Retweets extends Table {
 
         return result;
     }
+
 }

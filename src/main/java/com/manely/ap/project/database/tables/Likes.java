@@ -77,4 +77,5 @@ public class Likes extends Table {
 
         return result;
     }
+
 }

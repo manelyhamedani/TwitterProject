@@ -12,12 +12,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -35,6 +33,12 @@ public class EditProfile extends VBox {
     private final FileChooser fileChooser = new FileChooser();
     private com.manely.ap.project.common.model.Image avatar;
     private com.manely.ap.project.common.model.Image header;
+
+    @FXML
+    private TextField firstnameTextField;
+
+    @FXML
+    private TextField lastnameTextField;
 
     @FXML
     private TextField bioTextField;
@@ -103,10 +107,18 @@ public class EditProfile extends VBox {
             headerImageView.setImage(header);
         }
 
-        bioTextField.setText(user.getInfo().getBio());
-        locationTextField.setText(user.getInfo().getLocation());
-        String website = user.getInfo().getWebsite().split("//")[1];
-        websiteTextField.setText(website);
+        firstnameTextField.setText(user.getFirstName());
+        lastnameTextField.setText(user.getLastName());
+        if (user.getInfo().getBio() != null) {
+            bioTextField.setText(user.getInfo().getBio());
+        }
+        if (user.getInfo().getLocation() != null) {
+            locationTextField.setText(user.getInfo().getLocation());
+        }
+        String website = user.getInfo().getWebsite();
+        if (website != null) {
+            websiteTextField.setText(website.split("//")[1]);
+        }
 
         bioTextField.textProperty().addListener((observableValue, oldValue, newValue) -> {
             int length = newValue.length();
@@ -115,6 +127,7 @@ public class EditProfile extends VBox {
             }
         });
     }
+
 
     @FXML
     void addAvatarButtonPressed(ActionEvent event) {
@@ -188,8 +201,20 @@ public class EditProfile extends VBox {
             }
         }
 
+        User user = Data.getUser();
+
+        String firstname = firstnameTextField.getText();
+        String lastname = lastnameTextField.getText();
         String bio = bioTextField.getText();
         String location = locationTextField.getText();
+
+        if (!firstname.isBlank()) {
+            user.setFirstName(firstname);
+        }
+
+        if (!lastname.isBlank()) {
+            user.setLastName(lastname);
+        }
 
         if (!bio.isBlank()) {
             userInfo.setBio(bio);
@@ -203,16 +228,13 @@ public class EditProfile extends VBox {
             userInfo.setWebsite(website);
         }
 
-        HttpCall.post(API.SET_USER_INFO, userInfo, Object.class,
+        HttpCall.post(API.SET_USER_INFO, user, Object.class,
                 new ResponseCallback<>() {
                     @Override
                     public void run() {
-                        if (getResponse().isSuccess()) {
-                            Data.getUser().setInfo(userInfo);
-                        }
-                        else {
-                            System.out.println(getResponse().getMessage());
-                        }
+                    if (!getResponse().isSuccess()) {
+                        System.out.println(getResponse().getMessage());
+                    }
                     }
                 });
 

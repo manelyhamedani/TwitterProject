@@ -2,7 +2,9 @@ package com.manely.ap.project.database.tables;
 
 import com.manely.ap.project.database.SQL;
 import com.manely.ap.project.common.model.*;
+import com.manely.ap.project.filemanager.MediaManager;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -189,20 +191,25 @@ public class Users extends Table {
         return SQL.getFollows().selectFollowings(username);
     }
 
-    public synchronized void updateInfo(String username, UserInfo info) throws SQLException {
+    public synchronized void updateInfo(String username, User user) throws SQLException {
         String query = "UPDATE " + TABLE_NAME +
-                        " SET " + COLUMN_BIO + "=?, " +
+                        " SET " +
+                        COLUMN_FIRSTNAME + "=?, " +
+                        COLUMN_LASTNAME + "=?, " +
+                        COLUMN_BIO + "=?, " +
                         COLUMN_LOCATION + "=?, " +
                         COLUMN_WEBSITE + "=?, " +
                         COLUMN_LAST_DATE_MODIFIED + "=? " +
                         "WHERE " + COLUMN_USERNAME + "=?";
         long currentTime = System.currentTimeMillis();
         PreparedStatement statement = SQL.getConnection().prepareStatement(query);
-        statement.setString(1, info.getBio());
-        statement.setString(2, info.getLocation());
-        statement.setString(3, info.getWebsite());
-        statement.setLong(4, currentTime);
-        statement.setString(5, username);
+        statement.setString(1, user.getFirstName());
+        statement.setString(2, user.getLastName());
+        statement.setString(3, user.getInfo().getBio());
+        statement.setString(4, user.getInfo().getLocation());
+        statement.setString(5, user.getInfo().getWebsite());
+        statement.setLong(6, currentTime);
+        statement.setString(7, username);
         statement.executeUpdate();
         statement.close();
     }

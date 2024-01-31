@@ -7,7 +7,6 @@ import com.manely.ap.project.common.model.Retweet;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.ListView;
 
 import java.util.ArrayList;
 

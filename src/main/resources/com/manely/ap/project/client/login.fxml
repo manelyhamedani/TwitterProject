@@ -5,54 +5,89 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <Pane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manely.ap.project.client.controller.Login">
    <children>
       <VBox fx:id="root" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
          <children>
-            <TextField fx:id="usernameTextField" maxWidth="-Infinity" promptText="username">
-               <font>
-                  <Font name="Apple Braille" size="13.0" />
-               </font>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </TextField>
-            <PasswordField fx:id="passwordTextField" maxWidth="-Infinity" promptText="password">
-               <font>
-                  <Font name="Apple Braille" size="13.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="14.0" />
-               </VBox.margin>
-            </PasswordField>
-            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#loginButtonPressed" prefWidth="100.0" text="Login">
-               <font>
-                  <Font name="Apple Braille" size="13.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="5.0" top="14.0" />
-               </VBox.margin>
-            </Button>
-            <Label fx:id="errorLabel" focusTraversable="false" textFill="#e42626">
-               <font>
-                  <Font name="Apple Braille" size="11.0" />
-               </font>
-            </Label>
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" percentWidth="50.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="usernameTextField" maxWidth="-Infinity" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </TextField>
+                  <PasswordField fx:id="passwordTextField" maxWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </PasswordField>
+                  <Label text="Username">
+                     <GridPane.margin>
+                        <Insets right="20.0" />
+                     </GridPane.margin>
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label text="Password" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets right="20.0" />
+                     </GridPane.margin>
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="loginButton" mnemonicParsing="false" onAction="#loginButtonPressed" prefWidth="80.0" text="Login" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets right="20.0" />
+                     </GridPane.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#backButtonPressed" prefWidth="80.0" text="Back" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Button>
+                  <Label fx:id="errorLabel" focusTraversable="false" textFill="#e42626" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                     <font>
+                        <Font name="Apple Braille" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </GridPane>
          </children>
          <padding>
             <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
          </padding>
       </VBox>
-      <Button layoutX="8.0" layoutY="8.0" mnemonicParsing="false" onAction="#backButtonPressed" text="Back">
-         <font>
-            <Font name="Apple Braille" size="13.0" />
-         </font>
-      </Button>
    </children>
    <padding>
       <Insets bottom="4.0" left="4.0" right="4.0" />

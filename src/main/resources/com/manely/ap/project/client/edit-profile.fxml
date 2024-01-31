@@ -6,8 +6,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -44,53 +47,112 @@
             </StackPane>
          </children>
          <VBox.margin>
-            <Insets bottom="30.0" />
+            <Insets />
          </VBox.margin>
       </Pane>
-      <TextField fx:id="bioTextField" layoutX="50.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Bio">
-         <VBox.margin>
-            <Insets bottom="20.0" />
-         </VBox.margin>
-         <font>
-            <Font name="Apple Braille" size="13.0" />
-         </font>
-      </TextField>
-      <TextField fx:id="locationTextField" layoutX="50.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Location">
-         <VBox.margin>
-            <Insets bottom="20.0" />
-         </VBox.margin>
-         <font>
-            <Font name="Apple Braille" size="13.0" />
-         </font>
-      </TextField>
-      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
-         <VBox.margin>
-            <Insets bottom="40.0" right="50.0" />
-         </VBox.margin>
+      <GridPane>
+         <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" percentWidth="40.0" />
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" percentWidth="60.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
-            <TextField editable="false" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="50.0" text="http://">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
+            <TextField fx:id="firstnameTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1">
                <font>
                   <Font name="Apple Braille" size="13.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin>
             </TextField>
-            <TextField fx:id="websiteTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Website">
+            <TextField fx:id="bioTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <font>
                   <Font name="Apple Braille" size="13.0" />
                </font>
-               <HBox.margin>
-                  <Insets right="4.0" />
-               </HBox.margin>
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin>
             </TextField>
-            <Label fx:id="websiteErrorLabel" style="-fx-text-fill: #e42626;">
+            <TextField fx:id="locationTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin>
+            </TextField>
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <children>
+                  <TextField editable="false" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="50.0" text="http://">
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="websiteTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="4.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <Label fx:id="websiteErrorLabel" style="-fx-text-fill: #e42626;" textFill="#e42626">
+                     <font>
+                        <Font name="Apple Braille" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="4.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <Label text="Firstname">
                <font>
                   <Font name="Apple Braille" size="13.0" />
                </font>
             </Label>
+            <Label text="Bio" GridPane.rowIndex="2">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+            </Label>
+            <Label text="Location" GridPane.rowIndex="3">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+            </Label>
+            <Label text="Website" GridPane.rowIndex="4">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+            </Label>
+            <Label text="Lastname" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+            </Label>
+            <TextField fx:id="lastnameTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Apple Braille" size="13.0" />
+               </font>
+            </TextField>
          </children>
-      </HBox>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </GridPane>
       <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0">
          <children>
             <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#saveButtonPressed" prefWidth="60.0" text="Save">
@@ -105,7 +167,7 @@
             </Button>
          </children>
          <VBox.margin>
-            <Insets bottom="20.0" />
+            <Insets bottom="20.0" top="20.0" />
          </VBox.margin>
       </HBox>
    </children>
