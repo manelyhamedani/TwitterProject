@@ -1,0 +1,10 @@
+media/
+target/
+*~
+*.http
+*.iml
+*.json
+.DS_Store
+.idea/
+*.db
+
